@@ -20,12 +20,20 @@ public class TileEntityBones extends TileEntity implements IInventory {
 	public TileEntityBones() {
 		
 	}
+	
+	public TileEntityBones(ItemStack[] inv) {
+		this.inv = 	inv;
+	}
+	
+	public ItemStack[] getInventory() {
+		return inv;
+	}
 
 	@Override
 	public int getSizeInventory() {
 		return inv.length;
 	}
-
+	
 	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return inv[slot];

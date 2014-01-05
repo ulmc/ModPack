@@ -5,7 +5,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.item.ItemGrind;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
@@ -23,8 +22,7 @@ public class ContainerGrinder extends Container {
 	private int baseOffsetX = 8;
 	private int slotSize = 18;
 	private int basePlayerInventoryOffset = 123;
-	private int quickPlayerInventoryOffset = 181;
-	
+	private int quickPlayerInventoryOffset = 181;	
 
 	public ContainerGrinder(IInventory par1IInventory, IInventory par2IInventory) {
 		this.lowerChestInventory = par2IInventory;
@@ -34,7 +32,7 @@ public class ContainerGrinder extends Container {
 		int j;
 		int k;
 		
-		this.addSlotToContainer(new GrinderSlot(par2IInventory, GRIND_SLOT_ID,	62, 19)); // key
+		this.addSlotToContainer(new GrinderSlot(par2IInventory, GRIND_SLOT_ID,	62, 19));
 		this.addSlotToContainer(new Slot(par2IInventory, ITEM_SLOT_ID,	98, 19)); //helper
 		
 		for (j = 0; j < 9; j++) {
@@ -51,8 +49,6 @@ public class ContainerGrinder extends Container {
 						basePlayerInventoryOffset + j * slotSize + i));
 			}
 		}
-
-		
 	}
 
 	public boolean canInteractWith(EntityPlayer par1EntityPlayer) {

@@ -14,7 +14,7 @@ import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.gui.GuiBones;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 
-public class BlockBones extends BasicStandingBlock {
+public class BlockBones extends BasicFallingBlock {
 
 	private final Random random = new Random();
 
@@ -26,10 +26,9 @@ public class BlockBones extends BasicStandingBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z,
-			EntityPlayer player, int metadata, float what, float these,
-			float are) {
-		
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float what,
+			float these, float are) {
+
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		if (tileEntity == null || player.isSneaking()) {
 			return false;
@@ -39,12 +38,71 @@ public class BlockBones extends BasicStandingBlock {
 	}
 
 	@Override
+	public int getRenderType() {
+		return -1;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	private boolean canPlaceStandingBlockOn(World par1World, int par2, int par3, int par4) {
+		if (par1World.doesBlockHaveSolidTopSurface(par2, par3, par4)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
+		return canPlaceStandingBlockOn(par1World, par2, par3 - 1, par4);
+	}
+
+	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		dropItems(world, x, y, z);
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 
-	private void dropItems(World world, int x, int y, int z) {		
+	@Override
+	protected void tryToFall(World world, int x, int y, int z) {
+		if (canFallBelow(world, x, y - 1, z) && y >= 0) {
+			byte b0 = 32;
+
+			if (world.checkChunksExist(x - b0, y - b0, z - b0, x + b0, y + b0, z + b0)) {
+				int originY = y;
+				TileEntityBones te = (TileEntityBones) world.getBlockTileEntity(x, y, z);
+				TileEntityBones teb = new TileEntityBones(te.getInventory());
+				int metadata = world.getBlockMetadata(x, y, z);
+				
+				while (canFallBelow(world, x, y - 1, z) && y > 0) {
+					--y;
+				}
+
+				if (y > 0) {
+					world.setBlock(x, y, z, this.blockID);
+					world.setBlockMetadataWithNotify(x, y, z, metadata, 2);
+					world.setBlockTileEntity(x, y, z, teb);
+					if (!canPlaceStandingBlockOn(world, x, y - 1, z)) {
+						world.setBlockToAir(x, y, z);
+					}
+				}
+
+				world.removeBlockTileEntity(x, originY, z);
+				world.setBlockToAir(x, originY, z);
+
+			}
+		}
+	}
+
+	private void dropItems(World world, int x, int y, int z) {
 
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		if (!(tileEntity instanceof IInventory)) {
@@ -60,9 +118,8 @@ public class BlockBones extends BasicStandingBlock {
 				float ry = random.nextFloat() * 0.8F + 0.1F;
 				float rz = random.nextFloat() * 0.8F + 0.1F;
 
-				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z
-						+ rz, new ItemStack(item.itemID, item.stackSize,
-						item.getItemDamage()));
+				EntityItem entityItem = new EntityItem(world, x + rx, y + ry, z + rz, new ItemStack(item.itemID,
+						item.stackSize, item.getItemDamage()));
 
 				if (item.hasTagCompound()) {
 					entityItem.getEntityItem().setTagCompound((NBTTagCompound) item.getTagCompound().copy());
