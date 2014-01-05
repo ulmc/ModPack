@@ -1,0 +1,21 @@
+{
+  "modinfoversion": 1,
+  "modlist": [{
+    "modid": "UltimateExtender",
+    "name": "ULMC's Ultimate Extender",
+    "description": "Ultimate Extender The Mod",
+    "version": "dev",
+    "mcversion": "1.6.4",
+    "url": "",
+    "updateUrl": "",
+    "authors": [ "bormoshka" ],
+    "credits": "Authored by bormoshka",
+    "logoFile": "",
+    "screenshots": [ ],
+    "parent": "",
+    "requiredMods": [ "Forge" ],
+    "dependencies": [  ],
+    "dependants": [  ],
+    "useDependencyInformation": "false"
+  }]
+}
