@@ -5,6 +5,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
 public class ContainerLockedChest extends Container {
@@ -101,9 +102,9 @@ public class ContainerLockedChest extends Container {
 	/**
 	 * Called when the container is closed.
 	 */
-	public void onContainerClosed(EntityPlayer par1EntityPlayer) {
-		super.onContainerClosed(par1EntityPlayer);
-		this.lowerChestInventory.closeChest();
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);				
+		//this.lowerChestInventory.closeChest();
 	}
 
 	/**

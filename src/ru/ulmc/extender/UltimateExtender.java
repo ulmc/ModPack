@@ -2,9 +2,9 @@ package ru.ulmc.extender;
 
 import java.util.logging.Logger;
 
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.block.BlockManager;
-import ru.ulmc.extender.entity.item.EntityFallingBlock;
 import ru.ulmc.extender.events.MobDropEventsHook;
 import ru.ulmc.extender.events.PlayerEventsHook;
 import ru.ulmc.extender.gui.handler.GuiHandler;
@@ -21,7 +21,6 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
 @NetworkMod(channels = { Reference.NETWORK_CHANNEL }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
@@ -61,6 +60,12 @@ public class UltimateExtender {
 	private static void registerEventHooks() {
 		MinecraftForge.EVENT_BUS.register(new PlayerEventsHook());
 		MinecraftForge.EVENT_BUS.register(new MobDropEventsHook());
+	}
+	
+	public static void markSomeBlockForUpdate(World world, int x, int y, int z) {
+		if(!world.isRemote) {
+			world.markBlockForUpdate(x, y, z);
+		}
 	}
 
 }

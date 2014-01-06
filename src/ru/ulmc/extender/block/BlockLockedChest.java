@@ -1,32 +1,22 @@
 package ru.ulmc.extender.block;
 
-import static net.minecraftforge.common.ForgeDirection.DOWN;
-
 import java.util.Iterator;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryLargeChest;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
-import ru.ulmc.extender.gui.GuiBones;
 import ru.ulmc.extender.gui.GuiLockedChest;
 import ru.ulmc.extender.item.ItemPicklock;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
@@ -35,7 +25,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockLockedChest extends BlockContainer {
 
-	private final Random random = new Random();
 	private int chestType;
 
 	public BlockLockedChest(int i, String name) {
@@ -111,7 +100,7 @@ public class BlockLockedChest extends BlockContainer {
 			TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) par1World.getBlockTileEntity(x, y, z);
 			ItemStack hold = player.inventory.getCurrentItem();
 			boolean isAllowToOpen = false;
-			boolean isEfforced = false;
+			boolean updateEntity = false;
 			String failChatMessage = "It's locked!";
 			
 			if (player.capabilities.isCreativeMode) {
@@ -123,7 +112,8 @@ public class BlockLockedChest extends BlockContainer {
 			} else if(!lockedChestTE.isChestProtected()) {
 				isAllowToOpen = true;
 				if(hold != null && (hold.getItem() instanceof ItemPicklock)) {
-					isEfforced = true;
+					updateEntity = true;
+					lockedChestTE.enforceChest(player.username);
 				}
 			} else {
 				if(hold == null) {
@@ -133,8 +123,10 @@ public class BlockLockedChest extends BlockContainer {
 						
 						int picklockingStatus = lockedChestTE.tryToEnforceChest(hold, player);
 						if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
+							updateEntity = true;
 							isAllowToOpen = true;
 						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
+							//updateEntity = true; if some effects will realised
 							failChatMessage = "Key was damaged!";
 						} else {
 							failChatMessage = "picklocking failed!";
@@ -150,6 +142,9 @@ public class BlockLockedChest extends BlockContainer {
 				player.openGui(UltimateExtender.instance, GuiLockedChest.GUI_ID, par1World, x, y, z);
 				
 			} else {
+				if(updateEntity) {
+					UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
+				}
 				player.addChatMessage(failChatMessage);
 			}
 			return true;

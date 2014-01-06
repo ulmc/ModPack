@@ -109,7 +109,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		}
 	}
 
-	private void enforceChest(String username) {
+	public void enforceChest(String username) {
 		setOwnerName(username);
 		inv[ContainerLockedChest.KEY_SLOT_ID] = null;
 	}

@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 
 public class ContainerBones extends Container {
@@ -21,7 +22,7 @@ public class ContainerBones extends Container {
 
 		for (int line = 0; line < linesNum; line++) {
 			for (int row = 0; row < inLine; row++) {
-				addSlotToContainer(new Slot(tileEntity, line * inLine + row, 8 + row * 18,
+				addSlotToContainer(new ReSlot(tileEntity, line * inLine + row, 8 + row * 18,
 						18 + line * 18));
 			}
 		}
@@ -51,7 +52,7 @@ public class ContainerBones extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
-
+		
 		// null checks and checks if the item can be stacked (maxStackSize > 1)
 		if (slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
@@ -78,5 +79,11 @@ public class ContainerBones extends Container {
 			slotObject.onPickupFromSlot(player, stackInSlot);
 		}
 		return stack;
+	}
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);
+		
+		UltimateExtender.markSomeBlockForUpdate(player.worldObj, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+		
 	}
 }

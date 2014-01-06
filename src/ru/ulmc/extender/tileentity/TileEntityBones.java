@@ -1,6 +1,7 @@
 package ru.ulmc.extender.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,7 +9,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import ru.ulmc.extender.UltimateExtender;
+import cpw.mods.fml.common.network.Player;
 
 public class TileEntityBones extends TileEntity implements IInventory {
 	private ItemStack[] inv = new ItemStack[18];
@@ -16,13 +20,13 @@ public class TileEntityBones extends TileEntity implements IInventory {
 	private String ownerName;
 
 	public TileEntityBones() {
-		
+
 	}
-	
+
 	public TileEntityBones(ItemStack[] inv) {
-		this.inv = 	inv;
+		this.inv = inv;
 	}
-	
+
 	public ItemStack[] getInventory() {
 		return inv;
 	}
@@ -31,12 +35,12 @@ public class TileEntityBones extends TileEntity implements IInventory {
 	public int getSizeInventory() {
 		return inv.length;
 	}
-	
+
 	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return inv[slot];
 	}
-			
+
 	public String getOwnerName() {
 		return ownerName;
 	}
@@ -46,15 +50,15 @@ public class TileEntityBones extends TileEntity implements IInventory {
 	}
 
 	public int getState() {
-		
-		if(filledSlots == 0) {
+
+		if (filledSlots == 0) {
 			return 0;
-		} else if(filledSlots < 9) {
+		} else if (filledSlots < 9) {
 			return 1;
 		} else {
 			return 2;
 		}
-		
+
 	}
 
 	@Override
@@ -63,6 +67,7 @@ public class TileEntityBones extends TileEntity implements IInventory {
 		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
 			stack.stackSize = getInventoryStackLimit();
 		}
+
 	}
 
 	@Override
@@ -98,8 +103,7 @@ public class TileEntityBones extends TileEntity implements IInventory {
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) == this
-				&& player.getDistanceSq(xCoord + 0.5, yCoord + 0.5,
-						zCoord + 0.5) < 64;
+				&& player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
 	}
 
 	@Override
@@ -108,7 +112,7 @@ public class TileEntityBones extends TileEntity implements IInventory {
 
 	@Override
 	public void closeChest() {
-		
+
 	}
 
 	@Override
@@ -125,8 +129,8 @@ public class TileEntityBones extends TileEntity implements IInventory {
 		}
 		filledSlots = tagCompound.getInteger("filledSlots");
 		ownerName = tagCompound.getString("ownerName");
-		
-		//UltimateExtender.logger.info("filledSlots: " + filledSlots);
+
+		UltimateExtender.logger.info("filledSlots: " + filledSlots);
 	}
 
 	@Override
@@ -146,7 +150,7 @@ public class TileEntityBones extends TileEntity implements IInventory {
 		}
 		tagCompound.setTag("Inventory", itemList);
 		tagCompound.setInteger("filledSlots", filledSlots);
-		if(ownerName != null) {
+		if (ownerName != null) {
 			tagCompound.setString("ownerName", ownerName);
 		}
 	}
@@ -167,17 +171,16 @@ public class TileEntityBones extends TileEntity implements IInventory {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	@Override
 	public Packet getDescriptionPacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		this.writeToNBT(nbttagcompound);
-		return new Packet132TileEntityData(this.xCoord, this.yCoord,
-				this.zCoord, 4, nbttagcompound);
+		return new Packet132TileEntityData(this.xCoord, this.yCoord, this.zCoord, 4, nbttagcompound);
 	}
 
 	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData packet) {		
 		readFromNBT(packet.data);
 	}
 }

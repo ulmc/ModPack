@@ -2,6 +2,7 @@ package ru.ulmc.extender.entity.item;
 
 import java.util.Iterator;
 
+import ru.ulmc.extender.UltimateExtender;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.ITileEntityProvider;
