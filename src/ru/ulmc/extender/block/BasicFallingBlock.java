@@ -7,7 +7,6 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityFallingSand;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -17,9 +16,11 @@ import ru.ulmc.extender.entity.item.EntityFallingBlock;
 
 public class BasicFallingBlock extends BlockContainer {
 
+	@SuppressWarnings("rawtypes")
 	protected Class anEntityClass;
 	public static boolean fallInstantly = true;
 
+	@SuppressWarnings("rawtypes")
 	public BasicFallingBlock(int i, Material material, Class class1, String aBlockName) {
 		super(i, material);
 		anEntityClass = class1;
@@ -86,14 +87,14 @@ public class BasicFallingBlock extends BlockContainer {
 			byte b0 = 32;
 
 			if (par1World.checkChunksExist(x - b0, y - b0, z - b0, x + b0, y + b0, z + b0)) {
-				if (!par1World.isRemote) {
+				/*if (!par1World.isRemote) {
 					EntityFallingBlock entityfallingsand = new EntityFallingBlock(par1World, (double) ((float) x + 0.5F),
 							(double) ((float) y + 0.5F), (double) ((float) z + 0.5F), this.blockID,
 							par1World.getBlockMetadata(x, y, z));
 					this.onStartFalling(entityfallingsand);
 					par1World.spawnEntityInWorld(entityfallingsand);
 				}
-			} else {
+			} else {*/
 				int originY = y;
 				TileEntity te = par1World.getBlockTileEntity(x, y, z);
 
@@ -114,6 +115,7 @@ public class BasicFallingBlock extends BlockContainer {
 	/**
 	 * Called when the falling block entity for this block is created
 	 */
+	
 	protected void onStartFalling(EntityFallingBlock par1EntityFallingSand) {
 		
 	}

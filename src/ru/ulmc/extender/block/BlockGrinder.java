@@ -112,8 +112,8 @@ public class BlockGrinder extends BlockContainer {
 			if (isOpenAction) {
 				player.openGui(UltimateExtender.instance, GuiGrinder.GUI_ID, par1World, x, y, z);				
 			} else {
-				TileEntityGrinder lockedChestTE = (TileEntityGrinder) par1World.getBlockTileEntity(x, y, z);
-				if(lockedChestTE.grindItem(player)) {
+				TileEntityGrinder grinder = (TileEntityGrinder) par1World.getBlockTileEntity(x, y, z);
+				if(grinder.grindItem(player)) {
 					makeSomeNoize(par1World, x, y, z);					
 				} else {
 					UltimateExtender.logger.info("FALSE");

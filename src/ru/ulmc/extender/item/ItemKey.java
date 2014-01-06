@@ -12,6 +12,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 
 public class ItemKey extends Item {
 
@@ -66,8 +67,7 @@ public class ItemKey extends Item {
 			tagret.setTagCompound(new NBTTagCompound());
 			tag = tagret.getTagCompound();
 		}
-		tag.setInteger("cipher", source.stackTagCompound.getInteger("cipher"));
-
+		tag.setInteger("cipher", source.stackTagCompound.getInteger("cipher"));		
 	}
 
 	/*

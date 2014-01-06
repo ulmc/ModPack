@@ -32,6 +32,13 @@ public class ItemGrind extends Item {
 	public float getChanceToBuff() {
 		return chanceToBuff;
 	}
+	
+	public boolean isGoodEnoughForRenaming() {
+		if(bufflevel > 0.5) {
+			return true;
+		} 
+		return false;
+	}
 
 	public float getRandomBuff() {
 		float buff = bufflevel;

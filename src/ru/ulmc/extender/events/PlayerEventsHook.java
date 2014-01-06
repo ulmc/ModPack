@@ -9,14 +9,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
-import ru.ulmc.extender.UltimateExtender;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.tileentity.TileEntityBones;
+import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
 /**
  * Name and cast of this class are irrelevant
  */
 public class PlayerEventsHook {
+
+	@ForgeSubscribe
+	public void harvestingLockedChest(PlayerEvent.HarvestCheck event) {
+		if (!event.entityPlayer.worldObj.isRemote) {			
+			if (event.block.blockID == BlockManager.blockLockedChest.blockID) {
+				event.success = false;
+			}
+		}
+	}
 
 	@ForgeSubscribe
 	public void setBlockOfBones(PlayerDropsEvent event) {

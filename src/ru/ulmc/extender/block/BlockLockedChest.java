@@ -41,7 +41,7 @@ public class BlockLockedChest extends BlockContainer {
 	public BlockLockedChest(int i, String name) {
 		super(i, Material.iron);
 		setHardness(1.0F);
-		setResistance(2.0F);
+		setResistance(2000.0F);
 		setUnlocalizedName(name);
 		setCreativeTab(CreativeTabs.tabDecorations);
 		setTextureName(Reference.RES_NAME + name);
@@ -130,8 +130,16 @@ public class BlockLockedChest extends BlockContainer {
 					isAllowToOpen = false;
 				} else {
 					if((hold.getItem() instanceof ItemPicklock)) {
-						failChatMessage = "picklocking failed!";
-						isAllowToOpen = lockedChestTE.tryToEnforceChest(hold, player);
+						
+						int picklockingStatus = lockedChestTE.tryToEnforceChest(hold, player);
+						if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
+							isAllowToOpen = true;
+						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
+							failChatMessage = "Key was damaged!";
+						} else {
+							failChatMessage = "picklocking failed!";
+						}
+						
 					} else if(lockedChestTE.isKeyAndCipherMatches(hold)) {
 						isAllowToOpen = true;
 					}
@@ -147,7 +155,7 @@ public class BlockLockedChest extends BlockContainer {
 			return true;
 		}
 	}
-
+	
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getBlockTileEntity(x, y, z);
 		if (player.username.equals(lockedChestTE.getOwnerName()) || player.capabilities.isCreativeMode) {

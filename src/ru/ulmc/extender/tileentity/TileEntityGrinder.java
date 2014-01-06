@@ -32,10 +32,16 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 		if (item instanceof ItemKey) {
 			if (getExample() != null && getExample().getItem() instanceof ItemKey) {
 				ItemKey.cloneCipher(getExample(), stack);
+				if(grindStone.isGoodEnoughForRenaming()) {
+					stack.setItemName(getExample().getDisplayName());
+				}
 				damageGinder = true;
 			} else if (getExample() == null) {
 				ItemKey.setRandomCipher(stack);
 				damageGinder = true;
+				if(grindStone.isGoodEnoughForRenaming()) {
+					stack.setItemName(stack.getDisplayName() + " (" + player.username + ")");
+				}
 			}
 			ItemKey.setBonus(stack, grindStone.getRandomBuff());
 

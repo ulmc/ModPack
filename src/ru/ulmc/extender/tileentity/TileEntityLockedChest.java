@@ -10,14 +10,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockLockedChest;
-import ru.ulmc.extender.container.ContainerGrinder;
 import ru.ulmc.extender.container.ContainerLockedChest;
 import ru.ulmc.extender.item.ItemKey;
 import ru.ulmc.extender.item.ItemPicklock;
 
 public class TileEntityLockedChest extends ExtendedTileEntity implements IInventory {
+	public static final int PICKLOCKING_FAILED = 0; 
+	public static final int PICKLOCKING_SUCCESSED = 1; 
+	public static final int PICKLOCKING_KEY_DAMAGED = 2; 
 	private ItemStack[] inv = new ItemStack[38];
 	private int filledSlots;
 	private String ownerName;
@@ -57,16 +58,16 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		return false;
 	}
 
-	public boolean tryToEnforceChest(ItemStack picklock, EntityPlayer player) {
+	public int tryToEnforceChest(ItemStack picklock, EntityPlayer player) {
 		ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
 		if (picklock == null) {
-			return false;
+			return PICKLOCKING_FAILED;
 		}
 		if (key == null) {
 			enforceChest(player.username);
-			return true;
+			return PICKLOCKING_SUCCESSED;
 		} else if (!(picklock.getItem() instanceof ItemPicklock)) {
-			return false;
+			return PICKLOCKING_FAILED;
 		} else {
 			int keyLevel = ((ItemKey) key.getItem()).getSecurityLevel();
 			float keyBonus = ItemKey.getBonus(key);
@@ -74,27 +75,29 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			float picklockBonus = ItemPicklock.getBonus(picklock);
 
 			double multiplier = ((picklockLevel + picklockBonus) / (keyLevel + keyBonus));
-			double minRequried = 0.05D * multiplier;
-			double damageRequried = 0.10D * multiplier;
+			
+			double minRequried = 0.01D * multiplier;
+			double damageRequried = 0.06D * multiplier;
 
 			double chance = Math.random();
 
-			UltimateExtender.logger.info("minRequried: " + minRequried + " chance:" + chance
+			/*UltimateExtender.logger.info("minRequried: " + minRequried + " chance:" + chance
 					+ "picklockLevel, picklockBonus: " + picklockLevel + " : " + picklockBonus + "keyLevel, keyBonus: "
-					+ keyLevel + " : " + keyBonus + " | multiplier = " + multiplier);
+					+ keyLevel + " : " + keyBonus + " | multiplier = " + multiplier);*/
 			if (chance < minRequried) {
 				enforceChest(player.username);
 				picklock.damageItem(1, player);
-				UltimateExtender.logger.info("PICKLOCKED");
-				return true;
+				//UltimateExtender.logger.info("PICKLOCKED");
+				return PICKLOCKING_SUCCESSED;
 			} else {
 				chance =  Math.random();
 				if (chance < damageRequried) {
 					damageKey(key);
-					UltimateExtender.logger.info("DAMAGE! damageRequried: " + damageRequried + " chance:" + chance + " | multiplier = " + multiplier);
+					//UltimateExtender.logger.info("DAMAGE! damageRequried: " + damageRequried + " chance:" + chance + " | multiplier = " + multiplier);
+					return PICKLOCKING_KEY_DAMAGED;
 				}
 				picklock.damageItem((int) (chance * 10), player);
-				return false;
+				return PICKLOCKING_FAILED;
 			}
 		}
 	}
