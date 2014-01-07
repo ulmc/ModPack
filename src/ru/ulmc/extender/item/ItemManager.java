@@ -36,7 +36,7 @@ public class ItemManager {
 		createCraftItem(itemID++, "goldFabricRoll");
 		createCraftItem(itemID++, "diamondFabricRoll");
 		createCraftItem(itemID++, "chevron");
-		createCraftItem(itemID++, "chevronWithGoldenThread");
+		createCraftItem(itemID++, "chevronWithGoldThread");
 		createCraftItem(itemID++, "chevronWithDiamondThread");
 		createCraftItem(itemID++, "goldChevronWithGoldThread");
 		createCraftItem(itemID++, "goldChevronWithDiamondThread");
@@ -56,11 +56,12 @@ public class ItemManager {
 
 		createFoodItem(itemID++, "jerkedBeef", 6, 0.6f, false);
 		createFoodItem(itemID++, "jerkedPork", 6, 0.6f, false);
+		createFoodItem(itemID++, "jerkedLamb", 6, 0.5f, false);
 		createFoodItem(itemID++, "lambRawMeat", 4, 0.3f, true);
 		createFoodItem(itemID++, "lambFried", 8, 0.7f, true);
 		createFoodItem(itemID++, "lambLegFried", 8, 0.9f, true);
 		createFoodItem(itemID++, "salo", 3, 0.6f, true);
-		createFoodItem(itemID++, "jerkedLamb", 6, 0.5f, false);
+		
 
 		createCraftItem(itemID++, "salt");
 

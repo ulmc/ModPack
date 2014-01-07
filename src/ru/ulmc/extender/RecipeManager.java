@@ -27,8 +27,13 @@ public class RecipeManager {
 		Item ironKey = ItemManager.getItem("ironKey");
 		Item goldenKey = ItemManager.getItem("goldenKey");
 		Item diamondKey = ItemManager.getItem("diamondKey");
+		Item ironPicklock = ItemManager.getItem("ironPicklock");
+		Item goldenPicklock = ItemManager.getItem("goldenPicklock");
+		Item diamondPicklock = ItemManager.getItem("diamondPicklock");
+		
 		Item diamondDust = ItemManager.getItem("diamondDust");
 		Item goldDust = ItemManager.getItem("goldDust");
+		
 		Item leatherStrap = ItemManager.getItem("leatherStrap");
 		Item leatherCorset = ItemManager.getItem("leatherCorset");
 		Item spool = ItemManager.getItem("spool");
@@ -74,6 +79,11 @@ public class RecipeManager {
 		addShapeless(ironKey, 1, ironBlank);
 		addShapeless(goldenKey, 1, ironBlank, goldDust);
 		addShapeless(diamondKey, 1, ironBlank, diamondDust);
+		
+		addShapeless(ironPicklock, 1, ironBlank, ironBlank);
+		addShapeless(goldenPicklock, 1, ironBlank, ironBlank, goldDust, goldDust);
+		addShapeless(diamondPicklock, 1, ironBlank, ironBlank, diamondDust, diamondDust);
+		
 		addShapeless(spool, 1, Item.silk, Item.silk, Item.silk);
 		addShapeless(leatherStrap, 4, Item.leather);
 		addShapeless(fabricStrap, 1, spool, spool, spool);
