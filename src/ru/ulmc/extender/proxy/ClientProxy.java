@@ -17,6 +17,7 @@ import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 import ru.ulmc.extender.tileentity.TileEntityTable;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ClientProxy extends CommonProxy {
@@ -53,4 +54,8 @@ public class ClientProxy extends CommonProxy {
 	public void prepareBlock(Block aBlock) {
 		GameRegistry.registerBlock(aBlock, aBlock.getUnlocalizedName());
 	}
+	@Override
+	public int getArmorPrefix(String name){
+    	return RenderingRegistry.addNewArmourRendererPrefix(name);
+    }
 }

@@ -23,7 +23,7 @@ public class CommonProxy implements IGuiHandler
             int x, int y, int z)
     {
         return null;
-    }
+    }    
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world,
@@ -45,5 +45,8 @@ public class CommonProxy implements IGuiHandler
     }
     public void CreateItem(Item anItem, int index, String name, String[] metanames, String[] ruNames, String[] enNames, String differentTexturePath){
     	
+    }
+    public int getArmorPrefix(String name){
+    	return 0;
     }
 }
