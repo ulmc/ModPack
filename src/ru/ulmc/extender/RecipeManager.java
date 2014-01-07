@@ -8,79 +8,111 @@ import ru.ulmc.extender.proxy.CommonProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeManager {
+	
+	private static void addShapeless(Item item, int quantity, Object... combination) {
+		GameRegistry.addShapelessRecipe(new ItemStack(item, quantity), combination);
+	}
+	
+	private static void addSmelting(Item item, int quantity, float xp, Item inputitem) {
+		GameRegistry.addSmelting(inputitem.itemID, new ItemStack(item, quantity), xp);
+	}
 
 	public static void init(CommonProxy proxy) {
 		/*GameRegistry.addRecipe(new ItemStack(blockReinforcedConcrete, 1), "xxx", "yyy", "xxx", 'x', Block.fenceIron, 'y',
 				itemCementSack);*/
 		/*
-		GameRegistry.addRecipe(new ItemStack(ItemManager.getItemByName("nails"), 4),
-								"x",
-								'x', 
-								Item.ingotIron);
+		
 		*/
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("ironKey"), 1), new Object[] { Item.ingotIron });
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("goldenKey"), 1), new Object[] { Item.ingotGold, ItemManager.getItemByName("ironKey") });
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("diamondKey"), 1), new Object[] { Item.diamond, ItemManager.getItemByName("goldenKey") });
+		Item ironBlank = ItemManager.getItem("ironBlank");
+		Item ironKey = ItemManager.getItem("ironKey");
+		Item goldenKey = ItemManager.getItem("goldenKey");
+		Item diamondKey = ItemManager.getItem("diamondKey");
+		Item diamondDust = ItemManager.getItem("diamondDust");
+		Item goldDust = ItemManager.getItem("goldDust");
+		Item leatherStrap = ItemManager.getItem("leatherStrap");
+		Item leatherCorset = ItemManager.getItem("leatherCorset");
+		Item spool = ItemManager.getItem("spool");
+		Item goldSpool = ItemManager.getItem("goldSpool");
+		Item fabricStrap = ItemManager.getItem("fabricStrap");
+		Item fabricRoll = ItemManager.getItem("fabricRoll");
+		Item obsidianAlloyBlank = ItemManager.getItem("obsidianAlloyBlank");
+		Item obsidianBrick = ItemManager.getItem("obsidianBrick");
+		Item obsidianAlloyIngot = ItemManager.getItem("obsidianAlloyIngot");
+		Item lambFried = ItemManager.getItem("lambFried");
 		
+		Item diamondSpool = ItemManager.getItem("diamondSpool");
+		Item goldFabricStrap = ItemManager.getItem("goldFabricStrap");
+		Item goldFabricRoll = ItemManager.getItem("goldFabricRoll");
+		Item diamondFabricStrap = ItemManager.getItem("diamondFabricStrap");
+		Item diamondFabricRoll = ItemManager.getItem("diamondFabricRoll");
+		Item chevron = ItemManager.getItem("chevron");
+		Item chevronWithGoldThread = ItemManager.getItem("chevronWithGoldThread");
+		Item chevronWithDiamondThread = ItemManager.getItem("chevronWithDiamondThread");
+		Item goldChevronWithGoldThread = ItemManager.getItem("goldChevronWithGoldThread");
+		Item goldChevronWithDiamondThread = ItemManager.getItem("goldChevronWithDiamondThread");
+		Item diamondChevronWithDiamondThread = ItemManager.getItem("diamondChevronWithDiamondThread");
+		Item diamondChevronWithGoldThread = ItemManager.getItem("diamondChevronWithGoldThread");
+		Item medivalSymbol = ItemManager.getItem("medivalSymbol");
+		Item technoSymbol = ItemManager.getItem("technoSymbol");
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("leatherStrap"), 4), Item.leather);
+		Item jerkedBeef = ItemManager.getItem("jerkedBeef");
+		Item jerkedPork = ItemManager.getItem("jerkedPork");
+		Item jerkedLamb = ItemManager.getItem("jerkedLamb");
+		Item salt = ItemManager.getItem("salt");
+		Item lambRawMeat = ItemManager.getItem("lambRawMeat");
+		Item porkBelly = ItemManager.getItem("porkBelly");
+		Item salo = ItemManager.getItem("salo");
+		Item saltCrystal = ItemManager.getItem("saltCrystal");
 		
-		GameRegistry.addRecipe(new ItemStack(ItemManager.getItemByName("leatherCorset"), 1),
-				"x x",
-				"xyx",
-				"xyx",
-				'x', ItemManager.getItemByName("leatherStrap"),
-				'y', Item.silk);
+		Item cementMix = ItemManager.getItem("cementMix");
+		Item cementSack = ItemManager.getItem("cementSack");
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("spool"), 1), new Object[] { Item.silk, Item.silk, Item.silk });
+		addShapeless(diamondDust, 2, Item.diamond);
+		addShapeless(goldDust, 1, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("fabricStrap"), 1), 
-										new Object[] { 
-												ItemManager.getItemByName("spool"), 
-												ItemManager.getItemByName("spool"), 
-												ItemManager.getItemByName("spool") 
-										});
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("fabricRoll"), 1),
-										new Object[] { 
-											ItemManager.getItemByName("fabricStrap"),
-											ItemManager.getItemByName("fabricStrap"), 
-											ItemManager.getItemByName("fabricStrap"), 
-											ItemManager.getItemByName("fabricStrap"), 
-											ItemManager.getItemByName("fabricStrap"), 
-											ItemManager.getItemByName("fabricStrap") });
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("diamondDust"), 2), new Object[] { Item.diamond });
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("goldDust"), 4), new Object[] { Item.ingotGold, Item.ingotGold });
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("obsidianAlloyBlank"), 1),
-										new Object[] { 
-											Item.ingotIron,
-											ItemManager.getItemByName("obsidianBrick") });
-		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("obsidianBrick"), 2), new Object[] { Block.obsidian });
-		
+		addShapeless(ironBlank, 4, Item.ingotIron);
+		addShapeless(ironKey, 1, ironBlank);
+		addShapeless(goldenKey, 1, ironBlank, goldDust);
+		addShapeless(diamondKey, 1, ironBlank, diamondDust);
+		addShapeless(spool, 1, Item.silk, Item.silk, Item.silk);
+		addShapeless(leatherStrap, 4, Item.leather);
+		addShapeless(fabricStrap, 1, spool, spool, spool);
+		addShapeless(fabricRoll, 1, fabricStrap, fabricStrap, fabricStrap, fabricStrap, fabricStrap, fabricStrap);		
+		addShapeless(obsidianAlloyBlank, 1, Item.ingotIron, obsidianBrick);
+		addShapeless(obsidianBrick, 2, Block.obsidian);
 		
 		// Соление/вяление		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("jerkedBeef"), 1), new Object[] { Item.beefRaw, ItemManager.getItemByName("salt") });
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("jerkedPork"), 1), new Object[] { Item.porkRaw, ItemManager.getItemByName("salt") });
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("jerkedLamb"), 1), 
-										new Object[] { 
-											ItemManager.getItemByName("lambRawMeat"), 
-											ItemManager.getItemByName("salt") 
-										});
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("salo"), 1), 
-										new Object[] { 
-											ItemManager.getItemByName("porkBelly"), 
-											ItemManager.getItemByName("salt") 
-										});
+		addShapeless(jerkedBeef, 1, salt, Item.beefRaw);
+		addShapeless(jerkedPork, 1, salt, Item.porkRaw);
+		addShapeless(jerkedLamb, 1, salt, lambRawMeat);
+		addShapeless(salo, 1, salt, porkBelly);
+		addShapeless(jerkedBeef, 1, salt, Item.beefRaw);
+		addShapeless(salt, 4, saltCrystal);
+
+		addSmelting(obsidianAlloyIngot, 1, 1, obsidianAlloyBlank);
+		addSmelting(lambFried, 1, 1, lambRawMeat);
+		addSmelting(salt, 8, 0.1F, Item.bucketWater);
 		
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemManager.getItemByName("salt"), 4), new Object[] { ItemManager.getItemByName("saltCrystal") });
+		addSmelting(cementSack, 8, 0.3F, cementMix);
+		addSmelting(salt, 8, 0.1F, Item.bucketWater);
 		
-		GameRegistry.addSmelting(ItemManager.getItemByName("obsidianAlloyBlank").itemID, new ItemStack(ItemManager.getItemByName("obsidianAlloyIngot"), 1), 1);
+		addShapeless(goldSpool, 1, goldDust, spool);
+		addShapeless(diamondSpool, 1, diamondDust, spool);
+		addShapeless(goldFabricStrap, 1, goldSpool, goldSpool, goldSpool);
+		addShapeless(goldFabricRoll, 1, goldFabricStrap, goldFabricStrap, goldFabricStrap, goldFabricStrap, goldFabricStrap, goldFabricStrap);
+		addShapeless(diamondFabricStrap, 1, diamondSpool, diamondSpool, diamondSpool);
+		addShapeless(diamondFabricRoll, 1, diamondFabricStrap, diamondFabricStrap, diamondFabricStrap, diamondFabricStrap, diamondFabricStrap, diamondFabricStrap);
+		addShapeless(chevron, 1, spool, fabricRoll, spool);
 		
-		GameRegistry.addSmelting(ItemManager.getItemByName("lambRawMeat").itemID, new ItemStack(ItemManager.getItemByName("lambFried"), 1), 1);
-		GameRegistry.addSmelting(Item.bucketWater.itemID, new ItemStack(ItemManager.getItemByName("salt"), 8), 0);
+		addShapeless(chevronWithGoldThread, 1, goldSpool, fabricStrap, goldSpool);
+		addShapeless(chevronWithDiamondThread, 1, diamondSpool, fabricStrap, diamondSpool);
+		addShapeless(goldChevronWithGoldThread, 1,goldSpool, goldFabricStrap, goldSpool);
+		addShapeless(goldChevronWithDiamondThread, 1, diamondSpool, goldFabricStrap, diamondSpool);
+		addShapeless(diamondChevronWithDiamondThread, 1, diamondSpool, diamondFabricStrap, diamondSpool);
+		addShapeless(diamondChevronWithGoldThread, 1, goldSpool, diamondFabricStrap, goldSpool);
+		
+		addShapeless(medivalSymbol, 1, fabricStrap, spool, new ItemStack(Item.dyePowder, 1, 11));
+		addShapeless(technoSymbol, 1, fabricStrap, spool, new ItemStack(Item.dyePowder, 1, 1));
 		
 		/*
 		// marble and other simple blocks
@@ -90,8 +122,6 @@ public class RecipeManager {
 		GameRegistry.addRecipe(new ItemStack(itemIronStripe, 6), "xxx", 'x', Item.ingotIron);
 		// переплавка
 		
-		GameRegistry.addSmelting(itemCementMix.shiftedIndex, new ItemStack(itemCementSack, 1), 0);
-		GameRegistry.addSmelting(itemObsidianAlloyBlank.shiftedIndex, new ItemStack(itemObsidianAlloyIngot, 1), 0);
 		// Крафт фурнитуры
 		GameRegistry.addRecipe(new ItemStack(itemWoodChair, 1), "  x", "xxx", "xyx", 'x', itemWoodPlank, 'y', itemNails);
 		GameRegistry.addRecipe(new ItemStack(itemWhiteCottonChair, 1), " zx", "xxx", "xyx", 'x', itemWoodPlank, 'y',
@@ -104,131 +134,102 @@ public class RecipeManager {
 				itemNails, 'z', new ItemStack(Block.cloth, 1, 15));
 		GameRegistry.addRecipe(new ItemStack(itemLeatherChair, 1), " zx", "xxx", "xyx", 'x', itemWoodPlank, 'y', itemNails,
 				'z', Item.leather);
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldSpool, 1), new Object[] { itemGoldDust, itemSpool });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemDiamondSpool, 1), new Object[] { itemDiamondDust, itemSpool });
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldFabricStrap, 1), new Object[] { itemGoldSpool, itemGoldSpool,
-				itemGoldSpool });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldFabricRoll, 1), new Object[] { itemGoldFabricStrap,
-				itemGoldFabricStrap, itemGoldFabricStrap, itemGoldFabricStrap, itemGoldFabricStrap, itemGoldFabricStrap });
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemDiamondFabricStrap, 1), new Object[] { itemDiamondSpool,
-				itemDiamondSpool, itemDiamondSpool });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemDiamondFabricRoll, 1), new Object[] { itemDiamondFabricStrap,
-				itemDiamondFabricStrap, itemDiamondFabricStrap, itemDiamondFabricStrap, itemDiamondFabricStrap,
-				itemDiamondFabricStrap });
-
-		GameRegistry
-				.addShapelessRecipe(new ItemStack(itemChevron, 1), new Object[] { itemSpool, itemFabricRoll, itemSpool });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemChevronWithGoldThread, 1), new Object[] { itemGoldSpool,
-				itemFabricRoll, itemGoldSpool });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemChevronWithDiamondThread, 1), new Object[] { itemDiamondDust,
-				itemFabricRoll, itemDiamondDust });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldChevronWithGoldThread, 1), new Object[] { itemGoldSpool,
-				itemGoldFabricRoll, itemGoldSpool });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemGoldChevronWithDiamondThread, 1), new Object[] { itemDiamondSpool,
-				itemGoldFabricRoll, itemDiamondSpool });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemDiamondChevronWithDiamondThread, 1), new Object[] {
-				itemDiamondSpool, itemDiamondFabricRoll, itemDiamondSpool });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemDiamondChevronWithGoldThread, 1), new Object[] { itemGoldSpool,
-				itemDiamondFabricRoll, itemGoldSpool });
-
-		GameRegistry.addShapelessRecipe(new ItemStack(itemMedivalSymbol, 1), new Object[] { itemFabricStrap, itemSpool,
-				new ItemStack(Item.dyePowder, 1, 11) });
-		GameRegistry.addShapelessRecipe(new ItemStack(itemTechnoSymbol, 1), new Object[] { itemFabricStrap, itemSpool,
-				new ItemStack(Item.dyePowder, 1, 1) });
+		GameRegistry.addRecipe(new ItemStack(leatherCorset, 1),
+				"x x",
+				"xyx",
+				"xyx",
+				'x', leatherStrap,
+				'y', Item.silk);
 
 		// крафт нейтральных флагов
-		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 0), "xxx", "rsr", "p p", 'x', Item.stick, 's', itemChevron, 'p',
-				itemSpool, 'r', itemFabricRoll);
-		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 1), "xxx", "rsr", "p p", 'x', Item.stick, 's', itemChevron, 'p',
-				itemGoldSpool, 'r', itemFabricRoll);
-		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 2), "xxx", "rsr", "p p", 'x', Item.stick, 's', itemChevron, 'p',
-				itemGoldSpool, 'r', itemGoldFabricRoll);
+		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 0), "xxx", "rsr", "p p", 'x', Item.stick, 's', chevron, 'p',
+				spool, 'r', fabricRoll);
+		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 1), "xxx", "rsr", "p p", 'x', Item.stick, 's', chevron, 'p',
+				goldSpool, 'r', fabricRoll);
+		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 2), "xxx", "rsr", "p p", 'x', Item.stick, 's', chevron, 'p',
+				goldSpool, 'r', goldFabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 3), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemChevronWithGoldThread, 'p', itemSpool, 'r', itemFabricRoll);
+				chevronWithGoldThread, 'p', spool, 'r', fabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 4), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemChevronWithGoldThread, 'p', itemGoldSpool, 'r', itemFabricRoll);
+				chevronWithGoldThread, 'p', goldSpool, 'r', fabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 5), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemChevronWithGoldThread, 'p', itemSpool, 'r', itemGoldFabricRoll);
+				chevronWithGoldThread, 'p', spool, 'r', goldFabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 6), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemGoldChevronWithGoldThread, 'p', itemSpool, 'r', itemFabricRoll);
+				goldChevronWithGoldThread, 'p', spool, 'r', fabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 7), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemGoldChevronWithGoldThread, 'p', itemGoldSpool, 'r', itemFabricRoll);
+				goldChevronWithGoldThread, 'p', goldSpool, 'r', fabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 8), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemGoldChevronWithGoldThread, 'p', itemSpool, 'r', itemGoldFabricRoll);
+				goldChevronWithGoldThread, 'p', spool, 'r', goldFabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 9), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemGoldChevronWithGoldThread, 'p', itemGoldSpool, 'r', itemGoldFabricRoll);
+				goldChevronWithGoldThread, 'p', goldSpool, 'r', goldFabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 10), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemGoldChevronWithDiamondThread, 'p', itemSpool, 'r', itemFabricRoll);
+				goldChevronWithDiamondThread, 'p', spool, 'r', fabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 11), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemGoldChevronWithDiamondThread, 'p', itemGoldSpool, 'r', itemFabricRoll);
+				goldChevronWithDiamondThread, 'p', goldSpool, 'r', fabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 12), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemGoldChevronWithDiamondThread, 'p', itemSpool, 'r', itemGoldFabricRoll);
+				goldChevronWithDiamondThread, 'p', spool, 'r', goldFabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 13), "xxx", "rsr", "p p", 'x', Item.stick, 's',
-				itemGoldChevronWithDiamondThread, 'p', itemGoldSpool, 'r', itemGoldFabricRoll);
+				goldChevronWithDiamondThread, 'p', goldSpool, 'r', goldFabricRoll);
 
 		// консерваторские флаги
-		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 0), "xxx", "rsr", "pyp", 'x', Item.stick, 's', itemChevron,
-				'p', itemSpool, 'r', itemFabricRoll, 'y', itemMedivalSymbol);
-		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 1), "xxx", "rsr", "pyp", 'x', Item.stick, 's', itemChevron,
-				'p', itemDiamondSpool, 'r', itemFabricRoll, 'y', itemMedivalSymbol);
-		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 2), "xxx", "rsr", "pyp", 'x', Item.stick, 's', itemChevron,
-				'p', itemDiamondSpool, 'r', itemDiamondFabricRoll, 'y', itemMedivalSymbol);
+		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 0), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
+				'p', spool, 'r', fabricRoll, 'y', medivalSymbol);
+		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 1), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
+				'p', diamondSpool, 'r', fabricRoll, 'y', medivalSymbol);
+		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 2), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
+				'p', diamondSpool, 'r', diamondFabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 3), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemChevronWithDiamondThread, 'p', itemSpool, 'r', itemFabricRoll, 'y', itemMedivalSymbol);
+				chevronWithDiamondThread, 'p', spool, 'r', fabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 4), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemChevronWithDiamondThread, 'p', itemDiamondSpool, 'r', itemFabricRoll, 'y', itemMedivalSymbol);
+				chevronWithDiamondThread, 'p', diamondSpool, 'r', fabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 5), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemChevronWithDiamondThread, 'p', itemSpool, 'r', itemDiamondFabricRoll, 'y', itemMedivalSymbol);
+				chevronWithDiamondThread, 'p', spool, 'r', diamondFabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 6), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithGoldThread, 'p', itemSpool, 'r', itemFabricRoll, 'y', itemMedivalSymbol);
+				diamondChevronWithGoldThread, 'p', spool, 'r', fabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 7), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithGoldThread, 'p', itemDiamondSpool, 'r', itemFabricRoll, 'y', itemMedivalSymbol);
+				diamondChevronWithGoldThread, 'p', diamondSpool, 'r', fabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 8), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithGoldThread, 'p', itemSpool, 'r', itemDiamondFabricRoll, 'y', itemMedivalSymbol);
+				diamondChevronWithGoldThread, 'p', spool, 'r', diamondFabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 9), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithGoldThread, 'p', itemDiamondSpool, 'r', itemDiamondFabricRoll, 'y', itemMedivalSymbol);
+				diamondChevronWithGoldThread, 'p', diamondSpool, 'r', diamondFabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 10), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithDiamondThread, 'p', itemSpool, 'r', itemFabricRoll, 'y', itemMedivalSymbol);
+				diamondChevronWithDiamondThread, 'p', spool, 'r', fabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 11), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithDiamondThread, 'p', itemDiamondSpool, 'r', itemFabricRoll, 'y', itemMedivalSymbol);
+				diamondChevronWithDiamondThread, 'p', diamondSpool, 'r', fabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 12), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithDiamondThread, 'p', itemSpool, 'r', itemDiamondFabricRoll, 'y', itemMedivalSymbol);
+				diamondChevronWithDiamondThread, 'p', spool, 'r', diamondFabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 13), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithDiamondThread, 'p', itemDiamondSpool, 'r', itemDiamondFabricRoll, 'y',
-				itemMedivalSymbol);
+				diamondChevronWithDiamondThread, 'p', diamondSpool, 'r', diamondFabricRoll, 'y',
+				medivalSymbol);
 		// Флаги технократов
-		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 0), "xxx", "rsr", "pyp", 'x', Item.stick, 's', itemChevron,
-				'p', itemSpool, 'r', itemFabricRoll, 'y', itemTechnoSymbol);
-		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 1), "xxx", "rsr", "pyp", 'x', Item.stick, 's', itemChevron,
-				'p', itemDiamondSpool, 'r', itemFabricRoll, 'y', itemTechnoSymbol);
-		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 2), "xxx", "rsr", "pyp", 'x', Item.stick, 's', itemChevron,
-				'p', itemDiamondSpool, 'r', itemDiamondFabricRoll, 'y', itemTechnoSymbol);
+		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 0), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
+				'p', spool, 'r', fabricRoll, 'y', technoSymbol);
+		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 1), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
+				'p', diamondSpool, 'r', fabricRoll, 'y', technoSymbol);
+		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 2), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
+				'p', diamondSpool, 'r', diamondFabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 3), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemChevronWithDiamondThread, 'p', itemSpool, 'r', itemFabricRoll, 'y', itemTechnoSymbol);
+				chevronWithDiamondThread, 'p', spool, 'r', fabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 4), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemChevronWithDiamondThread, 'p', itemDiamondSpool, 'r', itemFabricRoll, 'y', itemTechnoSymbol);
+				chevronWithDiamondThread, 'p', diamondSpool, 'r', fabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 5), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemChevronWithDiamondThread, 'p', itemSpool, 'r', itemDiamondFabricRoll, 'y', itemTechnoSymbol);
+				chevronWithDiamondThread, 'p', spool, 'r', diamondFabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 6), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithGoldThread, 'p', itemSpool, 'r', itemFabricRoll, 'y', itemTechnoSymbol);
+				diamondChevronWithGoldThread, 'p', spool, 'r', fabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 7), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithGoldThread, 'p', itemDiamondSpool, 'r', itemFabricRoll, 'y', itemTechnoSymbol);
+				diamondChevronWithGoldThread, 'p', diamondSpool, 'r', fabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 8), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithGoldThread, 'p', itemSpool, 'r', itemDiamondFabricRoll, 'y', itemTechnoSymbol);
+				diamondChevronWithGoldThread, 'p', spool, 'r', diamondFabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 9), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithGoldThread, 'p', itemDiamondSpool, 'r', itemDiamondFabricRoll, 'y', itemTechnoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 10), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithDiamondThread, 'p', itemSpool, 'r', itemFabricRoll, 'y', itemTechnoSymbol);
+				diamondChevronWithDiamondThread, 'p', spool, 'r', fabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 11), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithDiamondThread, 'p', itemDiamondSpool, 'r', itemFabricRoll, 'y', itemTechnoSymbol);
+				diamondChevronWithDiamondThread, 'p', diamondSpool, 'r', fabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 12), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithDiamondThread, 'p', itemSpool, 'r', itemDiamondFabricRoll, 'y', itemTechnoSymbol);
+				diamondChevronWithDiamondThread, 'p', spool, 'r', diamondFabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 13), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
-				itemDiamondChevronWithDiamondThread, 'p', itemDiamondSpool, 'r', itemDiamondFabricRoll, 'y',
-				itemTechnoSymbol);
+				diamondChevronWithDiamondThread, 'p', diamondSpool, 'r', diamondFabricRoll, 'y',
+				technoSymbol);
 				
 		*/
 	}

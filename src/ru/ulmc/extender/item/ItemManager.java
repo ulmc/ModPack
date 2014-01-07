@@ -102,14 +102,10 @@ public class ItemManager {
 		createCraftItem(alterItemID++, "ash");
 	}
 
-	public static Item getItemByName(String name) {
+	public static Item getItem(String name) {
 		return items.get(name);
 	}
-
-	public static void setItems(Map<String, Item> items) {
-		ItemManager.items = items;
-	}
-
+	
 	protected static void createPlaceableItem(int itemID, Block block, String itemName) {
 		BasicPlaceableItem item = new BasicPlaceableItem(ConfigurationHander.getItemID(itemName, itemID), itemName, block);
 		commonRegistrationActions(item, itemName);
