@@ -3,14 +3,20 @@ package ru.ulmc.extender.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockManager;
+import ru.ulmc.extender.item.ItemManager;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
@@ -24,6 +30,18 @@ public class PlayerEventsHook {
 		if (!event.entityPlayer.worldObj.isRemote) {			
 			if (event.block.blockID == BlockManager.blockLockedChest.blockID) {
 				event.success = false;
+			}
+		}
+	}
+	@SideOnly(Side.CLIENT)
+	@ForgeSubscribe
+	public void hidePlayerDisplayName(RenderLivingEvent.Specials.Pre event) {
+		if(event.entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer)event.entity;
+			if(player.getCurrentArmor(3) != null && player.getCurrentArmor(3).itemID == ItemManager.maskId) {
+				if(event.isCancelable()) {
+					event.setCanceled(true);
+				}	
 			}
 		}
 	}

@@ -21,7 +21,7 @@ public class MobDropEventsHook {
 				
 		if(event.entityLiving instanceof EntitySheep) {
 			int dropCount = getDropCount(event, baseDropRawLambMeat);
-			dropItem(event.entityLiving, ItemManager.getItemByName("lambRawMeat"), dropCount);
+			dropItem(event.entityLiving, ItemManager.getItem("lambRawMeat"), dropCount);
 			/*UltimateExtender.logger.info(	"event.lootingLevel: " + event.lootingLevel + 
 											" | event.specialDropValue: " + event.specialDropValue + 
 											" | dropCount: " + dropCount);*/
@@ -33,7 +33,7 @@ public class MobDropEventsHook {
 	public void pigLooseFat(LivingDropsEvent event) {				
 		if(event.entityLiving instanceof EntityPig) {
 			int dropCount = getDropCount(event, baseDropPigFat);
-			dropItem(event.entityLiving, ItemManager.getItemByName("porkBelly"), dropCount);
+			dropItem(event.entityLiving, ItemManager.getItem("porkBelly"), dropCount);
 		}
 		
 	}
