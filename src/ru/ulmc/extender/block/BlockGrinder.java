@@ -20,7 +20,7 @@ import ru.ulmc.extender.tileentity.TileEntityGrinder;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockGrinder extends BlockContainer {
+public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	
 	@SideOnly(Side.CLIENT)
     private Icon grinderTop;
@@ -32,14 +32,21 @@ public class BlockGrinder extends BlockContainer {
     private Icon grinderRight;
     @SideOnly(Side.CLIENT)
     private Icon grinderBottom;
+    
+    private String name;
 
-	public BlockGrinder(int i) {
+	public BlockGrinder(int i, String name) {
 		super(i, Material.iron);
 		setHardness(1.0F);
 		setResistance(2.0F);
-		setUnlocalizedName("blockGrinder");
+		setUnlocalizedName(name);
+		this.name = name;
 		setCreativeTab(CreativeTabs.tabBlock);
-		setTextureName(Reference.RES_NAME + "blockGrinder");
+		setTextureName(Reference.RES_NAME + name);
+	}
+	
+	public String getSystemName() {
+		return name;
 	}
 	
 	@SideOnly(Side.CLIENT)

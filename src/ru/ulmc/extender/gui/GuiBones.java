@@ -9,7 +9,6 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import ru.ulmc.extender.Reference;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.container.ContainerBones;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 

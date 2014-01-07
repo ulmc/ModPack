@@ -12,20 +12,25 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockBarbedWire extends BlockBreakable
+public class BlockBarbedWire extends BlockBreakable implements UlmcBlock
 {
-    public BlockBarbedWire(int blockID)
+	private static String name;
+    public BlockBarbedWire(int blockID, String name)
     {
-        super(blockID, Reference.RES_NAME + "barbedWire", Material.cactus, false);
+        super(blockID, Reference.RES_NAME + name, Material.cactus, false);
         setHardness(2.5f);
         setResistance(10.0f);
         setLightOpacity(0);
         setStepSound(soundMetalFootstep);
-        setUnlocalizedName("barbedWire");
+        setUnlocalizedName(name);
+        this.name = name;
         //setTextureName(Reference.RES_NAME + "barbedWire");
         setCreativeTab(CreativeTabs.tabBlock);
         this.setTickRandomly(true);
     }
+    public String getSystemName() {
+		return name;
+	}
     public int getRenderBlockPass()
     {
         return 1;

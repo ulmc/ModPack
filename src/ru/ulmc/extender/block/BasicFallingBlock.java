@@ -14,17 +14,18 @@ import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.entity.item.EntityFallingBlock;
 
-public class BasicFallingBlock extends BlockContainer {
+public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 
 	@SuppressWarnings("rawtypes")
 	protected Class anEntityClass;
 	public static boolean fallInstantly = true;
-
+	private String name;
 	@SuppressWarnings("rawtypes")
 	public BasicFallingBlock(int i, Material material, Class class1, String aBlockName) {
 		super(i, material);
 		anEntityClass = class1;
 		setUnlocalizedName(aBlockName);
+		name = aBlockName;
 		setTextureName(Reference.RES_NAME + getUnlocalizedName());
 	}
 
@@ -196,5 +197,10 @@ public class BasicFallingBlock extends BlockContainer {
 			aByte = 3;
 		}
 		par1World.setBlockMetadataWithNotify(par2, par3, par4, aByte, 2);
+	}
+
+	@Override
+	public String getSystemName() {
+		return name;
 	}
 }

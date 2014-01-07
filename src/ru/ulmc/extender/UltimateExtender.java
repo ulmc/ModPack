@@ -35,6 +35,7 @@ public class UltimateExtender {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		ConfigurationHander.init();
 		logger = Logger.getLogger(Reference.MOD_ID);
 		logger.setParent(FMLLog.getLogger());
 		proxy.preInit(); // You have to call the methods in your proxy class

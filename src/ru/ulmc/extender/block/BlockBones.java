@@ -18,8 +18,8 @@ public class BlockBones extends BasicFallingBlock {
 
 	private final Random random = new Random();
 
-	public BlockBones(int i) {
-		super(i, Material.ground, "blockOfBones");
+	public BlockBones(int i, String name) {
+		super(i, Material.ground, name);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 		setHardness(1.0F);
 		setResistance(2.0F);

@@ -9,13 +9,17 @@ import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.tileentity.FillerTileEntity;
 
-public class FillerBlock extends BlockContainer {
+public class FillerBlock extends BlockContainer implements UlmcBlock {
 
 	public FillerBlock(int id, Material material) {
 		super(id, material);
 		setUnlocalizedName(Reference.RES_NAME + "fillerBlock");
 		setTextureName(Reference.RES_NAME + "fillerBlock");
 		setStepSound(new StepSound("NONE", 0.0f, 0.0f));
+	}
+	@Override
+	public String getSystemName() {
+		return "fillerBlock";
 	}
 
 	@Override

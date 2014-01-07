@@ -17,20 +17,27 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 
-public class BasicStandingBlock extends BlockContainer {
-	
+public class BasicStandingBlock extends BlockContainer implements UlmcBlock {
+
 	protected Class anEntityClass;
+	private String name;
 
 	public BasicStandingBlock(int i, Material material, Class class1, String aBlockName) {
 		super(i, material);
 		anEntityClass = class1;
 		setUnlocalizedName(aBlockName);
+		name = aBlockName;
 		setTextureName(Reference.RES_NAME + getUnlocalizedName());
 	}
+
 	public BasicStandingBlock(int i, Material material, String aBlockName) {
 		super(i, material);
 		setUnlocalizedName(aBlockName);
 		setTextureName(Reference.RES_NAME + getUnlocalizedName());
+	}
+
+	public String getSystemName() {
+		return name;
 	}
 
 	public TileEntity getBlockEntity() {
@@ -41,6 +48,7 @@ public class BasicStandingBlock extends BlockContainer {
 			throw new RuntimeException(exception);
 		}
 	}
+
 	@Override
 	public TileEntity createNewTileEntity(World var1) {
 		try {
@@ -59,17 +67,16 @@ public class BasicStandingBlock extends BlockContainer {
 			return false;
 		}
 	}
+
 	@Override
 	public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
 		return canPlaceStandingBlockOn(par1World, par2, par3 - 1, par4);
 	}
 
-	private boolean dropBlockIfCantStay(World par1World, int par2, int par3,
-			int par4) {
+	private boolean dropBlockIfCantStay(World par1World, int par2, int par3, int par4) {
 		if (!this.canPlaceBlockAt(par1World, par2, par3, par4)) {
 			if (par1World.getBlockId(par2, par3, par4) == this.blockID) {
-				this.dropBlockAsItem(par1World, par2, par3, par4,
-						par1World.getBlockMetadata(par2, par3, par4), 0);
+				this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
 				par1World.setBlock(par2, par3, par4, 0);
 			}
 
@@ -78,50 +85,54 @@ public class BasicStandingBlock extends BlockContainer {
 			return true;
 		}
 	}
+
 	@Override
 	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
 		if (this.dropBlockIfCantStay(par1World, par2, par3, par4)) {
 			int var6 = par1World.getBlockMetadata(par2, par3, par4);
-			if (!this.canPlaceStandingBlockOn(par1World, par2, par3 - 1, par4)
-					&& var6 == 5) {
-				this.dropBlockAsItem(par1World, par2, par3, par4,
-						par1World.getBlockMetadata(par2, par3, par4), 0);
+			if (!this.canPlaceStandingBlockOn(par1World, par2, par3 - 1, par4) && var6 == 5) {
+				this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
 				par1World.setBlock(par2, par3, par4, 0);
 			}
 
 		}
 	}
+
 	@Override
 	public int idDropped(int i, Random random, int j) {
 		return this.blockID;
 	}
+
 	@Override
 	public void registerIcons(IconRegister icon) {
-		this.blockIcon = icon.registerIcon(Reference.RES_NAME + "icons/"
-				+ this.getUnlocalizedName());
+		this.blockIcon = icon.registerIcon(Reference.RES_NAME + "icons/" + this.getUnlocalizedName());
 	}
+
 	@Override
 	public int quantityDropped(Random random) {
 		return 1;
 	}
+
 	@Override
 	public int getRenderType() {
 		return -1;
 	}
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
+
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
-	
+
 	@Override
-	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, 
-			EntityLivingBase par5EntityLivingBase, ItemStack par6ItemStack) {
-		int p = MathHelper.floor_double((double) ((par5EntityLivingBase.rotationYaw * 4F) / 360F) + 0.5D) & 3; 
-		
+	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
+			ItemStack par6ItemStack) {
+		int p = MathHelper.floor_double((double) ((par5EntityLivingBase.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+
 		int aByte = 3;
 		if (p == 0) {
 			aByte = 0;

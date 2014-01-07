@@ -5,7 +5,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
 public class ContainerLockedChest extends Container {

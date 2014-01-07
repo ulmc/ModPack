@@ -36,11 +36,11 @@ public class CommonProxy implements IGuiHandler
     {
         return null;
     }
-    public void prepareBlock(Block aBlock, String ru, String en)
+    public void prepareBlock(Block aBlock)
     {
         GameRegistry.registerBlock(aBlock, aBlock.getUnlocalizedName());
     }
-    public void createItem(Item anItem, String ru, String en){
+    public void createItem(Item anItem){
     	GameRegistry.registerItem(anItem, anItem.getUnlocalizedName());
     }
     public void CreateItem(Item anItem, int index, String name, String[] metanames, String[] ruNames, String[] enNames, String differentTexturePath){

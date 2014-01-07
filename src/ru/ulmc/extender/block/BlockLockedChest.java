@@ -1,7 +1,6 @@
 package ru.ulmc.extender.block;
 
 import java.util.Iterator;
-import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -23,17 +22,19 @@ import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockLockedChest extends BlockContainer {
+public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 
 	private int chestType;
+	private String name;
 
-	public BlockLockedChest(int i, String name) {
+	public BlockLockedChest(int i, String aName) {
 		super(i, Material.iron);
 		setHardness(1.0F);
 		setResistance(2000.0F);
-		setUnlocalizedName(name);
+		setUnlocalizedName(aName);
+		name = aName;
 		setCreativeTab(CreativeTabs.tabDecorations);
-		setTextureName(Reference.RES_NAME + name);
+		setTextureName(Reference.RES_NAME + aName);
 		chestType = 100;
 		setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 	}
@@ -181,6 +182,7 @@ public class BlockLockedChest extends BlockContainer {
 	 * Looks for a sitting ocelot within certain bounds. Such an ocelot is
 	 * considered to be blocking access to the chest.
 	 */
+	@SuppressWarnings("rawtypes")
 	public static boolean isOcelotBlockingChest(World par0World, int par1, int par2, int par3) {
 		Iterator iterator = par0World.getEntitiesWithinAABB(
 				EntityOcelot.class,
@@ -215,6 +217,11 @@ public class BlockLockedChest extends BlockContainer {
 
 	public void setChestType(int chestType) {
 		this.chestType = chestType;
+	}
+
+	@Override
+	public String getSystemName() {
+		return name;
 	}
 
 }
