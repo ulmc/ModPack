@@ -128,9 +128,7 @@ public class TileEntityBones extends TileEntity implements IInventory {
 			}
 		}
 		filledSlots = tagCompound.getInteger("filledSlots");
-		ownerName = tagCompound.getString("ownerName");
-
-		UltimateExtender.logger.info("filledSlots: " + filledSlots);
+		ownerName = tagCompound.getString("ownerName");		
 	}
 
 	@Override

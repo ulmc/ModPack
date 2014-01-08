@@ -11,6 +11,7 @@ import ru.ulmc.extender.gui.handler.GuiHandler;
 import ru.ulmc.extender.item.ItemManager;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.proxy.PacketManager;
+import ru.ulmc.extender.tickhandler.WarmTickSheduler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -21,6 +22,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
 @NetworkMod(channels = { Reference.NETWORK_CHANNEL }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
@@ -43,6 +46,7 @@ public class UltimateExtender {
 		ItemManager.init(proxy);
 		RecipeManager.init(proxy);
 		NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
+		TickRegistry.registerScheduledTickHandler(new WarmTickSheduler(), Side.SERVER);
 	}
 
 	@EventHandler
