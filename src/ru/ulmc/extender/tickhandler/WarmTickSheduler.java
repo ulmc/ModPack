@@ -5,32 +5,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import ru.ulmc.extender.UltimateExtender;
-import ru.ulmc.extender.item.IWarmArmor;
-import ru.ulmc.extender.util.UDamageSource;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.item.IWarmArmor;
+import ru.ulmc.extender.util.UDamageSource;
 import cpw.mods.fml.common.IScheduledTickHandler;
 import cpw.mods.fml.common.TickType;
 
 public class WarmTickSheduler implements IScheduledTickHandler {
 
 	private int tickStep = 200;
+	private int underGroundPosition = 52;
+	private float underGroundBonus = 0.1f;
 	private float defaultArmorWarmness = 0.5f;
 	private float inWaterPenalty = 0.5f;
 	private float nightPenalty = 0.2f;
 	private float stormPenalty = 0.3f;
 	private float rainPenalty = 0.15f;
 	private float torchBonus = 0.2f;
-	private float fireBonus = 2.0f;
 	private String handlerLabel = "ulmc Wintermod SheduledHandler";
 	private EnumSet<TickType> tick = EnumSet.of(TickType.PLAYER);
 	private Map<BiomeGenBase, Float> biomeToCold = new HashMap<>();
@@ -40,8 +39,8 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 		super();
 		// Чем больше, тем холоднее
 		biomeToCold.put(BiomeGenBase.frozenOcean, 1.0f);
-		biomeToCold.put(BiomeGenBase.frozenRiver, 0.8f);
-		biomeToCold.put(BiomeGenBase.icePlains, 0.6f);
+		biomeToCold.put(BiomeGenBase.frozenRiver, 0.9f);
+		biomeToCold.put(BiomeGenBase.icePlains, 0.8f);
 		biomeToCold.put(BiomeGenBase.iceMountains, 1.2f);
 		biomeToCold.put(BiomeGenBase.taigaHills, 0.7f);
 		biomeToCold.put(BiomeGenBase.taiga, 0.7f);
@@ -65,61 +64,60 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 	}
 
 	private void doTheWork(Object... tickData) {
-		if (tickData[0] instanceof EntityPlayer) {			
+		if (tickData[0] instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) tickData[0];
-			
-			if(player.isBurning()) { return;}
-			
+
+			if (player.isBurning()) {
+				return;
+			}
+
 			World world = player.worldObj;
 			if (!world.isRemote && player != null && !player.capabilities.isCreativeMode) {
 				BiomeGenBase biome = world.getBiomeGenForCoords((int) player.posX, (int) player.posZ);
 
 				Float coldStrength = biomeToCold.get(biome);
 				float warmnessDelta;
-				UltimateExtender.logger.info("biome:" + biome.biomeName);
+				//UltimateExtender.logger.info("biome:" + biome.biomeName);
 				if (coldStrength != null && coldStrength > 0.0f) {
+					if (player.isInWater()) {
+						coldStrength += inWaterPenalty;
+					}
+
 					
-					AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(
-							player.posX - 5.0D, 			
-							player.posY - 4.0D,		
-							player.posZ - 5.0D,
-							player.posX + 5.0D,
-							player.posY + 3.0D,							 
-							player.posZ + 5.0D);
-					boolean noWarmNear= !isBoundingBoxBurning(aabb, world);
-					UltimateExtender.logger.info("noWarmNear: " + noWarmNear);
-					if (noWarmNear) {
+					if (player.posY < underGroundPosition || haveRoofOrSo(player, world)) {
+						coldStrength -= underGroundBonus;
+					} else {
+						if (world.getWorldTime() > 13500 && world.getWorldTime() < 22220) {
+							coldStrength += nightPenalty;
+						}
+						if (world.isThundering()) {
+							coldStrength += stormPenalty;
+						} else if (world.isRaining()) {
+							coldStrength += rainPenalty;
+						}
+					}
+					if (player.getCurrentEquippedItem() != null
+							&& (player.getCurrentEquippedItem().itemID == Item.bucketLava.itemID || player
+									.getCurrentEquippedItem().itemID == Block.torchWood.blockID)) {
+						coldStrength -= torchBonus;
+					}
+					warmnessDelta  = getWarmness(player, coldStrength, 0);
+					warmnessDelta += getWarmness(player, coldStrength, 1);
+					warmnessDelta += getWarmness(player, coldStrength, 2);
+					warmnessDelta += getWarmness(player, coldStrength, 3);
+					if (warmnessDelta < 0) {
+						//UltimateExtender.logger.info("You are cold! =( " + warmnessDelta);
+						AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(
+								player.posX - 5.0D, player.posY - 4.0D, player.posZ - 5.0D, 
+								player.posX + 5.0D, player.posY + 3.0D, player.posZ + 5.0D);
+						boolean noWarmNear = !isBoundingBoxBurning(aabb, world);
 						
-						if (player.isInWater()) {
-							coldStrength += inWaterPenalty;
-						}
+						//UltimateExtender.logger.info("noWarmNear: " + noWarmNear);
 						
-						boolean roof = haveRoofOrSo(player, world);
-						if (!roof) {
-							
-							if (world.getWorldTime() > 13500 && world.getWorldTime() < 22220) {
-								coldStrength += nightPenalty;
-							}
-							if (world.isThundering()) {
-								coldStrength += stormPenalty;
-							} else if (world.isRaining()) {
-								coldStrength += rainPenalty;
-							}
-						}
-						if (player.getCurrentEquippedItem() != null
-								&& (player.getCurrentEquippedItem().itemID == Item.bucketLava.itemID || player
-										.getCurrentEquippedItem().itemID == Block.torchWood.blockID)) {
-							coldStrength -= torchBonus;
-						}
-						warmnessDelta = getWarmness(player, coldStrength, 0);
-						warmnessDelta += getWarmness(player, coldStrength, 1);
-						warmnessDelta += getWarmness(player, coldStrength, 2);
-						warmnessDelta += getWarmness(player, coldStrength, 3);
-						if (warmnessDelta < 0) {
-							UltimateExtender.logger.info("You are cold! =( " + warmnessDelta);
+						if (noWarmNear) {
 							player.attackEntityFrom(UDamageSource.cold, -warmnessDelta);
 						}
-					}					
+					}
 				} else {
 					Float hotStrength = biomeToHot.get(biome);
 					if (hotStrength != null && hotStrength > 0.0f) {
@@ -131,37 +129,16 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 						} else if (world.isRaining()) {
 							hotStrength += rainPenalty;
 						}
-						if (!world.provider.hasNoSky) {
-							int i1 = world.getSavedLightValue(EnumSkyBlock.Sky, (int) player.posX, (int) player.posY,
-									(int) player.posZ) - world.skylightSubtracted;
-							float f = world.getCelestialAngleRadians(1.0F);
-
-							if (f < (float) Math.PI) {
-								f += (0.0F - f) * 0.2F;
-							} else {
-								f += (((float) Math.PI * 2F) - f) * 0.2F;
-							}
-
-							i1 = Math.round((float) i1 * MathHelper.cos(f));
-
-							if (i1 < 0) {
-								hotStrength += nightPenalty;
-							}
-
+						if (world.getWorldTime() > 13500 && world.getWorldTime() < 22220) {
+							hotStrength += nightPenalty;
 						}
-						/*
-						 * 
-						 * if(world.getWorldTime() > 13500 &&
-						 * world.getWorldTime() < 22220 && biome.biomeID !=
-						 * BiomeGenBase.hell.biomeID) { hotStrength +=
-						 * nightPenalty; }
-						 */
+
 						warmnessDelta = getWarmness(player, hotStrength, 0);
 						warmnessDelta += getWarmness(player, hotStrength, 1);
 						warmnessDelta += getWarmness(player, hotStrength, 2);
 						warmnessDelta += getWarmness(player, hotStrength, 3);
 						if (warmnessDelta > 0) {
-							UltimateExtender.logger.info("Heat stroke! Boom! " + warmnessDelta);
+							//UltimateExtender.logger.info("Heat stroke! Boom! " + warmnessDelta);
 							player.attackEntityFrom(UDamageSource.hot, warmnessDelta);
 						}
 					}
@@ -202,7 +179,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 					&& !world.isAirBlock(currentX, i, currentZ - 2)) {
 				return true;
 			}
-			
+
 		}
 
 		return false;
@@ -230,7 +207,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 						int j2 = world.getBlockId(k1, l1, i2);
 
 						if (j2 == Block.fire.blockID || j2 == Block.lavaMoving.blockID || j2 == Block.lavaStill.blockID) {
-							return true;							
+							return true;
 						} else {
 							Block block = Block.blocksList[j2];
 							if (block != null && block.isBlockBurning(world, k1, l1, i2)) {
@@ -241,7 +218,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 				}
 			}
 		} else {
-			UltimateExtender.logger.info("Chunk doesnt exist");
+			UltimateExtender.logger.log(Level.WARNING, "Chunk doesn't exist! ");
 		}
 
 		return false;
