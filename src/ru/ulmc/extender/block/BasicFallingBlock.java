@@ -97,7 +97,7 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 				}
 			} else {*/
 				int originY = y;
-				TileEntity te = par1World.getBlockTileEntity(x, y, z);
+				//TileEntity te = par1World.getBlockTileEntity(x, y, z);
 
 				while (canFallBelow(par1World, x, y - 1, z) && y > 0) {
 					--y;

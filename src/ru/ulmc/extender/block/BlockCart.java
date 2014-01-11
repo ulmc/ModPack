@@ -12,7 +12,7 @@ import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.TileEntityFiller;
 import ru.ulmc.extender.tileentity.TileEntityCart;
 
-public class BlockCart extends BasicFallingBlock {
+public class BlockCart extends BasicStandingBlock {
 	
 	protected Block fillerBlock;
 	protected float[][] bounds = {	{0.0f, 0.0f, 0.0f, 2.0f, 1.0f, 2.0f},
@@ -83,6 +83,17 @@ public class BlockCart extends BasicFallingBlock {
 		this.setBlockBounds(bounds[meta][0], bounds[meta][1], bounds[meta][2],
 							bounds[meta][3], bounds[meta][4], bounds[meta][5]);
 	}
+	
+	
+	@Override
+	public boolean canPlaceBlockAt(World par1World, int par2, int par3, int par4) {
+		return true;
+	}
+
+	@Override
+	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
+		// nope
+	}	
 	
 	public int[] rotXZByDir(int x, int y, int z, int dir) {
 		if (dir == 0) {

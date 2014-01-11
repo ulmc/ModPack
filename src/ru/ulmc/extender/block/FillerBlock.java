@@ -7,8 +7,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
-import ru.ulmc.extender.UltimateExtender;
-import ru.ulmc.extender.tileentity.TileEntityCart;
 import ru.ulmc.extender.tileentity.TileEntityFiller;
 
 public class FillerBlock extends BlockContainer implements UlmcBlock {
@@ -43,10 +41,10 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 		if (tileEntity != null) {
 			TileEntity te = world.getBlockTileEntity(tileEntity.getPrimaryX(), tileEntity.getPrimaryY(),
 					tileEntity.getPrimaryZ());
-			if (te == null || !(te instanceof TileEntityCart)) {
+			if (te == null) {
 				world.destroyBlock(i, j, k, false);
 				world.removeBlockTileEntity(i, j, k);
-			}
+			} 
 		}
 	}
 
