@@ -14,9 +14,11 @@ public class WarmArmor extends ItemArmor implements IWarmArmor {
 	private String textureNameTop;
 	private String textureNameBottom;
 	private boolean isLegs;
+	private boolean itWarms;
+	private boolean itCools;
 
 	public WarmArmor(int itemID, EnumWarmMaterial material, 
-			int renderIndex, int armorType, String aName, boolean isLegs) {
+			int renderIndex, int armorType, String aName, boolean isLegs, boolean itWarms, boolean itCools) {
 		super(itemID, EnumArmorMaterial.IRON, renderIndex, armorType);
 		this.material = material;
 		damageReduceAmount = material.getDamageReductionAmount(armorType);
@@ -26,6 +28,8 @@ public class WarmArmor extends ItemArmor implements IWarmArmor {
 		setUnlocalizedName(aName);
 		setTextureName(Reference.RES_NAME + aName);
 		this.isLegs = isLegs;
+		this.itWarms = itWarms;
+		this.itCools = itCools;
 		textureNameTop = Reference.RES_NAME + "textures/armor/" + material.name().toLowerCase() + "-top.png";
 		textureNameBottom = Reference.RES_NAME + "textures/armor/" + material.name().toLowerCase() + "-bottom.png";
 	}
@@ -49,6 +53,21 @@ public class WarmArmor extends ItemArmor implements IWarmArmor {
 	@Override
 	public float getWarmLevel() {		
 		return material.getWarmLevel();
+	}
+
+	@Override
+	public boolean itWarms() {
+		return itWarms;
+	}
+
+	@Override
+	public boolean itCools() {
+		return itCools;
+	}
+
+	@Override
+	public float getCoolLevel() {		
+		return material.getCoolLevel();
 	}
 
 }
