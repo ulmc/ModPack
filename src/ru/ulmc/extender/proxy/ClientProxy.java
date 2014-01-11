@@ -5,11 +5,13 @@ import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.render.RenderBones;
+import ru.ulmc.extender.render.RenderCart;
 import ru.ulmc.extender.render.RenderFlags;
 import ru.ulmc.extender.render.RenderLockedChest;
 import ru.ulmc.extender.render.RenderTables;
 import ru.ulmc.extender.render.RenderUlmcObjects;
 import ru.ulmc.extender.tileentity.TileEntityBones;
+import ru.ulmc.extender.tileentity.TileEntityCart;
 import ru.ulmc.extender.tileentity.TileEntityChair;
 import ru.ulmc.extender.tileentity.TileEntityEliteChair;
 import ru.ulmc.extender.tileentity.TileEntityFlag;
@@ -35,6 +37,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new RenderTables());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBones.class, new RenderBones());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLockedChest.class, new RenderLockedChest());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCart.class, new RenderCart());
 
 		//RenderingRegistry.registerEntityRenderingHandler(EntityFallingBlock.class, new RenderBonesEntity());
 

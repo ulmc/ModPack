@@ -7,40 +7,43 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
-import ru.ulmc.extender.tileentity.FillerTileEntity;
+import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.tileentity.TileEntityCart;
+import ru.ulmc.extender.tileentity.TileEntityFiller;
 
 public class FillerBlock extends BlockContainer implements UlmcBlock {
+	private String systemName;
 
-	public FillerBlock(int id, Material material) {
+	public FillerBlock(int id, Material material, String systemName, StepSound sound) {
 		super(id, material);
-		setUnlocalizedName(Reference.RES_NAME + "fillerBlock");
+		setUnlocalizedName(systemName);
 		setTextureName(Reference.RES_NAME + "fillerBlock");
-		setStepSound(new StepSound("NONE", 0.0f, 0.0f));
+		setStepSound(sound);
+		this.systemName = systemName;
 	}
+
 	@Override
 	public String getSystemName() {
-		return "fillerBlock";
+		return systemName;
 	}
 
 	@Override
 	public void breakBlock(World world, int i, int j, int k, int par5, int par6) {
-		FillerTileEntity tileEntity = (FillerTileEntity) world.getBlockTileEntity(i,
-				j, k);
+		TileEntityFiller tileEntity = (TileEntityFiller) world.getBlockTileEntity(i, j, k);
 		if (tileEntity != null) {
-			world.destroyBlock(tileEntity.getPrimaryX(), tileEntity.getPrimaryY(),
-					tileEntity.getPrimaryZ(), false);
-			world.removeBlockTileEntity(tileEntity.getPrimaryX(),
-					tileEntity.getPrimaryY(), tileEntity.getPrimaryZ());
+			world.destroyBlock(tileEntity.getPrimaryX(), tileEntity.getPrimaryY(), tileEntity.getPrimaryZ(), false);
+			world.removeBlockTileEntity(tileEntity.getPrimaryX(), tileEntity.getPrimaryY(), tileEntity.getPrimaryZ());
 		}
 		world.removeBlockTileEntity(i, j, k);
 	}
 
 	@Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, int par5) {
-		FillerTileEntity tileEntity = (FillerTileEntity) world.getBlockTileEntity(i, j, k);
+		TileEntityFiller tileEntity = (TileEntityFiller) world.getBlockTileEntity(i, j, k);
 		if (tileEntity != null) {
-			if (world.getBlockId(tileEntity.getPrimaryX(), tileEntity.getPrimaryY(),
-					tileEntity.getPrimaryZ()) < 1) {
+			TileEntity te = world.getBlockTileEntity(tileEntity.getPrimaryX(), tileEntity.getPrimaryY(),
+					tileEntity.getPrimaryZ());
+			if (te == null || !(te instanceof TileEntityCart)) {
 				world.destroyBlock(i, j, k, false);
 				world.removeBlockTileEntity(i, j, k);
 			}
@@ -48,16 +51,26 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i,
-			int j, int k, int l) {
+	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
+		TileEntityFiller entity = (TileEntityFiller) block.getBlockTileEntity(x, y, z);
+		
+		this.setBlockBounds(entity.getMinX(), entity.getMinY(), entity.getMinZ(), 
+							entity.getMaxX(), entity.getMaxY(), entity.getMaxZ());	
+
+	}
+
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		return false;
 	}
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
+
 	@Override
 	public TileEntity createNewTileEntity(World world) {
-		return new FillerTileEntity();
+		return new TileEntityFiller();
 	}
 }

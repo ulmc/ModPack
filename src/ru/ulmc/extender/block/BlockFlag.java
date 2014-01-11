@@ -16,7 +16,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
-import ru.ulmc.extender.tileentity.FillerTileEntity;
+import ru.ulmc.extender.tileentity.TileEntityFiller;
 import ru.ulmc.extender.tileentity.TileEntityFlag;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -102,7 +102,7 @@ public class BlockFlag extends BasicStandingBlock {
 				int fillerY = y;
 				for (int i = 0; i < 2; i++) {
 					world.setBlock(x, ++fillerY, z,	fillerBlock.blockID, 0, 0x02);
-					FillerTileEntity tileFiller = (FillerTileEntity) world.getBlockTileEntity(x, fillerY, z);
+					TileEntityFiller tileFiller = (TileEntityFiller) world.getBlockTileEntity(x, fillerY, z);
 					if (tileFiller != null) {
 						tileFiller.setPrimaryX(x);
 						tileFiller.setPrimaryY(y);

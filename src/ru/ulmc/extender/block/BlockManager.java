@@ -4,13 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.StepSound;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.ConfigurationHander;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.proxy.CommonProxy;
-import ru.ulmc.extender.tileentity.FillerTileEntity;
+import ru.ulmc.extender.tileentity.TileEntityFiller;
 import ru.ulmc.extender.tileentity.TileEntityBones;
+import ru.ulmc.extender.tileentity.TileEntityCart;
 import ru.ulmc.extender.tileentity.TileEntityChair;
 import ru.ulmc.extender.tileentity.TileEntityEliteChair;
 import ru.ulmc.extender.tileentity.TileEntityFlag;
@@ -46,11 +48,13 @@ public class BlockManager {
 	public static BlockFlag blockMedivalFlag;
 	public static BlockFlag blockTechnoFlag;
 	public static FillerBlock flagFillerBlock;
+	public static FillerBlock cartFillerBlock;
 	public static BlockBarbedWire blockBarbedWire;
 	public static BlockLockedChest blockLockedChest;
 	public static BlockGrinder blockGrinder;
 
-	public static Block blockBones;
+	public static BlockBones blockBones;
+	public static BlockCart blockCart;
 
 	private static int blockID = 850;
 	private static int metaBlockID = 1656;
@@ -86,7 +90,7 @@ public class BlockManager {
 
 		blockDinnerWoodTable = createBlockTable(++blockID, 0.5F, 2.0F, "blockDinnerWoodTable", TileEntityTable.MODEL_DINNER);
 
-		flagFillerBlock = createFillerBlock(++blockID, Material.cloth);
+		flagFillerBlock = createFillerBlock(++blockID, Material.cloth, "fillerBlockFlag", Block.soundClothFootstep);
 		flagFillerBlock.setBlockBounds(0.1F, 0.0F, 0.1F, 0.1F, 1.0F, 0.1F);
 
 		blockBones = createBlockBones(++blockID, "blockOfBones");
@@ -98,15 +102,20 @@ public class BlockManager {
 		blockBarbedWire = createBlockBarbedWire(++blockID, "barbedWire");
 		blockLockedChest = createBlockLockedChest(++blockID, "blockLockedChest");
 		blockGrinder = createBlockGrinder(++blockID, "blockGrinder");
+		
+		cartFillerBlock = createFillerBlock(++blockID, Material.wood, "fillerBlockCart",  Block.soundWoodFootstep);
+		cartFillerBlock.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+		blockCart = createBlockCart(++blockID, "blockCart", cartFillerBlock);
 
 		GameRegistry.registerTileEntity(TileEntityChair.class, "ulmcTileEntityChair");
 		GameRegistry.registerTileEntity(TileEntityEliteChair.class, "ulmcTileEntityEliteChair");
 		GameRegistry.registerTileEntity(TileEntityFlag.class, "ulmcTileEntityFlag");
-		GameRegistry.registerTileEntity(FillerTileEntity.class, "ulmcFillerTileEntity");
+		GameRegistry.registerTileEntity(TileEntityFiller.class, "ulmcFillerTileEntity");
 		GameRegistry.registerTileEntity(TileEntityTable.class, "ulmcTileEntityTable");
 		GameRegistry.registerTileEntity(TileEntityBones.class, "ulmcTileEntityBones");
 		GameRegistry.registerTileEntity(TileEntityLockedChest.class, "ulmcTileEntityLockedChest");
 		GameRegistry.registerTileEntity(TileEntityGrinder.class, "ulmcTileEntityGrinder");
+		GameRegistry.registerTileEntity(TileEntityCart.class, "ulmcTileEntityCart");
 	}
 
 	@SuppressWarnings("unused")
@@ -114,8 +123,8 @@ public class BlockManager {
 		MinecraftForge.setBlockHarvestLevel(block, tool, level);
 	}
 
-	private static FillerBlock createFillerBlock(int blockID, Material material) {
-		return (FillerBlock) registerBlock(new FillerBlock(ConfigurationHander.getBlockID("fillerBlock", blockID), material));
+	private static FillerBlock createFillerBlock(int blockID, Material material, String systemName, StepSound sound) {
+		return (FillerBlock) registerBlock(new FillerBlock(ConfigurationHander.getBlockID(systemName, blockID), material, systemName, sound));
 	}
 
 	private static BlockChair createBlockChair(int blockID, float hardness, float explosionResistance, String name) {
@@ -123,10 +132,8 @@ public class BlockManager {
 	}
 
 	private static BlockEliteChair createBlockEliteChair(int blockID, float hardness, float explosionResistance, String name) {
-		return (BlockEliteChair) 
-				registerBlock(
-						new BlockEliteChair(
-								ConfigurationHander.getBlockID(name, blockID), TileEntityEliteChair.class, hardness, explosionResistance, name));
+		return (BlockEliteChair) registerBlock(new BlockEliteChair(ConfigurationHander.getBlockID(name, blockID),
+				TileEntityEliteChair.class, hardness, explosionResistance, name));
 	}
 
 	private static BlockTable createBlockTable(int blockID, float hardness, float explosionResistance, String name, int model) {
@@ -155,7 +162,9 @@ public class BlockManager {
 		return (BlockGrinder) registerBlock(new BlockGrinder(ConfigurationHander.getBlockID(name, blockID), name));
 	}
 
-	
+	private static BlockCart createBlockCart(int blockID, String name, Block filler) {
+		return (BlockCart) registerBlock(new BlockCart(ConfigurationHander.getBlockID(name, blockID), name, filler));
+	}
 	private static UlmcBlock registerBlock(UlmcBlock block) {
 		proxy.prepareBlock((Block)block);
 		blocks.put(block.getSystemName(), (Block)block);
