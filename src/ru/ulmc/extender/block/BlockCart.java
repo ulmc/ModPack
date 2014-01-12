@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.TileEntityFiller;
 import ru.ulmc.extender.tileentity.TileEntityCart;
@@ -47,6 +48,9 @@ public class BlockCart extends BasicStandingBlock {
 			for (int i = 0; i < fillers.length; i++) {
 				shift = rotXZByDir(fillers[i][0], y, fillers[i][2], dir);
 				if (!world.isAirBlock(x + shift[0], y, z + shift[2])) {
+					canPlace = false;
+				}
+				if (!world.isBlockSolidOnSide(x + shift[0], y-1, z + shift[2], ForgeDirection.UP)) {
 					canPlace = false;
 				}
 			}
