@@ -20,6 +20,7 @@ public class BlockCart extends BasicStandingBlock {
 									{0.0f, 0.0f, -1.0f, 2.0f, 1.0f, 1.0f},
 									{-1.0f, 0.0f, -1.0f, 1.0f, 1.0f, 1.0f},
 									{-1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 2.0f}};
+	protected int[][] fillers = { { 0, 0, 1 }, { 1, 0, 0 }, { 1, 0, 1 } };
 
 	public BlockCart(int blockID, String aBlockName, Block fillerBlock) {
 		super(blockID, Material.wood, TileEntityCart.class, aBlockName);
@@ -31,9 +32,7 @@ public class BlockCart extends BasicStandingBlock {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack par6ItemStack) {
 		if (!world.isRemote) {
 
-			boolean canPlace = true;
-
-			int[][] fillers = { { 0, 0, 1 }, { 1, 0, 0 }, { 1, 0, 1 } };
+			boolean canPlace = true;			
 			int[] shift;
 			int dir = MathHelper.floor_double((double) ((entityLiving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 			int aByte = 3;
@@ -95,9 +94,27 @@ public class BlockCart extends BasicStandingBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
-		// nope
-	}	
+	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {		
+		int meta = world.getBlockMetadata(x, y, z);
+
+		int[] shift;
+		int blocksUnderStructure = 4;
+		if (!world.isBlockSolidOnSide(x, y - 1, z, ForgeDirection.UP)) {
+			blocksUnderStructure--;
+			
+		}
+		for (int i = 0; i < fillers.length; i++) {
+			shift = rotXZByMeta(fillers[i][0], y, fillers[i][2], meta);
+			if (!world.isBlockSolidOnSide(x + shift[0], y - 1, z + shift[2], ForgeDirection.UP)) {
+				blocksUnderStructure--;
+			} 
+		}
+		if (blocksUnderStructure <= 1) {
+			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+			world.setBlock(x, y, z, 0);
+		}
+
+	}
 	
 	public int[] rotXZByDir(int x, int y, int z, int dir) {
 		if (dir == 0) {
@@ -108,6 +125,17 @@ public class BlockCart extends BasicStandingBlock {
 			return new int[] { -x, y, -z };
 		} else {
 			return new int[] { z, y, -x };
+		}
+	}
+	public int[] rotXZByMeta(int x, int y, int z, int dir) {
+		if (dir == 0) {
+			return new int[] { x, y, z };
+		} else if (dir == 1) {
+			return new int[] { z, y, -x };
+		} else if (dir == 2) {
+			return new int[] { -x, y, -z };
+		} else {
+			return new int[] { -z, y, x };
 		}
 	}
 

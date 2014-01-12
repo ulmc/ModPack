@@ -6,7 +6,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.tileentity.TileEntityCart;
 import ru.ulmc.extender.tileentity.TileEntityFiller;
 
 public class FillerBlock extends BlockContainer implements UlmcBlock {
@@ -36,15 +38,25 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int i, int j, int k, int par5) {
-		TileEntityFiller tileEntity = (TileEntityFiller) world.getBlockTileEntity(i, j, k);
+	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {		
+		TileEntityFiller tileEntity = (TileEntityFiller) world.getBlockTileEntity(x, y, z);
 		if (tileEntity != null) {
-			TileEntity te = world.getBlockTileEntity(tileEntity.getPrimaryX(), tileEntity.getPrimaryY(),
+			TileEntity te = world.getBlockTileEntity(
+					tileEntity.getPrimaryX(), 
+					tileEntity.getPrimaryY(),
 					tileEntity.getPrimaryZ());
 			if (te == null) {
-				world.destroyBlock(i, j, k, false);
-				world.removeBlockTileEntity(i, j, k);
+				world.destroyBlock(x, y, z, false);
+				world.removeBlockTileEntity(x, y, z);
 			} 
+			if(te instanceof TileEntityCart) {
+				if(!world.isBlockSolidOnSide(x, y-1, z, ForgeDirection.UP)) {
+					world.notifyBlocksOfNeighborChange(
+							tileEntity.getPrimaryX(), 
+							tileEntity.getPrimaryY()-1,
+							tileEntity.getPrimaryZ(), 2);
+				}
+			}
 		}
 	}
 
