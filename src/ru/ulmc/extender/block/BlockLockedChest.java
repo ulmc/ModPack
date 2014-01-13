@@ -3,15 +3,16 @@ package ru.ulmc.extender.block;
 import java.util.Iterator;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -29,6 +30,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 
 	private int chestType;
 	private String name;
+	private Random random = new Random();
 
 	public BlockLockedChest(int i, String aName) {
 		super(i, Material.iron);
@@ -69,6 +71,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 
 	public int isProvidingWeakPower(IBlockAccess blockAccess, int x, int y, int z, int par5) {
 		TileEntityLockedChest te = (TileEntityLockedChest) blockAccess.getBlockTileEntity(x, y, z);
+		UltimateExtender.logger.info("isProvidingWeakPower.isPowered(): " + te.isPowered());
 		return (te.isPowered() > 0) ? 15 : 0;
 	}
 
@@ -79,7 +82,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 */
 	public int isProvidingStrongPower(IBlockAccess blockAccess, int x, int y, int z, int par5) {
 		TileEntityLockedChest te = (TileEntityLockedChest) blockAccess.getBlockTileEntity(x, y, z);
-
+		UltimateExtender.logger.info("isProvidingStrongPower.isPowered(): " + te.isPowered());
 		if (te.isPowered() == 0) {
 			return 0;
 		} else {
@@ -93,9 +96,9 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		if (!par1World.isRemote) {
 			TileEntityLockedChest te = (TileEntityLockedChest) par1World.getBlockTileEntity(x, y, z);
 
-			if (te.isPowered() != 0) {
-				par1World.scheduleBlockUpdate(x, y, z, blockID, 60);
+			if (te.isPowered() != 0) {				
 				te.setProvidingPower(false);
+				par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 			}
 		}
 	}
@@ -108,6 +111,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 * Can this block provide power. Only wire currently seems to have this
 	 * change based on its state.
 	 */
+	@Override
 	public boolean canProvidePower() {
 		return true;
 	}
@@ -139,15 +143,19 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		}
 	}
 
+	
 	/*
 	 * /** Called upon block activation (right click on the block.)
 	 */
-	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int par6, float par7,
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
 			float par8, float par9) {
-		if (par1World.isRemote) {
-			return true;
-		} else {
-			TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) par1World.getBlockTileEntity(x, y, z);
+		if(player.isEating()) {
+			return false;
+		}
+		
+		if (!world.isRemote) {
+			
+			TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getBlockTileEntity(x, y, z);
 			ItemStack hold = player.inventory.getCurrentItem();
 			boolean isAllowToOpen = false;
 			boolean updateEntity = false;
@@ -155,7 +163,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 			
 			if (player.capabilities.isCreativeMode) {
 				isAllowToOpen = true;
-			} else if(isOcelotBlockingChest(par1World, x, y, z)) {
+			} else if(isOcelotBlockingChest(world, x, y, z)) {
 				isAllowToOpen = false;
 			} else if (player.username != null && player.username.equals(lockedChestTE.getOwnerName())) {
 				isAllowToOpen = true;
@@ -170,6 +178,11 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 					isAllowToOpen = false;
 				} else {
 					if((hold.getItem() instanceof ItemPicklock)) {
+						
+						// Cooldown timeout		
+						ItemPicklock picklock = (ItemPicklock)hold.getItem();
+						hold = picklock.onItemRightClick(hold, world, player);
+						
 						
 						int picklockingStatus = lockedChestTE.tryToEnforceChest(hold, player);
 						if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
@@ -192,7 +205,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 			}
 			
 			if (isAllowToOpen) {
-				player.openGui(UltimateExtender.instance, GuiLockedChest.GUI_ID, par1World, x, y, z);
+				player.openGui(UltimateExtender.instance, GuiLockedChest.GUI_ID, world, x, y, z);
 				
 			} else {
 				if(updateEntity) {
@@ -202,6 +215,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 			}
 			return true;
 		}
+		return true;
 	}
 	
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
@@ -214,12 +228,58 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		}
 	}
 
+	public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
+    {
+		TileEntityLockedChest chestTE = (TileEntityLockedChest)par1World.getBlockTileEntity(par2, par3, par4);
+
+        if (chestTE != null)
+        {
+            for (int j1 = 0; j1 < chestTE.getSizeInventory(); ++j1)
+            {
+                ItemStack itemstack = chestTE.getStackInSlot(j1);
+
+                if (itemstack != null)
+                {
+                    float f = this.random.nextFloat() * 0.8F + 0.1F;
+                    float f1 = this.random.nextFloat() * 0.8F + 0.1F;
+                    EntityItem entityitem;
+
+                    for (float f2 = this.random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World.spawnEntityInWorld(entityitem))
+                    {
+                        int k1 = this.random.nextInt(21) + 10;
+
+                        if (k1 > itemstack.stackSize)
+                        {
+                            k1 = itemstack.stackSize;
+                        }
+
+                        itemstack.stackSize -= k1;
+                        entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
+                        float f3 = 0.05F;
+                        entityitem.motionX = (double)((float)this.random.nextGaussian() * f3);
+                        entityitem.motionY = (double)((float)this.random.nextGaussian() * f3 + 0.2F);
+                        entityitem.motionZ = (double)((float)this.random.nextGaussian() * f3);
+
+                        if (itemstack.hasTagCompound())
+                        {
+                            entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+                        }
+                    }
+                }
+            }
+
+            par1World.func_96440_m(par2, par3, par4, par5);
+        }
+
+        super.breakBlock(par1World, par2, par3, par4, par5, par6);
+    }
+	
 	/**
 	 * Returns a new instance of a block's tile entity class. Called on placing
 	 * the block.
 	 */
 	public TileEntity createNewTileEntity(World par1World) {
-		return new TileEntityLockedChest(this.chestType);
+		return new TileEntityLockedChest(this.chestType, this);
 	}
 
 

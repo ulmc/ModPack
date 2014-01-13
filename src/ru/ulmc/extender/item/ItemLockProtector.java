@@ -20,7 +20,7 @@ import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 public class ItemLockProtector extends Item {
 
 	public Icon placeholder;
-	private ProtectorType type;
+	private ProtectorType type;	
 	private static Random random = new Random();
 
 	public ItemLockProtector(int i, String unlocalizedName, int durability, ProtectorType type) {
@@ -31,6 +31,7 @@ public class ItemLockProtector extends Item {
 		this.setMaxStackSize(1);
 		this.setMaxDamage(durability);
 		this.type = type;
+		
 	}
 
 	@Override
@@ -38,6 +39,8 @@ public class ItemLockProtector extends Item {
 		super.registerIcons(par1IconRegister);
 		this.placeholder = par1IconRegister.registerIcon(Reference.RES_NAME + "placeholderCapsule");
 	}
+	
+	
 	
 	public static void logThief(ItemStack target, String name) {
 		NBTTagCompound tag = target.getTagCompound();
@@ -218,7 +221,11 @@ public class ItemLockProtector extends Item {
 		if(chance != 0.0f && random.nextFloat() < chance){
 			if(!tile.getWorldObj().isRemote) {
 				tile.setProvidingPower(true);
-				tile.getWorldObj().scheduleBlockUpdate(tile.xCoord, tile.yCoord, tile.zCoord, BlockManager.blockLockedChest.blockID, 20);
+				tile.getWorldObj().notifyBlocksOfNeighborChange(
+						tile.xCoord, 
+						tile.yCoord,
+						tile.zCoord, tile.getBlockType().blockID);
+				tile.getWorldObj().scheduleBlockUpdate(tile.xCoord, tile.yCoord, tile.zCoord, BlockManager.blockLockedChest.blockID, 40);
 			} 
 			return true;
 		}	
@@ -332,6 +339,7 @@ public class ItemLockProtector extends Item {
 		SIREN(0.9f, 0.15F, 0.8f),
 		LOGGER(0.0f, 0.05F, 0.9f),
 		REDSTONE(1.0f, 0.15F, 0.9f),
+		//REDSTONE(1.0f, 1.15F, 1.0f),
 		TNTLOCK(1.0f, 0.5F, 0.9f),
 		ANTIPICKLOCK(1.0f, 0.65F, 0.9f);
 		

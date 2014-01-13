@@ -54,7 +54,10 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 					world.notifyBlocksOfNeighborChange(
 							tileEntity.getPrimaryX(), 
 							tileEntity.getPrimaryY()-1,
-							tileEntity.getPrimaryZ(), 2);
+							tileEntity.getPrimaryZ(), 
+							world.getBlockId(	tileEntity.getPrimaryX(), 
+												tileEntity.getPrimaryY()-1, 
+												tileEntity.getPrimaryZ()));
 				}
 			}
 		}

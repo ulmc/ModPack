@@ -3,6 +3,7 @@ package ru.ulmc.extender.tileentity;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryLargeChest;
@@ -40,11 +41,13 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	/** Server sync counter (once per 20 ticks) */
 	private int ticksSinceSync;
 
-	public TileEntityLockedChest(int chestType) {
+	public TileEntityLockedChest(int chestType, Block block) {
 		this.chestType = chestType;
+		this.blockType = block;
 	}
 
 	public TileEntityLockedChest() {
+		
 		
 	}
 
