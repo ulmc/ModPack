@@ -61,11 +61,11 @@ public class ItemKey extends Item {
 		return 0;
 	}
 
-	public static void cloneCipher(ItemStack source, ItemStack tagret) {
-		NBTTagCompound tag = tagret.getTagCompound();
+	public static void cloneCipher(ItemStack source, ItemStack target) {
+		NBTTagCompound tag = target.getTagCompound();
 		if (tag == null) {
-			tagret.setTagCompound(new NBTTagCompound());
-			tag = tagret.getTagCompound();
+			target.setTagCompound(new NBTTagCompound());
+			tag = target.getTagCompound();
 		}
 		tag.setInteger("cipher", source.stackTagCompound.getInteger("cipher"));		
 	}

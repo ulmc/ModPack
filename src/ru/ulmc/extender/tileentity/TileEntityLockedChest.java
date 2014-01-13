@@ -13,12 +13,14 @@ import net.minecraft.util.AxisAlignedBB;
 import ru.ulmc.extender.block.BlockLockedChest;
 import ru.ulmc.extender.container.ContainerLockedChest;
 import ru.ulmc.extender.item.ItemKey;
+import ru.ulmc.extender.item.ItemLockProtector;
 import ru.ulmc.extender.item.ItemPicklock;
 
 public class TileEntityLockedChest extends ExtendedTileEntity implements IInventory {
 	public static final int PICKLOCKING_FAILED = 0; 
 	public static final int PICKLOCKING_SUCCESSED = 1; 
 	public static final int PICKLOCKING_KEY_DAMAGED = 2; 
+	public static final int PICKLOCKING_PROTECTOR = 3; 
 	private ItemStack[] inv = new ItemStack[38];
 	private int filledSlots;
 	private String ownerName;
@@ -32,6 +34,8 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 
 	/** The number of players currently using this chest */
 	public int numUsingPlayers;
+	
+	public int isPowered;
 
 	/** Server sync counter (once per 20 ticks) */
 	private int ticksSinceSync;
@@ -41,7 +45,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	}
 
 	public TileEntityLockedChest() {
-
+		
 	}
 
 	public boolean isKeyAndCipherMatches(ItemStack cipher) {
@@ -60,13 +64,26 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 
 	public int tryToEnforceChest(ItemStack picklock, EntityPlayer player) {
 		ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
+		ItemStack protectorStack = inv[ContainerLockedChest.PROTECTOR_SLOT_ID];	
+		boolean passToProtector;
+		ItemLockProtector protector;
+		
+		if(protectorStack == null || !(protectorStack.getItem() instanceof ItemLockProtector)) {
+			passToProtector = false;
+			protector = null;
+		} else {
+			passToProtector = true;
+			protector = (ItemLockProtector)protectorStack.getItem();
+		}
+		
 		if (picklock == null) {
 			return PICKLOCKING_FAILED;
 		}
+		
 		if (key == null) {
 			enforceChest(player.username);
 			return PICKLOCKING_SUCCESSED;
-		} else if (!(picklock.getItem() instanceof ItemPicklock)) {
+		} else if (!(picklock.getItem() instanceof ItemPicklock)) {			
 			return PICKLOCKING_FAILED;
 		} else {
 			int keyLevel = ((ItemKey) key.getItem()).getSecurityLevel();
@@ -84,34 +101,85 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			/*UltimateExtender.logger.info("minRequried: " + minRequried + " chance:" + chance
 					+ "picklockLevel, picklockBonus: " + picklockLevel + " : " + picklockBonus + "keyLevel, keyBonus: "
 					+ keyLevel + " : " + keyBonus + " | multiplier = " + multiplier);*/
-			if (chance < minRequried) {
+			if (chance < minRequried) {				
+				if(passToProtector) {
+					int result = protector.onEnforce(this, player, picklock);
+					if(result == PICKLOCKING_SUCCESSED) {
+						enforceChest(player.username);
+						picklock.damageItem(1, player);						
+					} 
+					return result;
+				}
 				enforceChest(player.username);
-				picklock.damageItem(1, player);
-				//UltimateExtender.logger.info("PICKLOCKED");
 				return PICKLOCKING_SUCCESSED;
+				
 			} else {
 				chance =  Math.random();
 				if (chance < damageRequried) {
-					damageKey(key);
+					damageKey();
 					//UltimateExtender.logger.info("DAMAGE! damageRequried: " + damageRequried + " chance:" + chance + " | multiplier = " + multiplier);
+					if(passToProtector) {			
+						picklock.damageItem(1, player);
+						return protector.onKeyDamage(this, player, picklock);
+					}
+					picklock.damageItem(1, player);
 					return PICKLOCKING_KEY_DAMAGED;
+				} else {
+					if(passToProtector) {
+						picklock.damageItem(1, player);
+						return protector.onPicklockFail(this, player, picklock);
+					}
 				}
-				picklock.damageItem((int) (chance * 10), player);
+				picklock.damageItem(2, player);
 				return PICKLOCKING_FAILED;
 			}
 		}
 	}
 
-	private void damageKey(ItemStack key) {
+	public void damageKey() {
+		ItemStack key = getCurrentKey();
 		key.setItemDamage(key.getItemDamage() + 1);
 		if (key.getItemDamage() > key.getMaxDamage()) {
 			inv[ContainerLockedChest.KEY_SLOT_ID] = null;
 		}
 	}
+	
+	public void damageProtector() {
+		ItemStack protector = getCurrentProtector();
+		protector.setItemDamage(protector.getItemDamage() + 1);
+		if (protector.getItemDamage() > protector.getMaxDamage()) {
+			inv[ContainerLockedChest.PROTECTOR_SLOT_ID] = null;
+		}
+	}
+	
+	public void setProvidingPower(boolean isIt) {
+		if(isIt) {
+			isPowered = 15;
+		} else {
+			isPowered = 0;
+		}
+		
+	}
+	public int isPowered() {
+		return isPowered;
+	}
+	
+	
+	public void destroyProtector() {
+		inv[ContainerLockedChest.PROTECTOR_SLOT_ID] = null;
+	}
+	
+	public ItemStack getCurrentKey() {
+		return inv[ContainerLockedChest.KEY_SLOT_ID];
+	}
+	public ItemStack getCurrentProtector() {
+		return inv[ContainerLockedChest.PROTECTOR_SLOT_ID];
+	}
 
 	public void enforceChest(String username) {
 		setOwnerName(username);
 		inv[ContainerLockedChest.KEY_SLOT_ID] = null;
+		inv[ContainerLockedChest.PROTECTOR_SLOT_ID] = null;
 	}
 
 	public boolean isChestProtected() {
@@ -177,6 +245,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		filledSlots = tagCompound.getInteger("filledSlots");
 		ownerName = tagCompound.getString("ownerName");
 		chestType = tagCompound.getInteger("chestType");
+		isPowered = tagCompound.getInteger("isPowered");
 
 		// UltimateExtender.logger.info("filledSlots: " + filledSlots);
 	}
@@ -199,6 +268,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		tagCompound.setTag("Inventory", itemList);
 		tagCompound.setInteger("filledSlots", filledSlots);
 		tagCompound.setInteger("chestType", chestType);
+		tagCompound.setInteger("isPowered", isPowered);
 		if (ownerName != null) {
 			tagCompound.setString("ownerName", ownerName);
 		}

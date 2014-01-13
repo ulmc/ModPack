@@ -1,7 +1,9 @@
 package ru.ulmc.extender.block;
 
 import java.util.Iterator;
+import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -13,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
@@ -35,6 +38,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		name = aName;
 		setCreativeTab(CreativeTabs.tabDecorations);
 		setTextureName(Reference.RES_NAME + aName);
+		setTickRandomly(true);
 		chestType = 100;
 		setBlockBounds(0.0625F, 0.0F, 0.0625F, 0.9375F, 0.875F, 0.9375F);
 	}
@@ -61,6 +65,51 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 */
 	public int getRenderType() {
 		return 22;
+	}
+
+	public int isProvidingWeakPower(IBlockAccess blockAccess, int x, int y, int z, int par5) {
+		TileEntityLockedChest te = (TileEntityLockedChest) blockAccess.getBlockTileEntity(x, y, z);
+		return (te.isPowered() > 0) ? 15 : 0;
+	}
+
+	/**
+	 * Returns true if the block is emitting direct/strong redstone power on the
+	 * specified side. Args: World, X, Y, Z, side. Note that the side is
+	 * reversed - eg it is 1 (up) when checking the bottom of the block.
+	 */
+	public int isProvidingStrongPower(IBlockAccess blockAccess, int x, int y, int z, int par5) {
+		TileEntityLockedChest te = (TileEntityLockedChest) blockAccess.getBlockTileEntity(x, y, z);
+
+		if (te.isPowered() == 0) {
+			return 0;
+		} else {
+			int j1 = te.isPowered() & 7;
+			return j1 == 5 && par5 == 1 ? 15 : (j1 == 4 && par5 == 2 ? 15 : (j1 == 3 && par5 == 3 ? 15 : (j1 == 2
+					&& par5 == 4 ? 15 : (j1 == 1 && par5 == 5 ? 15 : 0))));
+		}
+	}
+
+	public void updateTick(World par1World, int x, int y, int z, Random par5Random) {
+		if (!par1World.isRemote) {
+			TileEntityLockedChest te = (TileEntityLockedChest) par1World.getBlockTileEntity(x, y, z);
+
+			if (te.isPowered() != 0) {
+				par1World.scheduleBlockUpdate(x, y, z, blockID, 60);
+				te.setProvidingPower(false);
+			}
+		}
+	}
+
+	public int tickRate(World par1World) {
+		return 20;
+	}
+
+	/**
+	 * Can this block provide power. Only wire currently seems to have this
+	 * change based on its state.
+	 */
+	public boolean canProvidePower() {
+		return true;
 	}
 
 	/**
@@ -129,6 +178,9 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
 							//updateEntity = true; if some effects will realised
 							failChatMessage = "Key was damaged!";
+						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
+							//updateEntity = true; if some effects will realised
+							failChatMessage = "Protector Tratata";
 						} else {
 							failChatMessage = "picklocking failed!";
 						}
@@ -170,13 +222,6 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		return new TileEntityLockedChest(this.chestType);
 	}
 
-	/**
-	 * Can this block provide power. Only wire currently seems to have this
-	 * change based on its state.
-	 */
-	public boolean canProvidePower() {
-		return this.chestType == 1;
-	}
 
 	/**
 	 * Looks for a sitting ocelot within certain bounds. Such an ocelot is
@@ -223,5 +268,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	public String getSystemName() {
 		return name;
 	}
+
+	
 
 }

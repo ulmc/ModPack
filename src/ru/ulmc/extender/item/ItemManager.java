@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.src.ModLoader;
 import ru.ulmc.extender.ConfigurationHander;
 import ru.ulmc.extender.block.BlockManager;
+import ru.ulmc.extender.item.ItemLockProtector.ProtectorType;
 import ru.ulmc.extender.proxy.CommonProxy;
 
 public class ItemManager {
@@ -85,6 +86,16 @@ public class ItemManager {
 		createGrindStone(itemID++, 60, 0.5F, 0.3F, "coarseGrindstone");
 		createGrindStone(itemID++, 140, 0.6F, 0.5F, "enhancedGrindstone");
 		createGrindStone(itemID++, 250, 0.8F, 0.8F, "diamondGrindstone");
+		
+		createLockProtector(itemID++, 1, "capsuleEmpty", ProtectorType.DAMAGE_ABSORBER);
+		createLockProtector(itemID++, 20, "capsuleAbsorber", ProtectorType.DAMAGE_ABSORBER);
+		createLockProtector(itemID++, 10, "capsuleFirestarter", ProtectorType.FIRESTARTER);
+		createLockProtector(itemID++, 200, "capsuleLogger", ProtectorType.LOGGER);
+		createLockProtector(itemID++, 200, "capsuleRedstone", ProtectorType.REDSTONE);
+		createLockProtector(itemID++, 20, "capsuleShocker", ProtectorType.SHOCKER);
+		createLockProtector(itemID++, 200, "capsuleSiren", ProtectorType.SIREN);
+		createLockProtector(itemID++, 50, "capsuleAntipicklock", ProtectorType.ANTIPICKLOCK);
+		createLockProtector(itemID++, 2, "capsuleTNT", ProtectorType.TNTLOCK);
 
 		createCraftItem(alterItemID++, "boulder");
 		createCraftItem(alterItemID++, "cakeRaw");
@@ -159,6 +170,11 @@ public class ItemManager {
 
 	protected static void createKey(int itemID, int security, int maxDamage, String itemName) {
 		ItemKey item = new ItemKey(ConfigurationHander.getItemID(itemName, itemID), itemName, security, maxDamage);
+		commonRegistrationActions(item, itemName);
+	}
+	
+	protected static void createLockProtector(int itemID,  int maxDamage, String itemName, ProtectorType type) {
+		ItemLockProtector item = new ItemLockProtector(ConfigurationHander.getItemID(itemName, itemID), itemName, maxDamage, type);
 		commonRegistrationActions(item, itemName);
 	}
 

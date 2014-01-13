@@ -27,7 +27,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 	private float underGroundCoolBonus = 0.4f;
 	private float defaultArmorWarmness = 0.5f;
 	private float defaultArmorCoolness = 0.3f;
-	private float defaultNoneArmorCoolness = 0.4f;
+	private float defaultNoneArmorCoolness = 0.5f;
 	private float inWaterPenalty = 0.5f;
 	private float waterNearBonus = 0.3f;
 	private float fireResistanceBonus = 0.5f;

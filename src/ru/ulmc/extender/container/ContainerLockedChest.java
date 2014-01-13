@@ -10,6 +10,7 @@ import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 public class ContainerLockedChest extends Container {
 	
 	public static final int KEY_SLOT_ID = 0;
+	public static final int PROTECTOR_SLOT_ID = 1;
 	protected TileEntityLockedChest tileEntity;
 	protected int linesNum = 2;
 	protected int inLine = 9;
@@ -36,7 +37,7 @@ public class ContainerLockedChest extends Container {
 		int k;
 		
 		this.addSlotToContainer(new KeySlot(par2IInventory, KEY_SLOT_ID,	134, 6)); // key
-		this.addSlotToContainer(new Slot(par2IInventory, KEY_SLOT_ID + 1,	152, 6)); //helper
+		this.addSlotToContainer(new ProtectorSlot(par2IInventory, PROTECTOR_SLOT_ID,	152, 6)); //helper
 		
 		for (j = 0; j < this.numRows; j++) {
 			for (k = 0; k < 9; k++) {
@@ -112,4 +113,5 @@ public class ContainerLockedChest extends Container {
 	public IInventory getLowerChestInventory() {
 		return this.lowerChestInventory;
 	}
+	
 }
