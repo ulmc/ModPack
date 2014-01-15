@@ -127,7 +127,7 @@ public class PlayerEventsHook {
 				}
 
 				List<EntityItem> lastElements = event.drops.subList(event.drops.size() - searchOffset, event.drops.size());
-				ArrayList<EntityItem> newDrop = new ArrayList<>();
+				ArrayList<EntityItem> newDrop = new ArrayList<EntityItem>();
 				for (EntityItem item : lastElements) {
 					if (!item.getEntityItem().isStackable() && slotsLeft > 0) {
 						chest.setInventorySlotContents(i++, item.getEntityItem());

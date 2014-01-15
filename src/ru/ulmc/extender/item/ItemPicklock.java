@@ -49,13 +49,6 @@ public class ItemPicklock extends Item {
 		this.useTime = 32 - securityLevel;
 	}
 
-	/*
-	 * @Override public void registerIcons(IconRegister par1IconRegister) {
-	 * super.registerIcons(par1IconRegister); this.placeholder =
-	 * par1IconRegister.registerIcon(Reference.RES_NAME +
-	 * "placeholderPicklock"); }
-	 */
-
 	public int getSecurityLevel() {
 		return securityLevel;
 	}
@@ -69,7 +62,7 @@ public class ItemPicklock extends Item {
 		return EnumAction.bow;
 	}
 	/**
-	 * Этот метод не вызывается автоматически, при попытке взлома. См. Блок сундука там он вызывается вручную.
+	 * Р­С‚РѕС‚ РјРµС‚РѕРґ РЅРµ РІС‹Р·С‹РІР°РµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё, РїСЂРё РїРѕРїС‹С‚РєРµ РІР·Р»РѕРјР°. РЎРј. Р‘Р»РѕРє СЃСѓРЅРґСѓРєР° С‚Р°Рј РѕРЅ РІС‹Р·С‹РІР°РµС‚СЃСЏ РІСЂСѓС‡РЅСѓСЋ.
 	 */
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {

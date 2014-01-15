@@ -37,7 +37,7 @@ public class ItemManager {
 
 	protected static int itemID = 6000;
 	protected static int alterItemID = 5900;
-	protected static Map<String, Item> items = new HashMap<>();
+	protected static Map<String, Item> items = new HashMap<String, Item>();
 	protected static CommonProxy proxy;
 
 	public static void init(CommonProxy aProxy) {

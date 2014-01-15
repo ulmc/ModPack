@@ -78,7 +78,7 @@ public class BlockManager {
 	private static int blockID = 850;
 	private static int metaBlockID = 1656;
 	
-	private static Map<String, Block> blocks = new HashMap<>();
+	private static Map<String, Block> blocks = new HashMap<String, Block>();
 
 	protected static CommonProxy proxy;
 

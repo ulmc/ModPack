@@ -111,7 +111,7 @@ public class RecipeManager {
 		addShapeless(obsidianAlloyBlank, 1, Item.ingotIron, obsidianBrick);
 		addShapeless(obsidianBrick, 2, Block.obsidian);
 		
-		// Соление/вяление		
+		// РЎРѕР»РµРЅРёРµ/РІСЏР»РµРЅРёРµ		
 		addShapeless(jerkedBeef, 1, salt, Item.beefRaw);
 		addShapeless(jerkedPork, 1, salt, Item.porkRaw);
 		addShapeless(jerkedLamb, 1, salt, lambRawMeat);
@@ -150,9 +150,9 @@ public class RecipeManager {
 				15), 'z', Item.bucketWater, 'x', Block.sand);
 
 		GameRegistry.addRecipe(new ItemStack(itemIronStripe, 6), "xxx", 'x', Item.ingotIron);
-		// переплавка
+		// РїРµСЂРµРїР»Р°РІРєР°
 		
-		// Крафт фурнитуры
+		// РљСЂР°С„С‚ С„СѓСЂРЅРёС‚СѓСЂС‹
 		GameRegistry.addRecipe(new ItemStack(itemWoodChair, 1), "  x", "xxx", "xyx", 'x', itemWoodPlank, 'y', itemNails);
 		GameRegistry.addRecipe(new ItemStack(itemWhiteCottonChair, 1), " zx", "xxx", "xyx", 'x', itemWoodPlank, 'y',
 				itemNails, 'z', new ItemStack(Block.cloth, 1, 0));
@@ -171,7 +171,7 @@ public class RecipeManager {
 				'x', leatherStrap,
 				'y', Item.silk);
 
-		// крафт нейтральных флагов
+		// РєСЂР°С„С‚ РЅРµР№С‚СЂР°Р»СЊРЅС‹С… С„Р»Р°РіРѕРІ
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 0), "xxx", "rsr", "p p", 'x', Item.stick, 's', chevron, 'p',
 				spool, 'r', fabricRoll);
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 1), "xxx", "rsr", "p p", 'x', Item.stick, 's', chevron, 'p',
@@ -201,7 +201,7 @@ public class RecipeManager {
 		GameRegistry.addRecipe(new ItemStack(itemFlag, 1, 13), "xxx", "rsr", "p p", 'x', Item.stick, 's',
 				goldChevronWithDiamondThread, 'p', goldSpool, 'r', goldFabricRoll);
 
-		// консерваторские флаги
+		// РєРѕРЅСЃРµСЂРІР°С‚РѕСЂСЃРєРёРµ С„Р»Р°РіРё
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 0), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
 				'p', spool, 'r', fabricRoll, 'y', medivalSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 1), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
@@ -231,7 +231,7 @@ public class RecipeManager {
 		GameRegistry.addRecipe(new ItemStack(itemMedivalFlag, 1, 13), "xxx", "rsr", "pyp", 'x', Item.stick, 's',
 				diamondChevronWithDiamondThread, 'p', diamondSpool, 'r', diamondFabricRoll, 'y',
 				medivalSymbol);
-		// Флаги технократов
+		// Р¤Р»Р°РіРё С‚РµС…РЅРѕРєСЂР°С‚РѕРІ
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 0), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,
 				'p', spool, 'r', fabricRoll, 'y', technoSymbol);
 		GameRegistry.addRecipe(new ItemStack(itemTechnoFlag, 1, 1), "xxx", "rsr", "pyp", 'x', Item.stick, 's', chevron,

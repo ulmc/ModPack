@@ -67,7 +67,7 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	public TileEntity createNewTileEntity(World var1) {
 		try {
 			return (TileEntity) anEntityClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException(e);

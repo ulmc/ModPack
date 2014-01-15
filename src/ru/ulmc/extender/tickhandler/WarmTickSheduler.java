@@ -58,8 +58,8 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 	private float coldItemBonus = 0.2f;
 	private String handlerLabel = "ulmc Wintermod SheduledHandler";
 	private EnumSet<TickType> tick = EnumSet.of(TickType.PLAYER);
-	private Map<BiomeGenBase, Float> biomeToCold = new HashMap<>();
-	private Map<BiomeGenBase, Float> biomeToHot = new HashMap<>();
+	private Map<BiomeGenBase, Float> biomeToCold = new HashMap<BiomeGenBase, Float>();
+	private Map<BiomeGenBase, Float> biomeToHot = new HashMap<BiomeGenBase, Float>();
 	
 	public final int BOOTS = 0; 
 	public final int PANTS = 1; 
@@ -68,14 +68,14 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 
 	public WarmTickSheduler() {
 		super();
-		// Чем больше, тем холоднее
+		// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		biomeToCold.put(BiomeGenBase.frozenOcean, 1.0f);
 		biomeToCold.put(BiomeGenBase.frozenRiver, 0.9f);
 		biomeToCold.put(BiomeGenBase.icePlains, 0.8f);
 		biomeToCold.put(BiomeGenBase.iceMountains, 1.2f);
 		biomeToCold.put(BiomeGenBase.taigaHills, 0.7f);
 		biomeToCold.put(BiomeGenBase.taiga, 0.7f);
-		// Чем больше, тем жарче
+		// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 		biomeToHot.put(BiomeGenBase.hell, 0.8f);
 		biomeToHot.put(BiomeGenBase.desert, 0.5f);
 		biomeToHot.put(BiomeGenBase.desertHills, 0.5f);
