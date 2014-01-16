@@ -34,7 +34,7 @@ public class RenderCart extends TileEntitySpecialRenderer {
 	private ModelWheel leftWheel = new ModelWheel(-3.0f);
 	private ModelWheel rightWheel = new ModelWheel(18.0f);
 	private ModelCartBody modelBody = new ModelCartBody();
-	private ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/woodenCart.png");
+	private ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/woodenCart.png");
 
 	public RenderCart() { }
 

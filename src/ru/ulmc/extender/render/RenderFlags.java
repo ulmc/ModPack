@@ -42,7 +42,7 @@ public class RenderFlags extends TileEntitySpecialRenderer {
 	public static void registerResource(int type, String name) {	
 		
 		for(int i = 0; i < 16; i++) {
-			resources[type][i] = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/" + getPath(type, i) + name + ".png");;
+			resources[type][i] = new ResourceLocation(Reference.RES_NAME_C, "textures/models/" + getPath(type, i) + name + ".png");;
 		}
 		
 	}

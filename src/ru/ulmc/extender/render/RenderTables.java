@@ -47,7 +47,7 @@ public class RenderTables extends TileEntitySpecialRenderer {
 	private static Map<String, ResourceLocation> resources = new HashMap<String, ResourceLocation>();
 
 	public static void registerResource(String name) {
-		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/" + name + ".png");
+		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/" + name + ".png");
 		resources.put(name, resource);
 	}
 

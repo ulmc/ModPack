@@ -45,7 +45,7 @@ public class RenderChairs extends TileEntitySpecialRenderer {
 	private static Map<String, ResourceLocation> resources = new HashMap<String, ResourceLocation>();
 
 	public static void registerResource(String name) {
-		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/" + name + ".png");
+		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/" + name + ".png");
 		resources.put(name, resource);
 	}
 
@@ -121,7 +121,14 @@ public class RenderChairs extends TileEntitySpecialRenderer {
 
 		GL11.glPushMatrix();
 		
-		bindTexture(new ResourceLocation(Reference.RES_NAME_C,"/textures/blocks/" + tileEntity.blockType.getUnlocalizedName() + ".png"));
+		try {
+			if (resources.containsKey(tileEntity.blockType.getUnlocalizedName())) {
+				bindTexture(resources.get(tileEntity.blockType.getUnlocalizedName()));
+			}
+		} catch (Exception e) {
+			UltimateExtender.logger.log(Level.WARNING, e.getMessage());
+			e.printStackTrace();
+		}
 		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 1.5F,
 				(float) d2 + 0.5F);
 		GL11.glScalef(1.0F, 1.0F, 1.0F);

@@ -34,16 +34,15 @@ import ru.ulmc.extender.render.model.SimpleUlmcModel;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 
 public class RenderBones extends TileEntitySpecialRenderer {
-	private ModelBonesM modelM 			= new ModelBonesM();
-	private ModelBonesEmpty modelEmpty 	= new ModelBonesEmpty();
-	private ModelBonesFull modelFull 	= new ModelBonesFull();
-	private static ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/bonesFull.png");
+	private ModelBonesM modelM = new ModelBonesM();
+	private ModelBonesEmpty modelEmpty = new ModelBonesEmpty();
+	private ModelBonesFull modelFull = new ModelBonesFull();
+	private static final ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/bonesFull.png");
 
 	public RenderBones() {
 	}
 
-	public void renderModel(TileEntityBones tileEntityBones, double d,
-			double d1, double d2, float f, SimpleUlmcModel aModel) {
+	public void renderModel(TileEntityBones tileEntityBones, double d, double d1, double d2, float f, SimpleUlmcModel aModel) {
 		int i = tileEntityBones.getBlockMetadata();
 		float deg = 0f;
 
@@ -55,33 +54,31 @@ public class RenderBones extends TileEntitySpecialRenderer {
 			deg = 270f;
 		}
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 1.5F,
-				(float) d2 + 0.5F);
+		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 1.5F, (float) d2 + 0.5F);
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(deg, 0.0F, 1.0F, 0.0F);
-		bindTexture(resource);	
-		
+		bindTexture(resource);
+
 		aModel.render(0.0625F);
 		GL11.glPopMatrix();
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileEntity, double var2,
-			double var4, double var6, float var8) {
-		TileEntityBones bonesTE = (TileEntityBones)tileEntity;
+	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8) {
+		TileEntityBones bonesTE = (TileEntityBones) tileEntity;
 		switch (bonesTE.getState()) {
-			case 0:
-				renderModel(bonesTE, var2, var4, var6, var8, modelEmpty);
-				break;
-			case 1:
-				renderModel(bonesTE, var2, var4, var6, var8, modelM);
-				break;
-			case 2:
-				renderModel(bonesTE, var2, var4, var6, var8, modelFull);
-				break;
+		case 0:
+			renderModel(bonesTE, var2, var4, var6, var8, modelEmpty);
+			break;
+		case 1:
+			renderModel(bonesTE, var2, var4, var6, var8, modelM);
+			break;
+		case 2:
+			renderModel(bonesTE, var2, var4, var6, var8, modelFull);
+			break;
 		}
-		
+
 	}
 
 }

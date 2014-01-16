@@ -19,13 +19,9 @@
  */
 package ru.ulmc.extender.render;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
 import net.minecraft.client.model.ModelChest;
-import net.minecraft.client.model.ModelLargeChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -33,22 +29,15 @@ import org.lwjgl.opengl.GL12;
 
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderLockedChest extends TileEntitySpecialRenderer {
-	private static final ResourceLocation RES_NORMAL_LOCKED_SINGLE = new ResourceLocation(Reference.RES_NAME_C,
-			"textures/blocks/blockLockedChest.png");
-	private static final ResourceLocation RES_NORMAL_LOCKED_DOUBLE = new ResourceLocation(Reference.RES_NAME_C,
-			"textures/blocks/blockLockedChestDouble.png");
+	private static final ResourceLocation RES_NORMAL_LOCKED_SINGLE = new ResourceLocation(Reference.RES_NAME_C, "textures/models/blockLockedChest.png");	
 
 	/** The normal small chest model. */
 	private ModelChest chestModel = new ModelChest();
-
-	/** The large double chest model. */
-	private ModelChest largeChestModel = new ModelLargeChest();
 
 	public RenderLockedChest() {
 

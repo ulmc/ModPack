@@ -39,7 +39,7 @@ public class RenderBonesEntity extends Render {
 	private ModelBonesEmpty modelEmpty = new ModelBonesEmpty();
 	private ModelBonesFull modelFull = new ModelBonesFull();
 
-	private ResourceLocation resourceLocation = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/bonesFull.png");
+	private ResourceLocation resourceLocation = new ResourceLocation(Reference.RES_NAME_C, "textures/models/bonesFull.png");
 
 	public RenderBonesEntity() {
 	}
