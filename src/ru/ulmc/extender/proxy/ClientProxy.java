@@ -28,7 +28,7 @@ import ru.ulmc.extender.render.RenderCart;
 import ru.ulmc.extender.render.RenderFlags;
 import ru.ulmc.extender.render.RenderLockedChest;
 import ru.ulmc.extender.render.RenderTables;
-import ru.ulmc.extender.render.RenderUlmcObjects;
+import ru.ulmc.extender.render.RenderChairs;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 import ru.ulmc.extender.tileentity.TileEntityCart;
 import ru.ulmc.extender.tileentity.TileEntityChair;
@@ -49,7 +49,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerTileEntitySpecialRenderer() {
-		RenderUlmcObjects render = new RenderUlmcObjects();
+		RenderChairs render = new RenderChairs();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChair.class, render);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEliteChair.class, render);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new RenderFlags());

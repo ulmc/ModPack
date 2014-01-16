@@ -245,6 +245,7 @@ public class ItemLockProtector extends Item {
 						tile.yCoord,
 						tile.zCoord, tile.getBlockType().blockID);
 				tile.getWorldObj().scheduleBlockUpdate(tile.xCoord, tile.yCoord, tile.zCoord, BlockManager.blockLockedChest.blockID, 40);
+				tile.damageProtector();
 			} 
 			return true;
 		}	
@@ -259,6 +260,7 @@ public class ItemLockProtector extends Item {
 				if(owner != null) {
 					owner.addChatMessage("Someone trying to unlock your chest");
 				}
+				tile.damageProtector();
 			} 
 			return true;
 		}	
@@ -269,8 +271,9 @@ public class ItemLockProtector extends Item {
 	private boolean tryExplodeEverything(float chance, EntityPlayer player, TileEntityLockedChest tile) {
 		if(chance != 0.0f && random.nextFloat() < chance){
 			if(!tile.getWorldObj().isRemote) {
+				tile.clearAllItems();
 				tile.getWorldObj().createExplosion((Entity)null, tile.xCoord, tile.yCoord, tile.zCoord, ProtectorType.TNT_EXPLOSIONSIZE, false);
-				tile.getWorldObj().destroyBlock(tile.xCoord, tile.yCoord, tile.zCoord, false);				
+				tile.getWorldObj().destroyBlock(tile.xCoord, tile.yCoord, tile.zCoord, false);						
 			}			
 			return true;
 		}	
@@ -353,8 +356,8 @@ public class ItemLockProtector extends Item {
 	
 	public enum ProtectorType {
 		DAMAGE_ABSORBER(0.2f, 0.0F, 0.95f), 
-		SHOCKER(1.0f, 0.10F, 0.9f), 
-		FIRESTARTER(0.8f, 0.05F, 0.9f), 
+		SHOCKER(1.0f, 0.10F, 0.6f), 
+		FIRESTARTER(0.8f, 0.05F, 0.6f), 
 		SIREN(0.9f, 0.15F, 0.8f),
 		LOGGER(0.0f, 0.05F, 0.9f),
 		REDSTONE(1.0f, 0.15F, 0.9f),

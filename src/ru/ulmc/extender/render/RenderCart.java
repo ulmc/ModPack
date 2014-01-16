@@ -34,9 +34,9 @@ public class RenderCart extends TileEntitySpecialRenderer {
 	private ModelWheel leftWheel = new ModelWheel(-3.0f);
 	private ModelWheel rightWheel = new ModelWheel(18.0f);
 	private ModelCartBody modelBody = new ModelCartBody();
+	private ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/woodenCart.png");
 
-	public RenderCart() {
-	}
+	public RenderCart() { }
 
 	public void renderModel(TileEntityCart tileEntityBones, double d, double d1, double d2, float f) {
 		int i = tileEntityBones.getBlockMetadata();
@@ -59,7 +59,7 @@ public class RenderCart extends TileEntitySpecialRenderer {
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(deg, 0.0F, 1.0F, 0.0F);
-		bindTexture(new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/woodenCart.png"));
+		bindTexture(resource);
 
 		modelBody.render(0.0625F);
 		leftWheel.render(0.0625F);

@@ -25,6 +25,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.StatCollector;
 import ru.ulmc.extender.container.ContainerGrinder;
 import ru.ulmc.extender.item.ItemGrind;
 import ru.ulmc.extender.item.ItemKey;
@@ -59,7 +60,7 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 				ItemKey.setRandomCipher(stack);
 				damageGinder = true;
 				if(grindStone.isGoodEnoughForRenaming()) {
-					stack.setItemName(stack.getDisplayName() + " (" + player.username + ")");
+					stack.setItemName(StatCollector.translateToLocal(stack.getItem().getUnlocalizedName() + ".name") + " (" + player.username + ")");
 				}
 			}
 			ItemKey.setBonus(stack, grindStone.getRandomBuff());

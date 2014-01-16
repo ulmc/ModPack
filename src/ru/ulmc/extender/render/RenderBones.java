@@ -37,6 +37,7 @@ public class RenderBones extends TileEntitySpecialRenderer {
 	private ModelBonesM modelM 			= new ModelBonesM();
 	private ModelBonesEmpty modelEmpty 	= new ModelBonesEmpty();
 	private ModelBonesFull modelFull 	= new ModelBonesFull();
+	private static ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/bonesFull.png");
 
 	public RenderBones() {
 	}
@@ -59,8 +60,7 @@ public class RenderBones extends TileEntitySpecialRenderer {
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(deg, 0.0F, 1.0F, 0.0F);
-		bindTexture(new ResourceLocation(Reference.RES_NAME_C,
-					"/textures/blocks/bonesFull.png"));	
+		bindTexture(resource);	
 		
 		aModel.render(0.0625F);
 		GL11.glPopMatrix();

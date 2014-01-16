@@ -19,6 +19,8 @@
  */
 package ru.ulmc.extender.render;
 
+import java.util.logging.Level;
+
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockFlag;
 import ru.ulmc.extender.render.model.ModelFlag;
 import ru.ulmc.extender.tileentity.TileEntityFlag;
@@ -34,6 +37,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderFlags extends TileEntitySpecialRenderer {
 	private ModelFlag modelFlag = new ModelFlag();
+	private static ResourceLocation resources[][] = new ResourceLocation[3][16];
+	
+	public static void registerResource(int type, String name) {	
+		
+		for(int i = 0; i < 16; i++) {
+			resources[type][i] = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/" + getPath(type, i) + name + ".png");;
+		}
+		
+	}
+
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double var2,
@@ -50,19 +63,23 @@ public class RenderFlags extends TileEntitySpecialRenderer {
 		int s = flagEntity.getSkin();
 		
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 1.5F,
-				(float) d2 + 0.5F);
+		GL11.glTranslatef((float) d + 0.5F, (float) d1 + 1.5F, (float) d2 + 0.5F);
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(deg, 0.0F, 1.0F, 0.0F);
-		bindTexture(new ResourceLocation(Reference.RES_NAME_C,
-				"/textures/blocks/" + getPath(i, s)
-						+ flagEntity.blockType.getUnlocalizedName() + ".png"));
+		try {
+        	if(resources.length >= i && resources[i].length >= s) {
+        		bindTexture(resources[i][s]);
+        	}
+		} catch (Exception e) {
+			UltimateExtender.logger.log(Level.WARNING, e.getMessage());
+			e.printStackTrace();
+		}
 		
 		modelFlag.render(0.0625F);
 		GL11.glPopMatrix();
 	}
-	private String getPath(int type, int id) {
+	private static String getPath(int type, int id) {
 		if (type == 0) {
 			return "flags/neutral/" + id;
 		} else if (type == 1) {

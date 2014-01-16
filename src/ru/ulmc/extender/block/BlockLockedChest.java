@@ -168,7 +168,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 */
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
 			float par8, float par9) {
-		if(player.isEating()) {
+		if(world.isRemote && player.isEating()) {
 			return false;
 		}
 		
@@ -201,7 +201,6 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 						// Cooldown timeout		
 						ItemPicklock picklock = (ItemPicklock)hold.getItem();
 						hold = picklock.onItemRightClick(hold, world, player);
-						
 						
 						int picklockingStatus = lockedChestTE.tryToEnforceChest(hold, player);
 						if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {

@@ -19,6 +19,10 @@
  */
 package ru.ulmc.extender.render;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -26,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.render.model.ModelTable;
 import ru.ulmc.extender.render.model.ModelTableCabinet;
 import ru.ulmc.extender.render.model.ModelTableDinner;
@@ -39,7 +44,12 @@ public class RenderTables extends TileEntitySpecialRenderer {
 	private static ModelTable modelTable = new ModelTable();
 	private static ModelTableCabinet modelCabinetTable = new ModelTableCabinet();
 	private static ModelTableDinner modelTableDinner = new ModelTableDinner();
+	private static Map<String, ResourceLocation> resources = new HashMap<String, ResourceLocation>();
 
+	public static void registerResource(String name) {
+		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "/textures/blocks/" + name + ".png");
+		resources.put(name, resource);
+	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double var2,
@@ -64,6 +74,7 @@ public class RenderTables extends TileEntitySpecialRenderer {
 				break;
 			}
 		}
+		
 		if(model != null) {
 			doRender(tableTE, var2, var4, var6, var8, model);
 		}
@@ -85,9 +96,15 @@ public class RenderTables extends TileEntitySpecialRenderer {
 		}
          
         GL11.glPushMatrix();
-        bindTexture(new ResourceLocation(Reference.RES_NAME_C,
-				"/textures/blocks/" + tileEntity.blockType.getUnlocalizedName()
-						+ ".png"));
+        
+        try {
+        	if(resources.containsKey(tileEntity.blockType.getUnlocalizedName())) {
+        		bindTexture(resources.get(tileEntity.blockType.getUnlocalizedName()));
+        	}
+		} catch (Exception e) {
+			UltimateExtender.logger.log(Level.WARNING, e.getMessage());
+			e.printStackTrace();
+		}
         GL11.glTranslatef((float)d + 0.5F, (float)d1 + 1.5F, (float)d2 + 0.5F);
         GL11.glScalef(1.0F, 1.0F, 1.0F);
         GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);

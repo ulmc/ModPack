@@ -29,6 +29,9 @@ import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.ConfigurationHander;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.proxy.CommonProxy;
+import ru.ulmc.extender.render.RenderChairs;
+import ru.ulmc.extender.render.RenderFlags;
+import ru.ulmc.extender.render.RenderTables;
 import ru.ulmc.extender.tileentity.TileEntityFiller;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 import ru.ulmc.extender.tileentity.TileEntityCart;
@@ -147,22 +150,29 @@ public class BlockManager {
 	}
 
 	private static BlockChair createBlockChair(int blockID, float hardness, float explosionResistance, String name) {
-		return (BlockChair) registerBlock(new BlockChair(ConfigurationHander.getBlockID(name, blockID), TileEntityChair.class, hardness, explosionResistance, name));
+		BlockChair block = (BlockChair) registerBlock(new BlockChair(ConfigurationHander.getBlockID(name, blockID), TileEntityChair.class, hardness, explosionResistance, name));
+		RenderChairs.registerResource(block.getUnlocalizedName());
+		return block;
 	}
 
 	private static BlockEliteChair createBlockEliteChair(int blockID, float hardness, float explosionResistance, String name) {
-		return (BlockEliteChair) registerBlock(new BlockEliteChair(ConfigurationHander.getBlockID(name, blockID),
+		BlockEliteChair block = (BlockEliteChair) registerBlock(new BlockEliteChair(ConfigurationHander.getBlockID(name, blockID),
 				TileEntityEliteChair.class, hardness, explosionResistance, name));
+		RenderChairs.registerResource(block.getUnlocalizedName());
+		return block;
 	}
 
 	private static BlockTable createBlockTable(int blockID, float hardness, float explosionResistance, String name, int model) {
-		return (BlockTable) registerBlock(new BlockTable(ConfigurationHander.getBlockID(name, blockID), hardness, explosionResistance, name, model));
+		BlockTable block = (BlockTable)registerBlock(new BlockTable(ConfigurationHander.getBlockID(name, blockID), hardness, explosionResistance, name, model));
+		RenderTables.registerResource(block.getUnlocalizedName());
+		return block;
 	}
 
-	private static BlockFlag createBlockFlag(int blockID, float hardness, float explosionResistance, String name, int i,
+	private static BlockFlag createBlockFlag(int blockID, float hardness, float explosionResistance, String name, int blockType,
 			FillerBlock filler) {
-		return (BlockFlag) registerBlock(new BlockFlag(ConfigurationHander.getBlockID(name, blockID), TileEntityFlag.class, hardness, explosionResistance, name,
-				i, filler));
+		BlockFlag block =  (BlockFlag) registerBlock(new BlockFlag(ConfigurationHander.getBlockID(name, blockID), TileEntityFlag.class, hardness, explosionResistance, name, blockType, filler));
+		RenderFlags.registerResource(blockType, block.getUnlocalizedName());
+		return block;
 	}
 
 	private static BlockBones createBlockBones(int blockID, String name) {

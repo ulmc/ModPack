@@ -56,7 +56,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 	private float rainPenalty = 0.15f;
 	private float torchBonus = 0.2f;
 	private float coldItemBonus = 0.2f;
-	private String handlerLabel = "ulmc Wintermod SheduledHandler";
+	private String handlerLabel = "ulmc SurviveSeason SheduledHandler";
 	private EnumSet<TickType> tick = EnumSet.of(TickType.PLAYER);
 	private Map<BiomeGenBase, Float> biomeToCold = new HashMap<BiomeGenBase, Float>();
 	private Map<BiomeGenBase, Float> biomeToHot = new HashMap<BiomeGenBase, Float>();

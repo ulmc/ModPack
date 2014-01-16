@@ -456,5 +456,13 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	public ItemStack getStackInSlot(int slot) {
 		return inv[slot];
 	}
-
+	/**
+	 * Warning! this method is destroying all content of a chest
+	 */
+	public void clearAllItems() {
+		for (int i = 0; i < inv.length; i++) {
+			inv[i] = null;
+		}
+	}
+	
 }
