@@ -55,7 +55,7 @@ public class BlockFlag extends BasicStandingBlock {
 		this.blockType = blockType;
 		this.fillerBlock = fillerBlock;
 		setTextureName(Reference.RES_NAME + getUnlocalizedName());
-		setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 3.0F, 0.9F);
+		setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 3.0F, 1.0F);
 		
 	}
 	@Override
@@ -126,6 +126,8 @@ public class BlockFlag extends BasicStandingBlock {
 						tileFiller.setPrimaryX(x);
 						tileFiller.setPrimaryY(y);
 						tileFiller.setPrimaryZ(z);
+						tileFiller.setPrimaryBlockID(this.blockID);
+						tileFiller.setBoxBounds(0, y - fillerY, 0, 1, 3 + (y - fillerY), 1);
 					}
 				}
 				TileEntityFlag flagTE = (TileEntityFlag) world.getBlockTileEntity(x, y, z);

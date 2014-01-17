@@ -113,7 +113,7 @@ public class BlockManager {
 		blockDinnerWoodTable = createBlockTable(++blockID, 0.5F, 2.0F, "blockDinnerWoodTable", TileEntityTable.MODEL_DINNER);
 
 		flagFillerBlock = createFillerBlock(++blockID, Material.cloth, "fillerBlockFlag", Block.soundClothFootstep);
-		flagFillerBlock.setBlockBounds(0.1F, 0.0F, 0.1F, 0.1F, 1.0F, 0.1F);
+		//flagFillerBlock.setBlockBounds(0.1F, 0.0F, 0.1F, 0.1F, 1.0F, 0.1F);
 
 		blockBones = createBlockBones(++blockID, "blockOfBones");
 

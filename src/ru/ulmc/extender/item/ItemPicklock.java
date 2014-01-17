@@ -22,6 +22,7 @@ package ru.ulmc.extender.item;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -31,6 +32,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 
 public class ItemPicklock extends Item {
 
@@ -59,8 +61,29 @@ public class ItemPicklock extends Item {
 	}
 
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.bow;
+		return EnumAction.none;
 	}
+	
+	
+
+	@Override
+	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
+			int par6, int par7, float par8, float par9, float par10) {
+		if (par2EntityPlayer.worldObj.isRemote && par2EntityPlayer.isUsingItem()) {
+			if (useTime - 2 < par2EntityPlayer.getItemInUseCount()) {
+				return false;
+			}
+		}
+		return false;
+
+	}
+
+	@Override
+	public void onUsingItemTick(ItemStack stack, EntityPlayer player, int count) {
+		// TODO Auto-generated method stub
+		super.onUsingItemTick(stack, player, count);
+	}
+
 	/**
 	 * Этот метод не вызывается автоматически, при попытке взлома. См. Блок сундука там он вызывается вручную.
 	 */

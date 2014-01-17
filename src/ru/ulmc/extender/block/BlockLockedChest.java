@@ -164,13 +164,13 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 
 	
 	/*
-	 * /** Called upon block activation (right click on the block.)
+	 * Called upon block activation (right click on the block.)
 	 */
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
 			float par8, float par9) {
-		if(world.isRemote && player.isEating()) {
+		if(player.isUsingItem()) {
 			return false;
-		}
+		} 
 		
 		if (!world.isRemote) {
 			

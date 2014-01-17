@@ -27,6 +27,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.TileEntityCart;
 import ru.ulmc.extender.tileentity.TileEntityFiller;
 
@@ -85,7 +86,7 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 	@Override
 	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
 		TileEntityFiller entity = (TileEntityFiller) block.getBlockTileEntity(x, y, z);
-		
+			//UltimateExtender.logger.info(entity.getMinX() + " " + entity.getMinY() + " " + " " + " " + " " + " " + " ");
 		this.setBlockBounds(entity.getMinX(), entity.getMinY(), entity.getMinZ(), 
 							entity.getMaxX(), entity.getMaxY(), entity.getMaxZ());	
 
@@ -105,4 +106,12 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityFiller();
 	}
+
+	@Override
+	public int idPicked(World par1World, int x, int y, int z) {
+		TileEntityFiller entity = (TileEntityFiller) par1World.getBlockTileEntity(x, y, z);
+	
+		return par1World.getBlockId(entity.getPrimaryX(), entity.getPrimaryY(), entity.getPrimaryZ());
+	}
+	
 }
