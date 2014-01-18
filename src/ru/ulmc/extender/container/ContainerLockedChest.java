@@ -123,7 +123,7 @@ public class ContainerLockedChest extends Container {
 	 */
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);				
-		//this.lowerChestInventory.closeChest();
+		this.lowerChestInventory.closeChest();
 	}
 
 	/**

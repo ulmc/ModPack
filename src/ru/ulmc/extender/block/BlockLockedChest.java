@@ -121,7 +121,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 			}
 		}
 	}
-
+	@Override
 	public int tickRate(World par1World) {
 		return 20;
 	}
@@ -235,7 +235,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		}
 		return true;
 	}
-	
+	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getBlockTileEntity(x, y, z);
 		if (player.username.equals(lockedChestTE.getOwnerName()) || player.capabilities.isCreativeMode) {
@@ -245,7 +245,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 			return false;
 		}
 	}
-
+	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
     {
 		TileEntityLockedChest chestTE = (TileEntityLockedChest)par1World.getBlockTileEntity(par2, par3, par4);
@@ -296,6 +296,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 * Returns a new instance of a block's tile entity class. Called on placing
 	 * the block.
 	 */
+	@Override
 	public TileEntity createNewTileEntity(World par1World) {
 		return new TileEntityLockedChest(this.chestType, this);
 	}
@@ -330,6 +331,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
 	 * is the only chance you get to register icons.
 	 */
+	@Override
 	public void registerIcons(IconRegister par1IconRegister) {
 		this.blockIcon = par1IconRegister.registerIcon("planks_oak");
 	}
