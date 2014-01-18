@@ -28,6 +28,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.gui.GuiBones;
@@ -39,9 +40,29 @@ public class BlockBones extends BasicFallingBlock {
 
 	public BlockBones(int i, String name) {
 		super(i, Material.ground, name);
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+		//this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 		setHardness(1.0F);
 		setResistance(2.0F);
+	}
+	
+	@Override
+	public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
+		TileEntity tileEntity = block.getBlockTileEntity(x, y, z);
+		if(tileEntity instanceof TileEntityBones) {
+			int state = ((TileEntityBones) tileEntity).getState();
+			switch(state) {
+				case 0: 
+					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
+					break;
+				case 1:
+					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.9F, 1.0F);
+					break;
+				case 2:
+					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+					break;
+			}
+		}
+		
 	}
 
 	@Override
