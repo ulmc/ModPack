@@ -28,13 +28,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
@@ -69,13 +72,18 @@ public class ItemLockProtector extends Item {
 			target.setTagCompound(new NBTTagCompound());
 			tag = target.getTagCompound();
 		}
-		String thieves = tag.getString("log");
-		NBTTagList list = tag.getTagList("access");
-		if(list != null) {
-			list.appendTag(new NBTTagString(name));
-				
-		} 
-		
+		for(int i = 1; i < 6; i++) {
+			if(!tag.getString("thief"+i).isEmpty()) {
+				if(tag.getString("thief"+i).equals(name)) {
+					tag.setInteger("count"+i, tag.getInteger("count"+i) + 1);
+					break;
+				}
+			} else {
+				tag.setString("thief"+i, name);
+				tag.setInteger("count"+i, 1);
+				break;
+			}
+		}		
 	}
 
 	
@@ -85,12 +93,17 @@ public class ItemLockProtector extends Item {
 		if (itemStack.stackTagCompound == null) {
 			createNBT(itemStack);
 		}
-		String log = itemStack.stackTagCompound.getString("log");		
-		
-		if (log == null || log.isEmpty()) {
-			list.add(EnumChatFormatting.DARK_GREEN + "");
-		} else {
-			list.add(EnumChatFormatting.GREEN + log);
+			
+		if(type == ProtectorType.LOGGER) {
+			for(int i = 1; i<6; i++) {
+				list.add(UltimateExtender.concat(
+						EnumChatFormatting.DARK_GREEN.toString(), 
+						itemStack.stackTagCompound.getString("thief" + i),
+						" (",
+						String.valueOf(itemStack.stackTagCompound.getInteger("count" + i)),
+						")"
+						));
+			}
 		}
 
 	}
@@ -98,7 +111,18 @@ public class ItemLockProtector extends Item {
 	private static void createNBT(ItemStack itemStack) {
 		itemStack.stackTagCompound = new NBTTagCompound();
 		if(((ItemLockProtector)itemStack.getItem()).getType() == ProtectorType.LOGGER) {
-			itemStack.stackTagCompound.setString("log", "");
+			itemStack.stackTagCompound.setInteger("count1", 0);
+			itemStack.stackTagCompound.setInteger("count2", 0);
+			itemStack.stackTagCompound.setInteger("count3", 0);
+			itemStack.stackTagCompound.setInteger("count4", 0);
+			itemStack.stackTagCompound.setInteger("count5", 0);
+
+			itemStack.stackTagCompound.setString("thief1", "");
+			itemStack.stackTagCompound.setString("thief2", "");
+			itemStack.stackTagCompound.setString("thief3", "");
+			itemStack.stackTagCompound.setString("thief4", "");
+			itemStack.stackTagCompound.setString("thief5", "");
+			
 		}
 	}
 	
@@ -362,7 +386,7 @@ public class ItemLockProtector extends Item {
 		SHOCKER(1.0f, 0.10F, 0.6f), 
 		FIRESTARTER(0.8f, 0.05F, 0.6f), 
 		SIREN(0.9f, 0.15F, 0.8f),
-		LOGGER(0.0f, 0.05F, 0.9f),
+		LOGGER(0.0f, 0.25F, 0.8f),
 		REDSTONE(1.0f, 0.15F, 0.9f),
 		//REDSTONE(1.0f, 1.15F, 1.0f),
 		TNTLOCK(1.0f, 0.5F, 0.9f),

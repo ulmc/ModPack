@@ -52,6 +52,7 @@ public class UltimateExtender {
 	@Instance
 	public static UltimateExtender instance;
 	public static Logger logger;
+	private static StringBuilder stringBuilder = new StringBuilder();
 
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.COMMON_PROXY)
 	public static CommonProxy proxy;
@@ -91,6 +92,14 @@ public class UltimateExtender {
 		if(!world.isRemote) {
 			world.markBlockForUpdate(x, y, z);
 		}
+	}
+	
+	public static String concat(String... args) {
+		stringBuilder.delete(0, stringBuilder.length());
+		for (int i = 0; i < args.length; i++) {
+			stringBuilder.append(args[i]);
+		}
+		return stringBuilder.toString();		
 	}
 
 }
