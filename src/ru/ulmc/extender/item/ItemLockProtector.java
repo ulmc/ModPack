@@ -29,6 +29,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
@@ -67,12 +69,13 @@ public class ItemLockProtector extends Item {
 			target.setTagCompound(new NBTTagCompound());
 			tag = target.getTagCompound();
 		}
-		String thief = tag.getString("log");
-		if(thief == null || thief.isEmpty()) {
-			tag.setString("log", name);	
-		} else {
-			tag.setString("log", tag.getString("log") + ", " + name);	
-		}
+		String thieves = tag.getString("log");
+		NBTTagList list = tag.getTagList("access");
+		if(list != null) {
+			list.appendTag(new NBTTagString(name));
+				
+		} 
+		
 	}
 
 	
