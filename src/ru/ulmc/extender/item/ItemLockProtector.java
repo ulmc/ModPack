@@ -41,7 +41,7 @@ import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
-public class ItemLockProtector extends Item {
+public class ItemLockProtector extends Item implements Grindable {
 
 	public Icon placeholder;
 	private ProtectorType type;	
@@ -124,7 +124,7 @@ public class ItemLockProtector extends Item {
 			itemStack.stackTagCompound.setString("thief5", "");
 			
 		}
-	}
+	}	
 	
 	public ProtectorType getType() {
 		return type;
@@ -418,6 +418,14 @@ public class ItemLockProtector extends Item {
 		public float getOnKeyDamageChance() {
 			return onKeyDamageChance;
 		}
+	}
+
+	@Override
+	public boolean grindItem(EntityPlayer player, ItemStack grinder, ItemStack hold, ItemStack example) {
+		if(this.type == ProtectorType.LOGGER) {
+			createNBT(hold);
+		}
+		return true;
 	}
 	
 }

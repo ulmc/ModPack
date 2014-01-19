@@ -24,6 +24,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import ru.ulmc.extender.item.ItemKey;
+import ru.ulmc.extender.item.ItemLockProtector;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
 public class ContainerLockedChest extends Container {
@@ -101,11 +103,28 @@ public class ContainerLockedChest extends Container {
 			itemstack = itemstack1.copy();
 
 			if (par2 < this.numRows * 9) {
+
 				if (!this.mergeItemStack(itemstack1, this.numRows * 9 + extraSlotNum, this.inventorySlots.size(), true)) {
 					return null;
 				}
-			} else if (!this.mergeItemStack(itemstack1, extraSlotNum, this.numRows * 9 + extraSlotNum, false)) {
-				return null;
+			} else {
+				Slot keySlot = (Slot) this.inventorySlots.get(KEY_SLOT_ID);
+
+				if (keySlot.isItemValid(itemstack) && (keySlot == null || !keySlot.getHasStack())) {
+					keySlot.putStack(itemstack1);
+					slot.putStack(null);
+					return null;
+				}
+				Slot protectorSlot = (Slot) this.inventorySlots.get(PROTECTOR_SLOT_ID);
+				if (protectorSlot.isItemValid(itemstack) && (protectorSlot == null || !protectorSlot.getHasStack())) {
+					protectorSlot.putStack(itemstack1);
+					slot.putStack(null);
+					return null;
+				}
+
+				if (!this.mergeItemStack(itemstack1, extraSlotNum, this.numRows * 9 + extraSlotNum, false)) {
+					return null;
+				}
 			}
 
 			if (itemstack1.stackSize == 0) {
