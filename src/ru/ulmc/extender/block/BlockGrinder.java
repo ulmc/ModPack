@@ -19,7 +19,9 @@
  */
 package ru.ulmc.extender.block;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -35,6 +37,8 @@ import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.gui.GuiGrinder;
+import ru.ulmc.extender.item.Grindable;
+import ru.ulmc.extender.item.ItemGrind;
 import ru.ulmc.extender.tileentity.TileEntityGrinder;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -50,10 +54,9 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
     @SideOnly(Side.CLIENT)
     private Icon grinderRight;
     @SideOnly(Side.CLIENT)
-    private Icon grinderBottom;
-    
+    private Icon grinderBottom;    
     private String name;
-
+    
 	public BlockGrinder(int i, String name) {
 		super(i, Material.iron);
 		setHardness(1.0F);
@@ -131,16 +134,15 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 		} else {
 			boolean isOpenAction = false;
 			
-			if (player.isSneaking() || player.inventory.getCurrentItem() == null) {
+			if (player.inventory.getCurrentItem() == null || player.inventory.getCurrentItem().getItem() instanceof ItemGrind) {
 				isOpenAction = true;
 			} 
-			UltimateExtender.logger.info("blockActivated: " + player.isSneaking());
 			if (isOpenAction) {
 				player.openGui(UltimateExtender.instance, GuiGrinder.GUI_ID, par1World, x, y, z);				
 			} else {
 				TileEntityGrinder grinder = (TileEntityGrinder) par1World.getBlockTileEntity(x, y, z);
 				if(grinder.grindItem(player)) {
-					makeSomeNoize(par1World, x, y, z);					
+					makeSomeNoize(player, x, y, z);					
 				} else {
 					UltimateExtender.logger.info("FALSE");
 				}
@@ -149,12 +151,9 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 		}
 	}
 	
-	private void makeSomeNoize(World world, int x, int y, int z) {
+	private void makeSomeNoize(EntityPlayer player, int x, int y, int z) {
 		Random random = new Random();
-		world.playSound(x, y, z, "fire.fire", 0.5F + random.nextFloat(), 0.5F + random.nextFloat(), false);
-		world.spawnParticle("largesmoke", x, y, z, 0.5D, 0.5D, 0.5D);	
-		world.spawnParticle("largesmoke", x, y, z, 0.0D, 0.0D, 0.5D);	
-		world.spawnParticle("largesmoke", x, y, z, 0.5D, 0.0D, 0.0D);	
+		player.playSound("fire.fire", random.nextFloat(), random.nextFloat());
 	}
 	/**
 	 * Returns a new instance of a block's tile entity class. Called on placing

@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 
-public class ItemPicklock extends Item {
+public class ItemPicklock extends Item implements Grindable {
 
 	private int securityLevel = 0;
 	public Icon placeholder;
@@ -142,6 +142,12 @@ public class ItemPicklock extends Item {
 	public static void createNBT(ItemStack itemStack) {
 		itemStack.stackTagCompound = new NBTTagCompound();
 		itemStack.stackTagCompound.setFloat("bonus", 0.0F);
+	}
+
+	@Override
+	public boolean grindItem(EntityPlayer player, ItemStack grinder, ItemStack hold, ItemStack example) {
+		ItemPicklock.setBonus(hold, ((ItemGrind)grinder.getItem()).getRandomBuff());
+		return true;
 	}
 
 }

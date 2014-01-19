@@ -40,7 +40,6 @@ public class BlockBones extends BasicFallingBlock {
 
 	public BlockBones(int i, String name) {
 		super(i, Material.ground, name);
-		//this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 		setHardness(1.0F);
 		setResistance(2.0F);
 	}

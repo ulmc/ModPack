@@ -21,15 +21,12 @@ package ru.ulmc.extender.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.StatCollector;
 import ru.ulmc.extender.container.ContainerGrinder;
+import ru.ulmc.extender.item.Grindable;
 import ru.ulmc.extender.item.ItemGrind;
-import ru.ulmc.extender.item.ItemKey;
-import ru.ulmc.extender.item.ItemPicklock;
 
 public class TileEntityGrinder extends ExtendedTileEntity implements IInventory {
 	private ItemStack[] inv = new ItemStack[3];
@@ -39,42 +36,21 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 	}
 
 	public boolean grindItem(EntityPlayer player) {
-		ItemStack grinder = getGrinder();
-		ItemStack stack = player.inventory.getCurrentItem();
-		if (grinder == null || stack == null || !(grinder.getItem() instanceof ItemGrind)) {
+		ItemStack grinder 		= getGrinder();
+		ItemStack hold			= player.inventory.getCurrentItem();
+		
+		if (grinder == null || hold == null || !(grinder.getItem() instanceof ItemGrind) 
+				|| !(hold.getItem() instanceof Grindable)) {
 			return false;
-		}
-		ItemGrind grindStone = (ItemGrind) grinder.getItem();
+		}		
+		Grindable item = (Grindable)hold.getItem();
 
-		boolean damageGinder = false;
-		Item item = stack.getItem();
-
-		if (item instanceof ItemKey) {
-			if (getExample() != null && getExample().getItem() instanceof ItemKey) {
-				ItemKey.cloneCipher(getExample(), stack);
-				if(grindStone.isGoodEnoughForRenaming()) {
-					stack.setItemName(getExample().getDisplayName());
-				}
-				damageGinder = true;
-			} else if (getExample() == null) {
-				ItemKey.setRandomCipher(stack);
-				damageGinder = true;
-				if(grindStone.isGoodEnoughForRenaming()) {
-					stack.setItemName(StatCollector.translateToLocal(stack.getItem().getUnlocalizedName() + ".name") + " (" + player.username + ")");
-				}
-			}
-			ItemKey.setBonus(stack, grindStone.getRandomBuff());
-
-		}
-
-		if (item instanceof ItemPicklock) {
-			ItemPicklock.setBonus(stack, grindStone.getRandomBuff());
-		}
-
-		if (damageGinder) {
+		if (item.grindItem(player, grinder, hold, getExample())) {			
 			damageGrinder(grinder);
-		}
-		return damageGinder;
+			return true;
+			
+		} 
+		return false;
 	}
 
 	private ItemStack getExample() {

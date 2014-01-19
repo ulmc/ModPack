@@ -29,11 +29,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 
-public class ItemKey extends Item {
+public class ItemKey extends Item implements Grindable {
 
 	private int securityLevel = 0;
 	public Icon placeholder;
@@ -158,6 +159,30 @@ public class ItemKey extends Item {
 	 */
 	public int getSecurityLevel() {
 		return securityLevel;
+	}
+
+	@Override
+	public boolean grindItem(EntityPlayer player, ItemStack grinder, ItemStack hold, ItemStack example) {
+		ItemGrind grindStone = (ItemGrind) grinder.getItem();
+		boolean damageGinder = false;
+		if (example != null && example.getItem() instanceof ItemKey) {
+			ItemKey.cloneCipher(example, hold);
+			if(grindStone.isGoodEnoughForRenaming()) {
+				hold.setItemName(example.getDisplayName());
+			}
+			damageGinder = true;
+		} else if (example == null) {
+			ItemKey.setRandomCipher(hold);
+			damageGinder = true;
+			if(grindStone.isGoodEnoughForRenaming()) {
+				hold.setItemName(UltimateExtender.concat(
+						StatCollector.translateToLocal(hold.getItem().getUnlocalizedName().concat(".name")),
+						" (", player.getDisplayName(), ")"
+						));
+			}
+		}
+		ItemKey.setBonus(hold, grindStone.getRandomBuff());
+		return damageGinder;
 	}
 
 }
