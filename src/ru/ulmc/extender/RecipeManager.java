@@ -36,6 +36,13 @@ public class RecipeManager {
 	private static void addSmelting(Item item, int quantity, float xp, Item inputitem) {
 		GameRegistry.addSmelting(inputitem.itemID, new ItemStack(item, quantity), xp);
 	}
+	private static void addRecipe(Item item, int quantity, Object... objs) {
+		GameRegistry.addRecipe(new ItemStack(item, quantity), objs);
+	}
+	
+	private static void addRecipe(Item item, int quantity, int meta, Object... objs) {
+		GameRegistry.addRecipe(new ItemStack(item, quantity, meta), objs);
+	}
 
 	public static void init(CommonProxy proxy) {
 		/*GameRegistry.addRecipe(new ItemStack(blockReinforcedConcrete, 1), "xxx", "yyy", "xxx", 'x', Block.fenceIron, 'y',
@@ -92,6 +99,43 @@ public class RecipeManager {
 		Item cementMix = ItemManager.getItem("cementMix");
 		Item cementSack = ItemManager.getItem("cementSack");
 		
+		Item woodenGrindstoneBlank = ItemManager.getItem("woodenGrindstoneBlank");
+		Item ironGrindstoneBlank = ItemManager.getItem("ironGrindstoneBlank");
+		Item coarseGrindstone = ItemManager.getItem("coarseGrindstone");
+		Item enhancedGrindstone = ItemManager.getItem("enhancedGrindstone");
+		Item diamondGrindstone = ItemManager.getItem("diamondGrindstone");
+		
+		addRecipe(woodenGrindstoneBlank, 1,
+				" x ", 
+				"xyx", 
+				" x ", 
+				'x', Block.planks, 
+				'y', Item.stick);
+		addRecipe(ironGrindstoneBlank, 1,
+				" x ", 
+				"xyx", 
+				" x ", 
+				'x', Item.ingotIron, 
+				'y', Item.stick);
+		addRecipe(coarseGrindstone, 1,
+				" x ", 
+				"xyx", 
+				" x ", 
+				'x', Block.stone, 
+				'y', woodenGrindstoneBlank);
+		addRecipe(enhancedGrindstone, 1,
+				" x ", 
+				"xyx", 
+				" x ", 
+				'x', obsidianBrick, 
+				'y', ironGrindstoneBlank);
+		addRecipe(diamondGrindstone, 1,
+				" x ", 
+				"xyx", 
+				" x ", 
+				'x', diamondDust, 
+				'y', ironGrindstoneBlank);
+		
 		addShapeless(diamondDust, 2, Item.diamond);
 		addShapeless(goldDust, 1, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
 		
@@ -143,6 +187,8 @@ public class RecipeManager {
 		
 		addShapeless(medivalSymbol, 1, fabricStrap, spool, new ItemStack(Item.dyePowder, 1, 11));
 		addShapeless(technoSymbol, 1, fabricStrap, spool, new ItemStack(Item.dyePowder, 1, 1));
+		
+		
 		
 		/*
 		// marble and other simple blocks
