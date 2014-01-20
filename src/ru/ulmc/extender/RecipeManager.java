@@ -57,7 +57,7 @@ public class RecipeManager {
 		Item ironPicklock = ItemManager.getItem("ironPicklock");
 		Item goldenPicklock = ItemManager.getItem("goldenPicklock");
 		Item diamondPicklock = ItemManager.getItem("diamondPicklock");
-		
+
 		Item diamondDust = ItemManager.getItem("diamondDust");
 		Item goldDust = ItemManager.getItem("goldDust");
 		
@@ -105,6 +105,86 @@ public class RecipeManager {
 		Item enhancedGrindstone = ItemManager.getItem("enhancedGrindstone");
 		Item diamondGrindstone = ItemManager.getItem("diamondGrindstone");
 		
+		Item capsuleEmpty = ItemManager.getItem("capsuleEmpty");
+		Item capsuleAbsorber = ItemManager.getItem("capsuleAbsorber");
+		Item capsuleFirestarter = ItemManager.getItem("capsuleFirestarter");
+		Item capsuleLogger = ItemManager.getItem("capsuleLogger");
+		Item capsuleRedstone = ItemManager.getItem("capsuleRedstone");
+		Item capsuleShocker = ItemManager.getItem("capsuleShocker");
+		Item capsuleSiren = ItemManager.getItem("capsuleSiren");
+		Item capsuleAntipicklock = ItemManager.getItem("capsuleAntipicklock");
+		Item capsuleTNT = ItemManager.getItem("capsuleTNT");
+		
+		addRecipe(capsuleEmpty, 1,
+				" y ", 
+				" x ", 
+				" y ", 
+				'x', Block.glass, 
+				'y', ironBlank);
+		
+		addRecipe(capsuleAbsorber, 1,
+				"zxz", 
+				"zyz", 
+				"zzz", 
+				'x', diamondDust, 
+				'z', goldDust,
+				'y', capsuleEmpty);
+		
+		addRecipe(capsuleFirestarter, 1,
+				"zyz", 
+				"xyx", 
+				"xxx", 
+				'x', Item.blazePowder,
+				'z', Item.magmaCream, 
+				'y', capsuleEmpty);
+		
+		addRecipe(capsuleLogger, 1,
+				"xzx", 
+				"xyx", 
+				'x', goldDust, 
+				'z', Item.book, 
+				'y', capsuleEmpty);
+		
+		addRecipe(capsuleRedstone, 1,
+				"xxx", 
+				"ryr", 
+				"xxx", 
+				'x', goldDust, 
+				'r', Item.redstone, 
+				'y', capsuleEmpty);
+		
+		addRecipe(capsuleShocker, 1,
+				"   ", 
+				"qyq", 
+				"rrr", 
+				'q', Item.netherQuartz,
+				'x', Item.redstone, 
+				'y', capsuleEmpty);
+		
+		addRecipe(capsuleSiren, 1,
+				" n ", 
+				"nyn", 
+				" n ", 
+				'n', Block.music, 
+				'y', capsuleEmpty);
+		
+		addRecipe(capsuleAntipicklock, 1,
+				"rxr", 
+				"byb", 
+				"rxr", 
+				'x', diamondDust,
+				'b', Item.blazeRod, 
+				'r', Item.redstone, 
+				'y', capsuleEmpty);
+		
+		addRecipe(capsuleTNT, 1,
+				"xxx", 
+				"ryr", 
+				"xxx", 
+				'r', Item.redstone, 
+				'x', Item.gunpowder, 
+				'y', capsuleEmpty);
+		
 		addRecipe(woodenGrindstoneBlank, 1,
 				" x ", 
 				"xyx", 
@@ -129,6 +209,13 @@ public class RecipeManager {
 				" x ", 
 				'x', obsidianBrick, 
 				'y', ironGrindstoneBlank);
+		addRecipe(diamondGrindstone, 1,
+				" x ", 
+				"xyx", 
+				" x ", 
+				'x', diamondDust, 
+				'y', ironGrindstoneBlank);
+		
 		addRecipe(diamondGrindstone, 1,
 				" x ", 
 				"xyx", 
