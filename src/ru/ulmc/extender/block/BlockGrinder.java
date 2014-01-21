@@ -56,6 +56,7 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
     @SideOnly(Side.CLIENT)
     private Icon grinderBottom;    
     private String name;
+    private Random random = new Random();
     
 	public BlockGrinder(int i, String name) {
 		super(i, Material.iron);
@@ -129,10 +130,18 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	 */
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int par6, float par7,
 			float par8, float par9) {
+		
 		if (par1World.isRemote) {
+			TileEntityGrinder grinder = (TileEntityGrinder) par1World.getBlockTileEntity(x, y, z);
+			if(grinder.isGrinderSetup()) {
+				par1World.spawnParticle("largesmoke", x + random.nextFloat(), y+1, z + random.nextFloat(), 0, 0, 0);
+				par1World.spawnParticle("smoke", x + random.nextFloat(), y+1, z + random.nextFloat(), 0, 0, 0);
+			} else {
+				par1World.spawnParticle("spell", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+			}
 			return true;
 		} else {
-			boolean isOpenAction = false;
+			boolean isOpenAction = false;			
 			
 			if (player.inventory.getCurrentItem() == null || player.inventory.getCurrentItem().getItem() instanceof ItemGrind) {
 				isOpenAction = true;
@@ -141,20 +150,19 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 				player.openGui(UltimateExtender.instance, GuiGrinder.GUI_ID, par1World, x, y, z);				
 			} else {
 				TileEntityGrinder grinder = (TileEntityGrinder) par1World.getBlockTileEntity(x, y, z);
-				if(grinder.grindItem(player)) {
-					makeSomeNoize(player, x, y, z);					
-				} else {
-					UltimateExtender.logger.info("FALSE");
+				if(grinder.grindItem(player)) {					
+					par1World.playSoundAtEntity(player, Reference.RES_NAME.concat("grinder.grinder"), 1.3f-random.nextFloat(), 1.0f + random.nextFloat()/5);
+				} else {					
+					par1World.playSoundAtEntity(player, Reference.RES_NAME.concat("grinder.empty"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/10);
+
 				}
+				
+				
 			}
 			return true;
-		}
-	}
+		}		
+	}	
 	
-	private void makeSomeNoize(EntityPlayer player, int x, int y, int z) {
-		Random random = new Random();
-		player.playSound("fire.fire", random.nextFloat(), random.nextFloat());
-	}
 	/**
 	 * Returns a new instance of a block's tile entity class. Called on placing
 	 * the block.

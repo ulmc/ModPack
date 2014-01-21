@@ -62,7 +62,7 @@ public class UltimateExtender {
 		ConfigurationHander.init();
 		logger = Logger.getLogger(Reference.MOD_ID);
 		logger.setParent(FMLLog.getLogger());
-		proxy.preInit(); // You have to call the methods in your proxy class
+		proxy.preInit(); 
 		BlockManager.init(proxy);
 		ItemManager.init(proxy);
 		RecipeManager.init(proxy);

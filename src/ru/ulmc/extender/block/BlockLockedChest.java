@@ -172,13 +172,13 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 			return false;
 		} 
 		
-		if (!world.isRemote) {
+	//	if (!world.isRemote) {
 			
 			TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getBlockTileEntity(x, y, z);
 			ItemStack hold = player.inventory.getCurrentItem();
 			boolean isAllowToOpen = false;
 			boolean updateEntity = false;
-			String failChatMessage = "It's locked!";
+			//String failChatMessage = "It's locked!";
 			
 			if (player.capabilities.isCreativeMode) {
 				isAllowToOpen = true;
@@ -206,14 +206,22 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 						if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
 							updateEntity = true;
 							isAllowToOpen = true;
+							world.spawnParticle("magicCrit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.enforce"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
 						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
 							//updateEntity = true; if some effects will realised
-							failChatMessage = "Key was damaged!";
+							world.spawnParticle("crit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
+							//failChatMessage = "Key was damaged!";
 						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
 							//updateEntity = true; if some effects will realised
-							failChatMessage = "Protector Tratata";
+							world.spawnParticle("reddust", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
+							//failChatMessage = "Protector Tratata";
 						} else {
-							failChatMessage = "picklocking failed!";
+							world.spawnParticle("spell", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
+							//failChatMessage = "picklocking failed!";
 						}
 						
 					} else if(lockedChestTE.isKeyAndCipherMatches(hold)) {
@@ -229,11 +237,11 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 				if(updateEntity) {
 					UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
 				}
-				player.addChatMessage(failChatMessage);
+				//player.addChatMessage(failChatMessage);
 			}
 			return true;
-		}
-		return true;
+	//	}
+	//	return true;
 	}
 	@Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {

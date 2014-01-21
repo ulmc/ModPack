@@ -24,6 +24,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.container.ContainerGrinder;
 import ru.ulmc.extender.item.Grindable;
 import ru.ulmc.extender.item.ItemGrind;
@@ -60,12 +61,17 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 	private ItemStack getGrinder() {
 		return inv[ContainerGrinder.GRIND_SLOT_ID];
 	}
+	
+	public boolean isGrinderSetup() {
+		return !(inv[ContainerGrinder.GRIND_SLOT_ID] == null);
+	}
 
 	private void damageGrinder(ItemStack grinder) {
 		int damageMultiplier = 5;
 		grinder.setItemDamage(grinder.getItemDamage() + (int) (Math.random() * damageMultiplier));
 		if (grinder.getItemDamage() > grinder.getMaxDamage()) {
 			inv[ContainerGrinder.GRIND_SLOT_ID] = null;
+			UltimateExtender.markSomeBlockForUpdate(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord);
 		}
 	}
 
