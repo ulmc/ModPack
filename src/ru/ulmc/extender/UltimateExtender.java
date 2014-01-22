@@ -22,6 +22,8 @@ package ru.ulmc.extender;
 
 import java.util.logging.Logger;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.block.BlockManager;
@@ -31,6 +33,8 @@ import ru.ulmc.extender.gui.handler.GuiHandler;
 import ru.ulmc.extender.item.ItemManager;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.proxy.PacketManager;
+import ru.ulmc.extender.render.particle.EntityLockFX;
+import ru.ulmc.extender.render.particle.UParticle;
 import ru.ulmc.extender.tickhandler.WarmTickSheduler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
@@ -100,6 +104,16 @@ public class UltimateExtender {
 			stringBuilder.append(args[i]);
 		}
 		return stringBuilder.toString();		
+	}
+	
+	public static void spawnParticle(int particleID, World world, double x, double y, double z) {
+		EntityFX particle = null;
+		switch(particleID) {
+		case UParticle.LOCK:
+			particle = new EntityLockFX(world, x, y, z);
+			break;
+		}
+		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 	}
 
 }

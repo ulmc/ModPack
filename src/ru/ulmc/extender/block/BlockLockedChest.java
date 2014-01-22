@@ -41,6 +41,7 @@ import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.gui.GuiLockedChest;
 import ru.ulmc.extender.item.ItemPicklock;
+import ru.ulmc.extender.render.particle.UParticle;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -205,17 +206,22 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 						int picklockingStatus = lockedChestTE.tryToEnforceChest(hold, player);
 						if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
 							updateEntity = true;
-							isAllowToOpen = true;
-							world.spawnParticle("magicCrit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							isAllowToOpen = true;							
 							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.enforce"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
 						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
 							//updateEntity = true; if some effects will realised
+							world.spawnParticle("crit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							world.spawnParticle("crit", x + random.nextFloat()*0.1, y+1.1, z + random.nextFloat()*0.1, 0, 0, 0);
+							world.spawnParticle("crit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
 							world.spawnParticle("crit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
 							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
 							//failChatMessage = "Key was damaged!";
 						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
 							//updateEntity = true; if some effects will realised
-							world.spawnParticle("reddust", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							world.spawnParticle("magicCrit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							world.spawnParticle("magicCrit", x + random.nextFloat()*0.1, y+1.1, z + random.nextFloat()*0.1, 0, 0, 0);
+							world.spawnParticle("magicCrit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
+							world.spawnParticle("magicCrit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
 							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
 							//failChatMessage = "Protector Tratata";
 						} else {
@@ -226,6 +232,8 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 						
 					} else if(lockedChestTE.isKeyAndCipherMatches(hold)) {
 						isAllowToOpen = true;
+					} else {
+						UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y+2, z + random.nextFloat());
 					}
 				}				
 			}
@@ -239,7 +247,8 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 				}
 				//player.addChatMessage(failChatMessage);
 			}
-			return true;
+			UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5, z + random.nextFloat()); 
+			return false;
 	//	}
 	//	return true;
 	}
