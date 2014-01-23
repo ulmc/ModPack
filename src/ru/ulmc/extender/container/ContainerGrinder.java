@@ -70,6 +70,7 @@ public class ContainerGrinder extends Container {
 		}
 	}
 
+	@Override
 	public boolean canInteractWith(EntityPlayer par1EntityPlayer) {
 		return this.lowerChestInventory.isUseableByPlayer(par1EntityPlayer);
 	}
@@ -78,6 +79,7 @@ public class ContainerGrinder extends Container {
 	 * Called when a player shift-clicks on a slot. You must override this or
 	 * you will crash when someone does that.
 	 */
+	@Override
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
 		ItemStack itemstack = null;
 		Slot slot = (Slot) this.inventorySlots.get(par2);
@@ -113,6 +115,7 @@ public class ContainerGrinder extends Container {
 	/**
 	 * Called when the container is closed.
 	 */
+	@Override
 	public void onContainerClosed(EntityPlayer par1EntityPlayer) {
 		super.onContainerClosed(par1EntityPlayer);
 		this.lowerChestInventory.closeChest();

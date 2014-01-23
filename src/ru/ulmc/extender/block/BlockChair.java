@@ -41,6 +41,7 @@ public class BlockChair extends BasicStandingBlock {
 		setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 0.7F, 0.9F);
 	}
 
+	@Override
 	public TileEntity getBlockEntity() {
 		try {
 			return (TileEntity) anEntityClass.newInstance();

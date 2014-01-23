@@ -19,10 +19,7 @@
  */
 package ru.ulmc.extender.block;
 
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -37,7 +34,6 @@ import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.gui.GuiGrinder;
-import ru.ulmc.extender.item.Grindable;
 import ru.ulmc.extender.item.ItemGrind;
 import ru.ulmc.extender.tileentity.TileEntityGrinder;
 import cpw.mods.fml.relauncher.Side;
@@ -68,10 +64,12 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 		setTextureName(Reference.RES_NAME + name);
 	}
 	
+	@Override
 	public String getSystemName() {
 		return name;
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 
     /**
@@ -90,6 +88,7 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 		}
 	}
 	
+	@Override
 	@SideOnly(Side.CLIENT)
 
     /**
@@ -107,10 +106,11 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	/**
 	 * Called when the block is placed in the world.
 	 */
+	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
 			ItemStack par6ItemStack) {
 		byte b0 = 0;
-		int l = MathHelper.floor_double((double) (par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int l = MathHelper.floor_double(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
 		if (l == 0) {
 			b0 = 2;
@@ -128,6 +128,7 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	/*
 	 * /** Called upon block activation (right click on the block.)
 	 */
+	@Override
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int par6, float par7,
 			float par8, float par9) {
 		
@@ -167,6 +168,7 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	 * Returns a new instance of a block's tile entity class. Called on placing
 	 * the block.
 	 */
+	@Override
 	public TileEntity createNewTileEntity(World par1World) {
 		return new TileEntityGrinder();
 	}

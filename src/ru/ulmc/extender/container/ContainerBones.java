@@ -99,6 +99,7 @@ public class ContainerBones extends Container {
 		}
 		return stack;
 	}
+	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
 		

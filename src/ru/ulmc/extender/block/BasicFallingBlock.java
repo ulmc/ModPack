@@ -77,6 +77,7 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	/**
 	 * Called whenever the block is added into the world. Args: world, x, y, z
 	 */
+	@Override
 	public void onBlockAdded(World par1World, int par2, int par3, int par4) {
 		par1World.scheduleBlockUpdate(par2, par3, par4, this.blockID, this.tickRate(par1World));
 	}
@@ -86,6 +87,7 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	 * neighbor changed (coordinates passed are their own) Args: x, y, z,
 	 * neighbor blockID
 	 */
+	@Override
 	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5) {
 		par1World.scheduleBlockUpdate(par2, par3, par4, this.blockID, this.tickRate(par1World));
 	}
@@ -93,6 +95,7 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	/**
 	 * Ticks the block if it's been scheduled
 	 */
+	@Override
 	public void updateTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 		if (!par1World.isRemote) {
 			this.tryToFall(par1World, par2, par3, par4);
@@ -143,6 +146,7 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	/**
 	 * How many world ticks before ticking
 	 */
+	@Override
 	public int tickRate(World par1World) {
 		return 2;
 	}
@@ -203,7 +207,7 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
 			ItemStack par6ItemStack) {
-		int p = MathHelper.floor_double((double) ((par5EntityLivingBase.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+		int p = MathHelper.floor_double((par5EntityLivingBase.rotationYaw * 4F) / 360F + 0.5D) & 3;
 
 		int aByte = 3;
 		if (p == 0) {

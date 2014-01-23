@@ -27,7 +27,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import ru.ulmc.extender.Reference;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.TileEntityCart;
 import ru.ulmc.extender.tileentity.TileEntityFiller;
 

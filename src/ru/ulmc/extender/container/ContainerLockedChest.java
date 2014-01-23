@@ -24,8 +24,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import ru.ulmc.extender.item.ItemKey;
-import ru.ulmc.extender.item.ItemLockProtector;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
 public class ContainerLockedChest extends Container {
@@ -86,6 +84,7 @@ public class ContainerLockedChest extends Container {
 		
 	}
 
+	@Override
 	public boolean canInteractWith(EntityPlayer par1EntityPlayer) {
 		return this.lowerChestInventory.isUseableByPlayer(par1EntityPlayer);
 	}
@@ -94,6 +93,7 @@ public class ContainerLockedChest extends Container {
 	 * Called when a player shift-clicks on a slot. You must override this or
 	 * you will crash when someone does that.
 	 */
+	@Override
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
 		ItemStack itemstack = null;
 		Slot slot = (Slot) this.inventorySlots.get(par2);
@@ -140,6 +140,7 @@ public class ContainerLockedChest extends Container {
 	/**
 	 * Called when the container is closed.
 	 */
+	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);				
 		this.lowerChestInventory.closeChest();

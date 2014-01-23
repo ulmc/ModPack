@@ -70,6 +70,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 * or not to render the shared face of two adjacent blocks and also whether
 	 * the player can attach torches, redstone wire, etc to this block.
 	 */
+	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
@@ -78,6 +79,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 * If this block doesn't render as an ordinary block it will return False
 	 * (examples: signs, buttons, stairs, etc)
 	 */
+	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
@@ -85,10 +87,12 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	/**
 	 * The type of render function that is called for this block
 	 */
+	@Override
 	public int getRenderType() {
 		return 22;
 	}
 
+	@Override
 	public int isProvidingWeakPower(IBlockAccess blockAccess, int x, int y, int z, int par5) {
 		TileEntityLockedChest te = (TileEntityLockedChest) blockAccess.getBlockTileEntity(x, y, z);
 		UltimateExtender.logger.info("isProvidingWeakPower.isPowered(): " + te.isPowered());
@@ -100,6 +104,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 * specified side. Args: World, X, Y, Z, side. Note that the side is
 	 * reversed - eg it is 1 (up) when checking the bottom of the block.
 	 */
+	@Override
 	public int isProvidingStrongPower(IBlockAccess blockAccess, int x, int y, int z, int par5) {
 		TileEntityLockedChest te = (TileEntityLockedChest) blockAccess.getBlockTileEntity(x, y, z);
 		UltimateExtender.logger.info("isProvidingStrongPower.isPowered(): " + te.isPowered());
@@ -112,6 +117,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		}
 	}
 
+	@Override
 	public void updateTick(World par1World, int x, int y, int z, Random par5Random) {
 		if (!par1World.isRemote) {
 			TileEntityLockedChest te = (TileEntityLockedChest) par1World.getBlockTileEntity(x, y, z);
@@ -139,10 +145,11 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	/**
 	 * Called when the block is placed in the world.
 	 */
+	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
 			ItemStack par6ItemStack) {
 		byte b0 = 0;
-		int l = MathHelper.floor_double((double) (par5EntityLivingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int l = MathHelper.floor_double(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
 		if (l == 0) {
 			b0 = 2;
@@ -167,6 +174,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	/*
 	 * Called upon block activation (right click on the block.)
 	 */
+	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
 			float par8, float par9) {
 		if(player.isUsingItem()) {
@@ -196,6 +204,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 			} else {
 				if(hold == null) {
 					isAllowToOpen = false;
+                    UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y+1.5f, z + random.nextFloat());
 				} else {
 					if((hold.getItem() instanceof ItemPicklock)) {
 						
@@ -247,7 +256,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 				}
 				//player.addChatMessage(failChatMessage);
 			}
-			//UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5, z + random.nextFloat()); 
+			//UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5, z + random.nextFloat());
 			return false;
 	//	}
 	//	return true;
@@ -289,11 +298,11 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
                         }
 
                         itemstack.stackSize -= k1;
-                        entityitem = new EntityItem(par1World, (double)((float)par2 + f), (double)((float)par3 + f1), (double)((float)par4 + f2), new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
+                        entityitem = new EntityItem(par1World, par2 + f, par3 + f1, par4 + f2, new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
                         float f3 = 0.05F;
-                        entityitem.motionX = (double)((float)this.random.nextGaussian() * f3);
-                        entityitem.motionY = (double)((float)this.random.nextGaussian() * f3 + 0.2F);
-                        entityitem.motionZ = (double)((float)this.random.nextGaussian() * f3);
+                        entityitem.motionX = (float)this.random.nextGaussian() * f3;
+                        entityitem.motionY = (float)this.random.nextGaussian() * f3 + 0.2F;
+                        entityitem.motionZ = (float)this.random.nextGaussian() * f3;
 
                         if (itemstack.hasTagCompound())
                         {
@@ -327,8 +336,8 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	public static boolean isOcelotBlockingChest(World par0World, int par1, int par2, int par3) {
 		Iterator iterator = par0World.getEntitiesWithinAABB(
 				EntityOcelot.class,
-				AxisAlignedBB.getAABBPool().getAABB((double) par1, (double) (par2 + 1), (double) par3, (double) (par1 + 1),
-						(double) (par2 + 2), (double) (par3 + 1))).iterator();
+				AxisAlignedBB.getAABBPool().getAABB(par1, par2 + 1, par3, par1 + 1,
+						par2 + 2, par3 + 1)).iterator();
 		EntityOcelot entityocelot;
 
 		do {
@@ -337,7 +346,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 			}
 
 			EntityOcelot entityocelot1 = (EntityOcelot) iterator.next();
-			entityocelot = (EntityOcelot) entityocelot1;
+			entityocelot = entityocelot1;
 		} while (!entityocelot.isSitting());
 
 		return true;

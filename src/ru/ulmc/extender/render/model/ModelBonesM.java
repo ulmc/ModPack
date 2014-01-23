@@ -74,6 +74,7 @@ public class ModelBonesM extends ModelBase implements SimpleUlmcModel {
 		setRotation(skull, -0.2602503F, 0.2974289F, 0.1115358F);
 	}
 
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3,
 			float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
@@ -86,6 +87,7 @@ public class ModelBonesM extends ModelBase implements SimpleUlmcModel {
 		skull.render(f5);
 	}
 
+	@Override
 	public void render(float f5) {
 		bone.render(f5);
 		chest.render(f5);

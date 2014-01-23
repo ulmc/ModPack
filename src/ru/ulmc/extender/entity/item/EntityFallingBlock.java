@@ -75,10 +75,12 @@ public class EntityFallingBlock extends Entity {
 	 * returns if this entity triggers Block.onEntityWalking on the blocks they
 	 * walk on. used for spiders and wolves to prevent them from trampling crops
 	 */
+	@Override
 	protected boolean canTriggerWalking() {
 		return false;
 	}
 
+	@Override
 	protected void entityInit() {
 	}
 
@@ -86,6 +88,7 @@ public class EntityFallingBlock extends Entity {
 	 * Returns true if other Entities should be prevented from moving through
 	 * this Entity.
 	 */
+	@Override
 	public boolean canBeCollidedWith() {
 		return !this.isDead;
 	}
@@ -93,6 +96,7 @@ public class EntityFallingBlock extends Entity {
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate() {
 		if (this.blockID == 0) {
 			this.setDead();
@@ -177,6 +181,7 @@ public class EntityFallingBlock extends Entity {
 	/**
 	 * Called when the mob is falling. Calculates and applies fall damage.
 	 */
+	@Override
 	protected void fall(float par1) {
 		
 	}
@@ -184,6 +189,7 @@ public class EntityFallingBlock extends Entity {
 	/**
 	 * (abstract) Protected helper method to write subclass entity data to NBT.
 	 */
+	@Override
 	protected void writeEntityToNBT(NBTTagCompound par1NBTTagCompound) {
 		par1NBTTagCompound.setByte("Tile", (byte) this.blockID);
 		par1NBTTagCompound.setInteger("TileID", this.blockID);
@@ -199,6 +205,7 @@ public class EntityFallingBlock extends Entity {
 	/**
 	 * (abstract) Protected helper method to read subclass entity data from NBT.
 	 */
+	@Override
 	protected void readEntityFromNBT(NBTTagCompound par1NBTTagCompound) {
 		if (par1NBTTagCompound.hasKey("TileID")) {
 			this.blockID = par1NBTTagCompound.getInteger("TileID");
@@ -223,12 +230,14 @@ public class EntityFallingBlock extends Entity {
 		}
 	}
 
+	@Override
 	public void addEntityCrashInfo(CrashReportCategory par1CrashReportCategory) {
 		super.addEntityCrashInfo(par1CrashReportCategory);
 		par1CrashReportCategory.addCrashSection("Immitating block ID", Integer.valueOf(this.blockID));
 		par1CrashReportCategory.addCrashSection("Immitating block data", Integer.valueOf(this.metadata));
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public float getShadowSize() {
 		return 0.0F;
@@ -239,6 +248,7 @@ public class EntityFallingBlock extends Entity {
 		return this.worldObj;
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	/**
 	 * Return whether this entity should be rendered as on fire.

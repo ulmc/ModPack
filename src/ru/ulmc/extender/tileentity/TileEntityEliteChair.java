@@ -28,7 +28,8 @@ public class TileEntityEliteChair extends TileEntity
 	/**
      * Writes a tile entity to NBT.
      */
-    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
+    @Override
+	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeToNBT(par1NBTTagCompound);
        /* par1NBTTagCompound.setInteger("t", this.cType);*/
@@ -37,7 +38,8 @@ public class TileEntityEliteChair extends TileEntity
     /**
      * Reads a tile entity from NBT.
      */
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound)
+    @Override
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
         /*this.cType = par1NBTTagCompound.getInteger("t");*/

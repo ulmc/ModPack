@@ -26,7 +26,6 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import ru.ulmc.extender.Reference;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.render.model.ModelBonesEmpty;
 import ru.ulmc.extender.render.model.ModelBonesFull;
 import ru.ulmc.extender.render.model.ModelBonesM;

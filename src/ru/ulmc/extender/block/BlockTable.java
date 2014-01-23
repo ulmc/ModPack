@@ -60,7 +60,7 @@ public class BlockTable extends BasicStandingBlock {
 			flagTE.setModel(tableModel);
 			
 			flagTE.blockType = this;
-			int p = MathHelper.floor_double((double) ((entityLiving.rotationYaw * 4F) / 360F) + 0.5D) & 3; 
+			int p = MathHelper.floor_double((entityLiving.rotationYaw * 4F) / 360F + 0.5D) & 3; 
 			
 			int aByte = 3;
 			if (p == 0) {

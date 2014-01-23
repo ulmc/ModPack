@@ -22,13 +22,10 @@ package ru.ulmc.extender.block;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
@@ -75,6 +72,7 @@ public class BlockFlag extends BasicStandingBlock {
     	
     	return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
     }
+	@Override
 	@SuppressWarnings("unchecked")
 	@SideOnly(Side.CLIENT)
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
@@ -131,7 +129,7 @@ public class BlockFlag extends BasicStandingBlock {
 					}
 				}
 				TileEntityFlag flagTE = (TileEntityFlag) world.getBlockTileEntity(x, y, z);
-		    	int side = (int)(MathHelper.floor_double((double)((entityLiving.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15);  
+		    	int side = MathHelper.floor_double((entityLiving.rotationYaw + 180.0F) * 16.0F / 360.0F + 0.5D) & 15;  
 		    	flagTE.setType(this.blockType);
 		    	flagTE.blockType = this;
 		    	flagTE.setAngle(side);

@@ -1,9 +1,6 @@
 package ru.ulmc.extender.render.particle;
 
-import org.lwjgl.opengl.GL11;
-
 import ru.ulmc.extender.Reference;
-import ru.ulmc.extender.UltimateExtender;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -27,6 +24,7 @@ public class EntityTestFX extends EntityFX implements UParticle {
 		setRBGColorF(0.5f + rand.nextFloat()/2, 0.1f+ rand.nextFloat()/2, 0.1f+ rand.nextFloat()/2);
 	}
 
+	@Override
 	public void renderParticle(Tessellator tess, float partialTicks, float par3, float par4, float par5, float par6,
 			float par7) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
@@ -58,6 +56,7 @@ public class EntityTestFX extends EntityFX implements UParticle {
 		return 0;
 	}
 
+	@Override
 	public void onUpdate() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
@@ -67,7 +66,7 @@ public class EntityTestFX extends EntityFX implements UParticle {
 			this.setDead();
 		}
 
-		this.motionY -= 0.04D * (double) this.particleGravity;
+		this.motionY -= 0.04D * this.particleGravity;
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.9800000190734863D;
 		this.motionY *= 0.9800000190734863D;

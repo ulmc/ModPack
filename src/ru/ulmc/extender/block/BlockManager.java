@@ -27,7 +27,6 @@ import net.minecraft.block.StepSound;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.ConfigurationHander;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.render.RenderChairs;
 import ru.ulmc.extender.render.RenderFlags;

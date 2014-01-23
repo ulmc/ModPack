@@ -57,9 +57,9 @@ public class RenderChairs extends TileEntitySpecialRenderer {
 	public void renderModel(TileEntity tileEntity, double d, double d1,
 			double d2, float f) {
 		if (tileEntity instanceof TileEntityChair) {
-			renderChairs((TileEntityChair) tileEntity, d, d1, d2, f);
+			renderChairs(tileEntity, d, d1, d2, f);
 		} else if (tileEntity instanceof TileEntityEliteChair) {
-			renderEliteChairs((TileEntityEliteChair) tileEntity, d, d1, d2, f);
+			renderEliteChairs(tileEntity, d, d1, d2, f);
 		}
 	}
 

@@ -53,7 +53,7 @@ public class BlockCart extends BasicStandingBlock {
 
 			boolean canPlace = true;			
 			int[] shift;
-			int dir = MathHelper.floor_double((double) ((entityLiving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+			int dir = MathHelper.floor_double((entityLiving.rotationYaw * 4F) / 360F + 0.5D) & 3;
 			int aByte = 3;
 			if (dir == 0) {
 				aByte = 0;

@@ -77,7 +77,7 @@ public class RenderLockedChest extends TileEntitySpecialRenderer {
 			short1 = -90;
 		}
 
-		GL11.glRotatef((float) short1, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(short1, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		float f1 = par1TileEntityChest.prevLidAngle + (par1TileEntityChest.lidAngle - par1TileEntityChest.prevLidAngle)
 				* par8;
@@ -92,6 +92,7 @@ public class RenderLockedChest extends TileEntitySpecialRenderer {
 
 	}
 
+	@Override
 	public void renderTileEntityAt(TileEntity par1TileEntity, double par2, double par4, double par6, float par8) {
 		this.renderTileEntityChestAt((TileEntityLockedChest) par1TileEntity, par2, par4, par6, par8);
 	}

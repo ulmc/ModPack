@@ -60,6 +60,7 @@ public class ModelTableCabinet extends ModelBase implements SimpleUlmcModel{
 		setRotation(Shape4, 0F, 1.570796F, 0F);
 	}
 
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3,
 			float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
@@ -70,6 +71,7 @@ public class ModelTableCabinet extends ModelBase implements SimpleUlmcModel{
 		Shape4.render(f5);
 	}
 
+	@Override
 	public void render(float f5) {
 		Shape1.render(f5);
 		Shape2.render(f5);

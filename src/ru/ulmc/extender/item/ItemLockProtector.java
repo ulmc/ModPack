@@ -28,11 +28,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
@@ -310,7 +306,7 @@ public class ItemLockProtector extends Item implements Grindable {
 	
 	private boolean tryToBrakePicklock(float chance, EntityPlayer player, TileEntityLockedChest tile, ItemStack picklock) {
 		if(chance != 0.0f && random.nextFloat() < chance){
-			picklock.damageItem((int)Math.round(random.nextFloat() * ProtectorType.ANTIPICKLOCK_STRENGTH), player);
+			picklock.damageItem(Math.round(random.nextFloat() * ProtectorType.ANTIPICKLOCK_STRENGTH), player);
 			tile.damageProtector();
 			return true;
 		}	

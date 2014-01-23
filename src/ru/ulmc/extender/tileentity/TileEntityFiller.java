@@ -35,6 +35,7 @@ public class TileEntityFiller extends ExtendedTileEntity {
 	
 	protected int primaryBlockID;
 
+	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("px", primaryX);
@@ -51,6 +52,7 @@ public class TileEntityFiller extends ExtendedTileEntity {
 		par1NBTTagCompound.setInteger("primaryBlockID", primaryBlockID);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
 		this.primaryX = par1NBTTagCompound.getInteger("px");

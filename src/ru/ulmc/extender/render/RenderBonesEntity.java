@@ -21,7 +21,6 @@ package ru.ulmc.extender.render;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -32,7 +31,6 @@ import ru.ulmc.extender.render.model.ModelBonesEmpty;
 import ru.ulmc.extender.render.model.ModelBonesFull;
 import ru.ulmc.extender.render.model.ModelBonesM;
 import ru.ulmc.extender.render.model.SimpleUlmcModel;
-import ru.ulmc.extender.tileentity.TileEntityBones;
 
 public class RenderBonesEntity extends Render {
 	private ModelBonesM modelM = new ModelBonesM();

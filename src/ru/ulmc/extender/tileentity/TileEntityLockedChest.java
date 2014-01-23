@@ -326,6 +326,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		return 64;
 	}
 
+	@Override
 	public void updateContainingBlockInfo() {
 		super.updateContainingBlockInfo();
 	}
@@ -335,6 +336,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	 * e.g. the mob spawner uses this to count ticks and creates a new spawn
 	 * inside its implementation.
 	 */
+	@Override
 	@SuppressWarnings({ "rawtypes" })
 	public void updateEntity() {
 		super.updateEntity();
@@ -347,10 +349,10 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			f = 5.0F;
 			List list = this.worldObj.getEntitiesWithinAABB(
 					EntityPlayer.class,
-					AxisAlignedBB.getAABBPool().getAABB((double) ((float) this.xCoord - f),
-							(double) ((float) this.yCoord - f), (double) ((float) this.zCoord - f),
-							(double) ((float) (this.xCoord + 1) + f), (double) ((float) (this.yCoord + 1) + f),
-							(double) ((float) (this.zCoord + 1) + f)));
+					AxisAlignedBB.getAABBPool().getAABB(this.xCoord - f,
+							this.yCoord - f, this.zCoord - f,
+							this.xCoord + 1 + f, this.yCoord + 1 + f,
+							this.zCoord + 1 + f));
 			Iterator iterator = list.iterator();
 
 			while (iterator.hasNext()) {
@@ -372,10 +374,10 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		double d0;
 
 		if (this.numUsingPlayers > 0 && this.lidAngle == 0.0F) {
-			double d1 = (double) this.xCoord + 0.5D;
-			d0 = (double) this.zCoord + 0.5D;
+			double d1 = this.xCoord + 0.5D;
+			d0 = this.zCoord + 0.5D;
 
-			this.worldObj.playSoundEffect(d1, (double) this.yCoord + 0.5D, d0, "random.chestopen", 0.5F,
+			this.worldObj.playSoundEffect(d1, this.yCoord + 0.5D, d0, "random.chestopen", 0.5F,
 					this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 		}
 
@@ -395,10 +397,10 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			float f2 = 0.5F;
 
 			if (this.lidAngle < f2 && f1 >= f2) {
-				d0 = (double) this.xCoord + 0.5D;
-				double d2 = (double) this.zCoord + 0.5D;
+				d0 = this.xCoord + 0.5D;
+				double d2 = this.zCoord + 0.5D;
 
-				this.worldObj.playSoundEffect(d0, (double) this.yCoord + 0.5D, d2, "random.chestclosed", 0.5F,
+				this.worldObj.playSoundEffect(d0, this.yCoord + 0.5D, d2, "random.chestclosed", 0.5F,
 						this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 			}
 
@@ -412,6 +414,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	 * Called when a client event is received with the event number and
 	 * argument, see World.sendClientEvent
 	 */
+	@Override
 	public boolean receiveClientEvent(int par1, int par2) {
 		if (par1 == 1) {
 			this.numUsingPlayers = par2;
@@ -421,6 +424,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		}
 	}
 
+	@Override
 	public void openChest() {
 		if (this.numUsingPlayers < 0) {
 			this.numUsingPlayers = 0;
@@ -431,6 +435,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 				this.numUsingPlayers);
 	}
 
+	@Override
 	public void closeChest() {
 		if (this.getBlockType() != null && this.getBlockType() instanceof BlockLockedChest) {
 			--this.numUsingPlayers;
@@ -442,6 +447,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	/**
 	 * invalidates a tile entity
 	 */
+	@Override
 	public void invalidate() {
 		super.invalidate();
 		this.updateContainingBlockInfo();

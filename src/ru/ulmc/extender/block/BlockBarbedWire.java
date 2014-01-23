@@ -42,15 +42,17 @@ public class BlockBarbedWire extends BlockBreakable implements UlmcBlock
         setLightOpacity(0);
         setStepSound(soundMetalFootstep);
         setUnlocalizedName(name);
-        this.name = name;
+        BlockBarbedWire.name = name;
         //setTextureName(Reference.RES_NAME + "barbedWire");
         setCreativeTab(CreativeTabs.tabBlock);
         this.setTickRandomly(true);
     }
-    public String getSystemName() {
+    @Override
+	public String getSystemName() {
 		return name;
 	}
-    public int getRenderBlockPass()
+    @Override
+	public int getRenderBlockPass()
     {
         return 1;
     }	
@@ -59,23 +61,28 @@ public class BlockBarbedWire extends BlockBreakable implements UlmcBlock
     {
         return 1;
     }
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
+    @Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
         return null;
     }
-    public boolean isOpaqueCube()
+    @Override
+	public boolean isOpaqueCube()
     {
             return false;
     }
-    public boolean renderAsNormalBlock()
+    @Override
+	public boolean renderAsNormalBlock()
     {
             return false;
     }
-    public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
+    @Override
+	public boolean shouldSideBeRendered(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
     {
         return super.shouldSideBeRendered(par1IBlockAccess, par2, par3, par4, par5);
     }
-    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+    @Override
+	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
     {
         par5Entity.attackEntityFrom(DamageSource.cactus, 2);
         par5Entity.setInWeb();

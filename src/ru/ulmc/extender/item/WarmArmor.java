@@ -53,6 +53,7 @@ public class WarmArmor extends ItemArmor implements IWarmArmor {
 		textureNameBottom = Reference.RES_NAME + "textures/armor/" + material.name().toLowerCase() + "-bottom.png";
 	}
 
+	@Override
 	public int getItemEnchantability() {
 		return material.getEnchantability();
 	}
@@ -61,6 +62,7 @@ public class WarmArmor extends ItemArmor implements IWarmArmor {
 		return maxDamageArray;
 	}
 
+	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
 		if (!isLegs) {
 			return textureNameTop;

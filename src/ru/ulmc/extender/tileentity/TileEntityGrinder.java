@@ -165,6 +165,7 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 		return 64;
 	}
 
+	@Override
 	public void updateContainingBlockInfo() {
 		super.updateContainingBlockInfo();
 	}
@@ -172,6 +173,7 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 	/**
 	 * invalidates a tile entity
 	 */
+	@Override
 	public void invalidate() {
 		super.invalidate();
 		this.updateContainingBlockInfo();

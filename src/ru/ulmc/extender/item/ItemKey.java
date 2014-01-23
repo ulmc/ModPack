@@ -100,7 +100,7 @@ public class ItemKey extends Item implements Grindable {
 	@Override
 	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
 		itemStack.stackTagCompound = new NBTTagCompound();
-		itemStack.stackTagCompound.setInteger("cipher", (int) -1);
+		itemStack.stackTagCompound.setInteger("cipher", -1);
 		itemStack.stackTagCompound.setFloat("bonus", 0.0F);
 	}
 

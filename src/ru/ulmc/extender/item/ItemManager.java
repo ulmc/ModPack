@@ -22,10 +22,8 @@ package ru.ulmc.extender.item;
 import java.util.HashMap;
 import java.util.Map;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.src.ModLoader;
 import ru.ulmc.extender.ConfigurationHander;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.item.ItemLockProtector.ProtectorType;

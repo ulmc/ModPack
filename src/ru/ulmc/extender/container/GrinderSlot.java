@@ -31,6 +31,7 @@ public class GrinderSlot extends Slot {
 		super(par1iInventory, par2, par3, par4);		
 		setBackgroundIcon(((ItemGrind)ItemManager.getItem("coarseGrindstone")).placeholder);
 	}
+	@Override
 	public boolean isItemValid(ItemStack par1ItemStack)
     {
 		if(par1ItemStack.getItem() instanceof ItemGrind) {

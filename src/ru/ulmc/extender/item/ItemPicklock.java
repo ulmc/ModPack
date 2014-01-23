@@ -22,7 +22,6 @@ package ru.ulmc.extender.item;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -32,7 +31,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
-import ru.ulmc.extender.UltimateExtender;
 
 public class ItemPicklock extends Item implements Grindable {
 
@@ -60,6 +58,7 @@ public class ItemPicklock extends Item implements Grindable {
 		return this.useTime;
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
 		return EnumAction.none;
 	}
@@ -93,6 +92,7 @@ public class ItemPicklock extends Item implements Grindable {
 		return par1ItemStack;
 	}
 	
+	@Override
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		//par2World.playSoundAtEntity(par3EntityPlayer, "random.bowhit", 0.5F, par2World.rand.nextFloat() * 0.1F + 0.9F);
 		return par1ItemStack;

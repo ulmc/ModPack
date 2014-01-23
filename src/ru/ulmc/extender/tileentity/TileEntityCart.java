@@ -20,7 +20,6 @@
 package ru.ulmc.extender.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,10 +27,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
-import ru.ulmc.extender.UltimateExtender;
-import cpw.mods.fml.common.network.Player;
 
 public class TileEntityCart extends TileEntity implements IInventory {
 	private ItemStack[] inv = new ItemStack[18];

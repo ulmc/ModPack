@@ -33,11 +33,9 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.item.ItemManager;
 import ru.ulmc.extender.tileentity.TileEntityBones;
-import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
 /**
  * Name and cast of this class are irrelevant
@@ -97,7 +95,7 @@ public class PlayerEventsHook {
 			}
 			if (allowToPlace) {
 				event.entityPlayer.worldObj.setBlock(coordX, coordY, coordZ, BlockManager.blockBones.blockID);
-				int p = MathHelper.floor_double((double) ((event.entityPlayer.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+				int p = MathHelper.floor_double((event.entityPlayer.rotationYaw * 4F) / 360F + 0.5D) & 3;
 
 				int aByte = 3;
 				if (p == 0) {

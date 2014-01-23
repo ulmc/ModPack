@@ -102,6 +102,7 @@ public class ModelCartBody extends ModelBase implements SimpleUlmcModel {
 		setRotation(Stick2, 0F, -0.0698132F, 0.3490659F);
 	}
 
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
@@ -117,6 +118,7 @@ public class ModelCartBody extends ModelBase implements SimpleUlmcModel {
 		Stick2.render(f5);
 	}
 
+	@Override
 	public void render(float f5) {
 		Axis1.render(f5);
 		Axis2.render(f5);
