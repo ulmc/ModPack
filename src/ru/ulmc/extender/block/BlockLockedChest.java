@@ -233,7 +233,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 					} else if(lockedChestTE.isKeyAndCipherMatches(hold)) {
 						isAllowToOpen = true;
 					} else {
-						UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y+2, z + random.nextFloat());
+						UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y+1.5f, z + random.nextFloat());
 					}
 				}				
 			}
@@ -247,7 +247,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 				}
 				//player.addChatMessage(failChatMessage);
 			}
-			UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5, z + random.nextFloat()); 
+			//UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5, z + random.nextFloat()); 
 			return false;
 	//	}
 	//	return true;

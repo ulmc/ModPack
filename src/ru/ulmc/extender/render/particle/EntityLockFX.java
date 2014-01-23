@@ -35,7 +35,7 @@ public class EntityLockFX extends EntityFX implements UParticle {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.003921569F);
 		tess.startDrawingQuads();
-		//tess.setBrightness(getBrightnessForRender(partialTicks));
+		tess.setBrightness(getBrightnessForRender(partialTicks));
 		float scale = 0.2F * particleScale;
 		float x = (float) (prevPosX + (posX - prevPosX) * partialTicks - interpPosX);
 		float y = (float) (prevPosY + (posY - prevPosY) * partialTicks - interpPosY);
