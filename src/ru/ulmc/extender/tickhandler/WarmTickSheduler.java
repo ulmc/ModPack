@@ -351,7 +351,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
         private float powerStep = 0.05F;
 
         private FrostRenderTask(float power) {
-            if(SurvivalGui.isDoRenderFrost()) {
+            if(SurvivalGui.isDoRenderFrost() || SurvivalGui.isDoRenderHeat()) {
                 power = -0.1F;
             }
             if(power> 2.0F) {
@@ -378,7 +378,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
         private float powerStep = 0.09F;
 
         private HeatRenderTask(float power) {
-            if(SurvivalGui.isDoRenderFrost()) {
+            if(SurvivalGui.isDoRenderHeat() || SurvivalGui.isDoRenderFrost()) {
                 power = -0.1F;
             }
             if(power> 2.0F) {

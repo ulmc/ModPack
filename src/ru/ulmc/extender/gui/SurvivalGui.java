@@ -96,7 +96,7 @@ public class SurvivalGui extends Gui {
     }
 
     public static void setDoRenderFrost(boolean doRender) {
-        SurvivalGui.doRenderFrost = doRenderFrost;
+        SurvivalGui.doRenderFrost = doRender;
     }
 
     public static boolean isDoRenderHeat() {
