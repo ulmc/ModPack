@@ -99,4 +99,5 @@ tile.blockLockedChest.name=Locked chest
 tile.blockGrinder.name=Grinder
 
 msg.sirenAlarm=Someone trying to unlock your chest!
-death.attack.cold=Cold as ice.
+death.attack.cold=%1$s is now cold as ice.
+death.attack.heat=%1$s is baked. Bon appetit!

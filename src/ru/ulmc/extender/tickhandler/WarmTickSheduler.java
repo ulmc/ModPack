@@ -57,14 +57,15 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 	private float coldItemBonus = 0.2f;
 	private String handlerLabel = "ulmc SurviveSeason SheduledHandler";
 	private EnumSet<TickType> tick = EnumSet.of(TickType.PLAYER);
-	private Map<BiomeGenBase, Float> biomeToCold = new HashMap<BiomeGenBase, Float>();
-	private Map<BiomeGenBase, Float> biomeToHot = new HashMap<BiomeGenBase, Float>();
+	private static Map<BiomeGenBase, Float> biomeToCold = new HashMap<BiomeGenBase, Float>();
+	private static Map<BiomeGenBase, Float> biomeToHot = new HashMap<BiomeGenBase, Float>();
     private Timer timer = new Timer();
-	
+
 	public final int BOOTS = 0; 
 	public final int PANTS = 1; 
 	public final int BODY = 2; 
-	public final int HAT = 3; 
+	public final int HAT = 3;
+
 
 	public WarmTickSheduler() {
 		super();
@@ -151,8 +152,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 
 						if (noWarmNear) {
 							player.attackEntityFrom(UDamageSource.cold, -warmnessDelta);
-
-                            timer.schedule(new FrostRenderTask(-warmnessDelta), 0, 250);
+                            timer.schedule(new FrostRenderTask(-warmnessDelta), 0, 50);
 						}
 					}
 				} else {
@@ -205,7 +205,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 						
 						if (warmnessDelta < 0) {
 							player.attackEntityFrom(UDamageSource.hot, -warmnessDelta);
-                            timer.schedule(new HeatRenderTask(-warmnessDelta), 0, 250);
+                            timer.schedule(new HeatRenderTask(-warmnessDelta), 0, 50);
 						}
 					}
 				}
@@ -346,16 +346,19 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 		return tickStep;
 	}
 
+    /**
+     * Управляет задачей по рендеру эффекта.
+     */
     private class FrostRenderTask extends TimerTask {
         private float power = 1.05F;
-        private float powerStep = 0.05F;
+        public float powerStep = 0.01F;
 
         private FrostRenderTask(float power) {
             if(SurvivalGui.isDoRenderFrost() || SurvivalGui.isDoRenderHeat()) {
                 power = -0.1F;
             }
-            if(power> 2.0F) {
-                this.power = 2.0F;
+            if(power> 1.5F) {
+                this.power = 1.5F;
             } else {
                 this.power = power;
             }
@@ -372,17 +375,23 @@ public class WarmTickSheduler implements IScheduledTickHandler {
                 this.cancel();
             }
         }
+        public int getShedulePeriod() {
+            return (int) (1.0F / powerStep * (250 *  powerStep));
+        }
     }
+    /**
+     * Управляет задачей по рендеру эффекта.
+     */
     private class HeatRenderTask extends TimerTask {
         private float power = 1.05F;
-        private float powerStep = 0.09F;
+        public float powerStep = 0.01F;
 
         private HeatRenderTask(float power) {
             if(SurvivalGui.isDoRenderHeat() || SurvivalGui.isDoRenderFrost()) {
                 power = -0.1F;
             }
-            if(power> 2.0F) {
-                this.power = 2.0F;
+            if(power> 1.5F) {
+                this.power = 1.5F;
             } else {
                 this.power = power;
             }
@@ -398,6 +407,9 @@ public class WarmTickSheduler implements IScheduledTickHandler {
                 SurvivalGui.setDoRenderHeat(false);
                 this.cancel();
             }
+        }
+        public int getShedulePeriod() {
+            return (int) (1.0F / powerStep * (250 *  powerStep));
         }
     }
 }
