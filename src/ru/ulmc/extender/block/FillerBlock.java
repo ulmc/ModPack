@@ -56,7 +56,17 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 		world.removeBlockTileEntity(i, j, k);
 	}
 
-	@Override
+    @Override
+    public boolean isBlockSolidOnSide (World world,int x, int y, int z, ForgeDirection side) {
+        return false;
+    }
+
+    @Override
+    public boolean isBlockReplaceable(World world, int x, int y, int z) {
+        return false;
+    }
+
+    @Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {		
 		TileEntityFiller tileEntity = (TileEntityFiller) world.getBlockTileEntity(x, y, z);
 		if (tileEntity != null) {
