@@ -24,7 +24,7 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import ru.ulmc.extender.ConfigurationHander;
+import ru.ulmc.extender.config.ConfigurationHander;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.item.ItemLockProtector.ProtectorType;
 import ru.ulmc.extender.proxy.CommonProxy;
@@ -88,31 +88,33 @@ public class ItemManager {
 
 		createCraftItem(itemID++, "ironBlank");
 
-		createKey(itemID++, 1, 10, "ironKey");
-		createKey(itemID++, 3, 6, "goldenKey");
-		createKey(itemID++, 6, 25, "diamondKey");
-		createKey(itemID++, 7, 30, "epicKey");
+        createGrindStone(itemID++, 1, 0.0F, 0.0F, "woodenGrindstoneBlank");
+        createGrindStone(itemID++, 2, 0.0F, 0.0F, "ironGrindstoneBlank");
+        createGrindStone(itemID++, 60, 0.5F, 0.3F, "coarseGrindstone");
+        createGrindStone(itemID++, 140, 0.6F, 0.5F, "enhancedGrindstone");
+        createGrindStone(itemID++, 250, 0.8F, 0.8F, "diamondGrindstone");
 
-		createPicklock(itemID++, 1, 40, "ironPicklock");
-		createPicklock(itemID++, 3, 30, "goldenPicklock");
-		createPicklock(itemID++, 6, 80, "diamondPicklock");
-		createPicklock(itemID++, 7, 95, "epicPicklock");
+        if(ConfigurationHander.tcConfig.isEnabled()) {
+            createKey(itemID++, 1, 10, "ironKey");
+            createKey(itemID++, 3, 6, "goldenKey");
+            createKey(itemID++, 6, 25, "diamondKey");
+            createKey(itemID++, 7, 30, "epicKey");
 
-		createGrindStone(itemID++, 1, 0.0F, 0.0F, "woodenGrindstoneBlank");
-		createGrindStone(itemID++, 2, 0.0F, 0.0F, "ironGrindstoneBlank");
-		createGrindStone(itemID++, 60, 0.5F, 0.3F, "coarseGrindstone");
-		createGrindStone(itemID++, 140, 0.6F, 0.5F, "enhancedGrindstone");
-		createGrindStone(itemID++, 250, 0.8F, 0.8F, "diamondGrindstone");
-		
-		createLockProtector(itemID++, 1, "capsuleEmpty", ProtectorType.DAMAGE_ABSORBER);
-		createLockProtector(itemID++, 20, "capsuleAbsorber", ProtectorType.DAMAGE_ABSORBER);
-		createLockProtector(itemID++, 10, "capsuleFirestarter", ProtectorType.FIRESTARTER);
-		createLockProtector(itemID++, 200, "capsuleLogger", ProtectorType.LOGGER);
-		createLockProtector(itemID++, 200, "capsuleRedstone", ProtectorType.REDSTONE);
-		createLockProtector(itemID++, 20, "capsuleShocker", ProtectorType.SHOCKER);
-		createLockProtector(itemID++, 200, "capsuleSiren", ProtectorType.SIREN);
-		createLockProtector(itemID++, 50, "capsuleAntipicklock", ProtectorType.ANTIPICKLOCK);
-		createLockProtector(itemID++, 2, "capsuleTNT", ProtectorType.TNTLOCK);
+            createPicklock(itemID++, 1, 40, "ironPicklock");
+            createPicklock(itemID++, 3, 30, "goldenPicklock");
+            createPicklock(itemID++, 6, 80, "diamondPicklock");
+            createPicklock(itemID++, 7, 95, "epicPicklock");
+
+            createLockProtector(itemID++, 1, "capsuleEmpty", ProtectorType.DAMAGE_ABSORBER);
+            createLockProtector(itemID++, 20, "capsuleAbsorber", ProtectorType.DAMAGE_ABSORBER);
+            createLockProtector(itemID++, 10, "capsuleFirestarter", ProtectorType.FIRESTARTER);
+            createLockProtector(itemID++, 200, "capsuleLogger", ProtectorType.LOGGER);
+            createLockProtector(itemID++, 200, "capsuleRedstone", ProtectorType.REDSTONE);
+            createLockProtector(itemID++, 20, "capsuleShocker", ProtectorType.SHOCKER);
+            createLockProtector(itemID++, 200, "capsuleSiren", ProtectorType.SIREN);
+            createLockProtector(itemID++, 50, "capsuleAntipicklock", ProtectorType.ANTIPICKLOCK);
+            createLockProtector(itemID++, 2, "capsuleTNT", ProtectorType.TNTLOCK);
+        }
 
 		createCraftItem(alterItemID++, "boulder");
 		createCraftItem(alterItemID++, "cakeRaw");
@@ -133,27 +135,29 @@ public class ItemManager {
 		createCraftItem(alterItemID++, "rottenWeat");
 		createCraftItem(alterItemID++, "ash");
 
-		int cottonWearRenderID = proxy.getArmorPrefix("cotton");
-		int furWearRenderID = proxy.getArmorPrefix("fur");
-		int apparelWearRenderID = proxy.getArmorPrefix("apparel");
-		int hiddenWearRenderID = proxy.getArmorPrefix("hidden");
+        if(ConfigurationHander.ssConfig.isEnabled()) {
+            int cottonWearRenderID = proxy.getArmorPrefix("cotton");
+            int furWearRenderID = proxy.getArmorPrefix("fur");
+            int apparelWearRenderID = proxy.getArmorPrefix("apparel");
+            int hiddenWearRenderID = proxy.getArmorPrefix("hidden");
 
-		createArmor(itemID++, EnumWarmMaterial.COTTON, cottonWearRenderID, 0, "cottonHat", false, true, true);
-		createArmor(itemID++, EnumWarmMaterial.COTTON, cottonWearRenderID, 1, "cottonJacket", false, true, true);
-		createArmor(itemID++, EnumWarmMaterial.COTTON, cottonWearRenderID, 2, "cottonPants", true, true, true);
-		createArmor(itemID++, EnumWarmMaterial.COTTON, cottonWearRenderID, 3, "cottonBoots", false, true, true);
+            createArmor(itemID++, EnumWarmMaterial.COTTON, cottonWearRenderID, 0, "cottonHat", false, true, true);
+            createArmor(itemID++, EnumWarmMaterial.COTTON, cottonWearRenderID, 1, "cottonJacket", false, true, true);
+            createArmor(itemID++, EnumWarmMaterial.COTTON, cottonWearRenderID, 2, "cottonPants", true, true, true);
+            createArmor(itemID++, EnumWarmMaterial.COTTON, cottonWearRenderID, 3, "cottonBoots", false, true, true);
 
-		createArmor(itemID++, EnumWarmMaterial.FUR, furWearRenderID, 0, "furHat", false, true, false);
-		createArmor(itemID++, EnumWarmMaterial.FUR, furWearRenderID, 1, "furCoat", false, true, false);
-		createArmor(itemID++, EnumWarmMaterial.FUR, furWearRenderID, 2, "warmPants", true, true, false);
-		createArmor(itemID++, EnumWarmMaterial.FUR, furWearRenderID, 3, "furBoots", false, true, false);
+            createArmor(itemID++, EnumWarmMaterial.FUR, furWearRenderID, 0, "furHat", false, true, false);
+            createArmor(itemID++, EnumWarmMaterial.FUR, furWearRenderID, 1, "furCoat", false, true, false);
+            createArmor(itemID++, EnumWarmMaterial.FUR, furWearRenderID, 2, "warmPants", true, true, false);
+            createArmor(itemID++, EnumWarmMaterial.FUR, furWearRenderID, 3, "furBoots", false, true, false);
 
-		createArmor(itemID++, EnumWarmMaterial.APPAREL, apparelWearRenderID, 0, "apparelHelmet", false, true, true);
-		createArmor(itemID++, EnumWarmMaterial.APPAREL, apparelWearRenderID, 1, "apparelVest", false, true, true);
-		createArmor(itemID++, EnumWarmMaterial.APPAREL, apparelWearRenderID, 2, "apparelPants", true, true, true);
-		createArmor(itemID++, EnumWarmMaterial.APPAREL, apparelWearRenderID, 3, "apparelBoots", false, true, true);
+            createArmor(itemID++, EnumWarmMaterial.APPAREL, apparelWearRenderID, 0, "apparelHelmet", false, true, true);
+            createArmor(itemID++, EnumWarmMaterial.APPAREL, apparelWearRenderID, 1, "apparelVest", false, true, true);
+            createArmor(itemID++, EnumWarmMaterial.APPAREL, apparelWearRenderID, 2, "apparelPants", true, true, true);
+            createArmor(itemID++, EnumWarmMaterial.APPAREL, apparelWearRenderID, 3, "apparelBoots", false, true, true);
 
-		createArmor(itemID++, EnumWarmMaterial.HIDDEN, hiddenWearRenderID, 0, "mask", false, true, true);
+            createArmor(itemID++, EnumWarmMaterial.HIDDEN, hiddenWearRenderID, 0, "mask", false, true, true);
+        }
 		maskId = items.get("mask").itemID;
 	}
 

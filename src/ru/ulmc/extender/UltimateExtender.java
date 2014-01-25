@@ -22,11 +22,13 @@ package ru.ulmc.extender;
 
 import java.util.logging.Logger;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.block.BlockManager;
+import ru.ulmc.extender.config.ConfigurationHander;
 import ru.ulmc.extender.events.MobDropEventsHook;
 import ru.ulmc.extender.events.PlayerEventsHook;
 import ru.ulmc.extender.gui.handler.GuiHandler;
@@ -115,5 +117,14 @@ public class UltimateExtender {
 		}
 		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 	}
+
+    /**
+     * Returns localized string from file.
+     * @param key
+     * @return
+     */
+    public static String loc(String key) {
+       return LanguageRegistry.instance().getStringLocalization(key);
+    }
 
 }

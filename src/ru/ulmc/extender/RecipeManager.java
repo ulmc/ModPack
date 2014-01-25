@@ -23,6 +23,7 @@ package ru.ulmc.extender;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import ru.ulmc.extender.config.ConfigurationHander;
 import ru.ulmc.extender.item.ItemManager;
 import ru.ulmc.extender.proxy.CommonProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -50,17 +51,10 @@ public class RecipeManager {
 		/*
 		
 		*/
-		Item ironBlank = ItemManager.getItem("ironBlank");
-		Item ironKey = ItemManager.getItem("ironKey");
-		Item goldenKey = ItemManager.getItem("goldenKey");
-		Item diamondKey = ItemManager.getItem("diamondKey");
-		Item ironPicklock = ItemManager.getItem("ironPicklock");
-		Item goldenPicklock = ItemManager.getItem("goldenPicklock");
-		Item diamondPicklock = ItemManager.getItem("diamondPicklock");
 
 		Item diamondDust = ItemManager.getItem("diamondDust");
 		Item goldDust = ItemManager.getItem("goldDust");
-		
+
 		Item leatherStrap = ItemManager.getItem("leatherStrap");
 		Item leatherCorset = ItemManager.getItem("leatherCorset");
 		Item spool = ItemManager.getItem("spool");
@@ -71,7 +65,7 @@ public class RecipeManager {
 		Item obsidianBrick = ItemManager.getItem("obsidianBrick");
 		Item obsidianAlloyIngot = ItemManager.getItem("obsidianAlloyIngot");
 		Item lambFried = ItemManager.getItem("lambFried");
-		
+
 		Item diamondSpool = ItemManager.getItem("diamondSpool");
 		Item goldFabricStrap = ItemManager.getItem("goldFabricStrap");
 		Item goldFabricRoll = ItemManager.getItem("goldFabricRoll");
@@ -86,7 +80,7 @@ public class RecipeManager {
 		Item diamondChevronWithGoldThread = ItemManager.getItem("diamondChevronWithGoldThread");
 		Item medivalSymbol = ItemManager.getItem("medivalSymbol");
 		Item technoSymbol = ItemManager.getItem("technoSymbol");
-		
+
 		Item jerkedBeef = ItemManager.getItem("jerkedBeef");
 		Item jerkedPork = ItemManager.getItem("jerkedPork");
 		Item jerkedLamb = ItemManager.getItem("jerkedLamb");
@@ -95,96 +89,16 @@ public class RecipeManager {
 		Item porkBelly = ItemManager.getItem("porkBelly");
 		Item salo = ItemManager.getItem("salo");
 		Item saltCrystal = ItemManager.getItem("saltCrystal");
-		
+
 		Item cementMix = ItemManager.getItem("cementMix");
 		Item cementSack = ItemManager.getItem("cementSack");
-		
+
 		Item woodenGrindstoneBlank = ItemManager.getItem("woodenGrindstoneBlank");
 		Item ironGrindstoneBlank = ItemManager.getItem("ironGrindstoneBlank");
 		Item coarseGrindstone = ItemManager.getItem("coarseGrindstone");
 		Item enhancedGrindstone = ItemManager.getItem("enhancedGrindstone");
 		Item diamondGrindstone = ItemManager.getItem("diamondGrindstone");
-		
-		Item capsuleEmpty = ItemManager.getItem("capsuleEmpty");
-		Item capsuleAbsorber = ItemManager.getItem("capsuleAbsorber");
-		Item capsuleFirestarter = ItemManager.getItem("capsuleFirestarter");
-		Item capsuleLogger = ItemManager.getItem("capsuleLogger");
-		Item capsuleRedstone = ItemManager.getItem("capsuleRedstone");
-		Item capsuleShocker = ItemManager.getItem("capsuleShocker");
-		Item capsuleSiren = ItemManager.getItem("capsuleSiren");
-		Item capsuleAntipicklock = ItemManager.getItem("capsuleAntipicklock");
-		Item capsuleTNT = ItemManager.getItem("capsuleTNT");
-		
-		addRecipe(capsuleEmpty, 1,
-				" y ", 
-				" x ", 
-				" y ", 
-				'x', Block.glass, 
-				'y', ironBlank);
-		
-		addRecipe(capsuleAbsorber, 1,
-				"zxz", 
-				"zyz", 
-				"zzz", 
-				'x', diamondDust, 
-				'z', goldDust,
-				'y', capsuleEmpty);
-		
-		addRecipe(capsuleFirestarter, 1,
-				"zyz", 
-				"xyx", 
-				"xxx", 
-				'x', Item.blazePowder,
-				'z', Item.magmaCream, 
-				'y', capsuleEmpty);
-		
-		addRecipe(capsuleLogger, 1,
-				"xzx", 
-				"xyx", 
-				'x', goldDust, 
-				'z', Item.book, 
-				'y', capsuleEmpty);
-		
-		addRecipe(capsuleRedstone, 1,
-				"xxx", 
-				"ryr", 
-				"xxx", 
-				'x', goldDust, 
-				'r', Item.redstone, 
-				'y', capsuleEmpty);
-		
-		addRecipe(capsuleShocker, 1,
-				"   ", 
-				"qyq", 
-				"rrr", 
-				'q', Item.netherQuartz,
-				'x', Item.redstone, 
-				'y', capsuleEmpty);
-		
-		addRecipe(capsuleSiren, 1,
-				" n ", 
-				"nyn", 
-				" n ", 
-				'n', Block.music, 
-				'y', capsuleEmpty);
-		
-		addRecipe(capsuleAntipicklock, 1,
-				"rxr", 
-				"byb", 
-				"rxr", 
-				'x', diamondDust,
-				'b', Item.blazeRod, 
-				'r', Item.redstone, 
-				'y', capsuleEmpty);
-		
-		addRecipe(capsuleTNT, 1,
-				"xxx", 
-				"ryr", 
-				"xxx", 
-				'r', Item.redstone, 
-				'x', Item.gunpowder, 
-				'y', capsuleEmpty);
-		
+
 		addRecipe(woodenGrindstoneBlank, 1,
 				" x ", 
 				"xyx", 
@@ -226,15 +140,6 @@ public class RecipeManager {
 		addShapeless(diamondDust, 2, Item.diamond);
 		addShapeless(goldDust, 1, Item.goldNugget, Item.goldNugget, Item.goldNugget, Item.goldNugget);
 		
-		addShapeless(ironBlank, 4, Item.ingotIron);
-		addShapeless(ironKey, 1, ironBlank);
-		addShapeless(goldenKey, 1, ironBlank, goldDust);
-		addShapeless(diamondKey, 1, ironBlank, diamondDust);
-		
-		addShapeless(ironPicklock, 1, ironBlank, ironBlank);
-		addShapeless(goldenPicklock, 1, ironBlank, ironBlank, goldDust, goldDust);
-		addShapeless(diamondPicklock, 1, ironBlank, ironBlank, diamondDust, diamondDust);
-		
 		addShapeless(spool, 1, Item.silk, Item.silk, Item.silk);
 		addShapeless(leatherStrap, 4, Item.leather);
 		addShapeless(fabricStrap, 1, spool, spool, spool);
@@ -274,8 +179,107 @@ public class RecipeManager {
 		
 		addShapeless(medivalSymbol, 1, fabricStrap, spool, new ItemStack(Item.dyePowder, 1, 11));
 		addShapeless(technoSymbol, 1, fabricStrap, spool, new ItemStack(Item.dyePowder, 1, 1));
-		
-		
+
+        if(ConfigurationHander.tcConfig.isEnabled()) {
+            Item capsuleEmpty = ItemManager.getItem("capsuleEmpty");
+            Item capsuleAbsorber = ItemManager.getItem("capsuleAbsorber");
+            Item capsuleFirestarter = ItemManager.getItem("capsuleFirestarter");
+            Item capsuleLogger = ItemManager.getItem("capsuleLogger");
+            Item capsuleRedstone = ItemManager.getItem("capsuleRedstone");
+            Item capsuleShocker = ItemManager.getItem("capsuleShocker");
+            Item capsuleSiren = ItemManager.getItem("capsuleSiren");
+            Item capsuleAntipicklock = ItemManager.getItem("capsuleAntipicklock");
+            Item capsuleTNT = ItemManager.getItem("capsuleTNT");
+
+            Item ironBlank = ItemManager.getItem("ironBlank");
+            Item ironKey = ItemManager.getItem("ironKey");
+            Item goldenKey = ItemManager.getItem("goldenKey");
+            Item diamondKey = ItemManager.getItem("diamondKey");
+            Item ironPicklock = ItemManager.getItem("ironPicklock");
+            Item goldenPicklock = ItemManager.getItem("goldenPicklock");
+            Item diamondPicklock = ItemManager.getItem("diamondPicklock");
+
+            addRecipe(capsuleEmpty, 1,
+                    " y ",
+                    " x ",
+                    " y ",
+                    'x', Block.glass,
+                    'y', ironBlank);
+
+            addRecipe(capsuleAbsorber, 1,
+                    "zxz",
+                    "zyz",
+                    "zzz",
+                    'x', diamondDust,
+                    'z', goldDust,
+                    'y', capsuleEmpty);
+
+            addRecipe(capsuleFirestarter, 1,
+                    "zyz",
+                    "xyx",
+                    "xxx",
+                    'x', Item.blazePowder,
+                    'z', Item.magmaCream,
+                    'y', capsuleEmpty);
+
+            addRecipe(capsuleLogger, 1,
+                    "xzx",
+                    "xyx",
+                    'x', goldDust,
+                    'z', Item.book,
+                    'y', capsuleEmpty);
+
+            addRecipe(capsuleRedstone, 1,
+                    "xxx",
+                    "ryr",
+                    "xxx",
+                    'x', goldDust,
+                    'r', Item.redstone,
+                    'y', capsuleEmpty);
+
+            addRecipe(capsuleShocker, 1,
+                    "   ",
+                    "qyq",
+                    "rrr",
+                    'q', Item.netherQuartz,
+                    'x', Item.redstone,
+                    'y', capsuleEmpty);
+
+            addRecipe(capsuleSiren, 1,
+                    " n ",
+                    "nyn",
+                    " n ",
+                    'n', Block.music,
+                    'y', capsuleEmpty);
+
+            addRecipe(capsuleAntipicklock, 1,
+                    "rxr",
+                    "byb",
+                    "rxr",
+                    'x', diamondDust,
+                    'b', Item.blazeRod,
+                    'r', Item.redstone,
+                    'y', capsuleEmpty);
+
+            addRecipe(capsuleTNT, 1,
+                    "xxx",
+                    "ryr",
+                    "xxx",
+                    'r', Item.redstone,
+                    'x', Item.gunpowder,
+                    'y', capsuleEmpty);
+
+            addShapeless(ironBlank, 4, Item.ingotIron);
+            addShapeless(ironKey, 1, ironBlank);
+            addShapeless(goldenKey, 1, ironBlank, goldDust);
+            addShapeless(diamondKey, 1, ironBlank, diamondDust);
+
+            addShapeless(ironPicklock, 1, ironBlank, ironBlank);
+            addShapeless(goldenPicklock, 1, ironBlank, ironBlank, goldDust, goldDust);
+            addShapeless(diamondPicklock, 1, ironBlank, ironBlank, diamondDust, diamondDust);
+        }
+
+
 		
 		/*
 		// marble and other simple blocks
@@ -396,5 +400,4 @@ public class RecipeManager {
 				
 		*/
 	}
-
 }

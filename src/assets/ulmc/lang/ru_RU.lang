@@ -97,3 +97,5 @@ tile.blockTechnoFlag.name=Флаг Технократов
 tile.blockBarbedWire.name=Ягоза
 tile.blockLockedChest.name=Сундук с замком
 tile.blockGrinder.name=Точильня
+
+msg.sirenAlarm=Кто-то пытается открыть твой сундук!

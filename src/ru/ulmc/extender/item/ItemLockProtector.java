@@ -22,6 +22,7 @@ package ru.ulmc.extender.item;
 import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -48,7 +49,11 @@ public class ItemLockProtector extends Item implements Grindable {
 		setUnlocalizedName(unlocalizedName);
 		setTextureName(Reference.RES_NAME + unlocalizedName);
 		setCreativeTab(CreativeTabs.tabTools);
-		this.setMaxStackSize(1);
+        if("capsuleEmpty".equals(unlocalizedName)) {
+            this.setMaxStackSize(32);
+        } else {
+		    this.setMaxStackSize(1);
+        }
 		this.setMaxDamage(durability);
 		this.type = type;
 		
@@ -281,7 +286,7 @@ public class ItemLockProtector extends Item implements Grindable {
 			if(!tile.getWorldObj().isRemote) {
 				EntityPlayer owner = tile.getWorldObj().getPlayerEntityByName(tile.getOwnerName());
 				if(owner != null) {
-					owner.addChatMessage("Someone trying to unlock your chest");
+					owner.addChatMessage(UltimateExtender.loc("msg.sirenAlarm"));
 				}
 				tile.damageProtector();
 			} 

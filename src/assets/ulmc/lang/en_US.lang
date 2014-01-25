@@ -97,3 +97,5 @@ tile.blockTechnoFlag.name=Technocrat's Flag
 tile.blockBarbedWire.name=Barbed Wire
 tile.blockLockedChest.name=Locked chest
 tile.blockGrinder.name=Grinder
+
+msg.sirenAlarm=Someone trying to unlock your chest!

@@ -36,7 +36,11 @@ public class ItemGrind extends Item {
 		setUnlocalizedName(unlocalizedName);
 		setTextureName(Reference.RES_NAME + unlocalizedName);
 		setCreativeTab(CreativeTabs.tabTools);
-		this.setMaxStackSize(1);
+        if("woodenGrindstoneBlank".equals(unlocalizedName) || "ironGrindstoneBlank".equals(unlocalizedName)) {
+            this.setMaxStackSize(32);
+        } else {
+		    this.setMaxStackSize(1);
+        }
 		this.setMaxDamage(durability);
 		this.chanceToBuff = chanceToBuff;
 		this.bufflevel = bufflevel;
