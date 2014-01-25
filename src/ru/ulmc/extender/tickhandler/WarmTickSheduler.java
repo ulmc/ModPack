@@ -19,9 +19,7 @@
  */
 package ru.ulmc.extender.tickhandler;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 import net.minecraft.block.Block;
@@ -33,6 +31,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.gui.SurvivalGui;
 import ru.ulmc.extender.item.IWarmArmor;
 import ru.ulmc.extender.util.UDamageSource;
 import cpw.mods.fml.common.IScheduledTickHandler;
@@ -60,6 +59,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 	private EnumSet<TickType> tick = EnumSet.of(TickType.PLAYER);
 	private Map<BiomeGenBase, Float> biomeToCold = new HashMap<BiomeGenBase, Float>();
 	private Map<BiomeGenBase, Float> biomeToHot = new HashMap<BiomeGenBase, Float>();
+    private Timer timer = new Timer();
 	
 	public final int BOOTS = 0; 
 	public final int PANTS = 1; 
@@ -68,14 +68,14 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 
 	public WarmTickSheduler() {
 		super();
-		// ��� ������, ��� ��������
+
 		biomeToCold.put(BiomeGenBase.frozenOcean, 1.0f);
 		biomeToCold.put(BiomeGenBase.frozenRiver, 0.9f);
 		biomeToCold.put(BiomeGenBase.icePlains, 0.8f);
 		biomeToCold.put(BiomeGenBase.iceMountains, 1.2f);
 		biomeToCold.put(BiomeGenBase.taigaHills, 0.7f);
 		biomeToCold.put(BiomeGenBase.taiga, 0.7f);
-		// ��� ������, ��� �����
+
 		biomeToHot.put(BiomeGenBase.hell, 0.8f);
 		biomeToHot.put(BiomeGenBase.desert, 0.5f);
 		biomeToHot.put(BiomeGenBase.desertHills, 0.5f);
@@ -107,7 +107,8 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 			int currentX = MathHelper.floor_double(player.posX);
 			int currentZ = MathHelper.floor_double(player.posZ);
 			int currentY = MathHelper.floor_double(player.posY);
-			if (!world.isRemote && player != null && !player.capabilities.isCreativeMode) {
+			//if (!world.isRemote && player != null && !player.capabilities.isCreativeMode) {
+			if (player != null && !player.capabilities.isCreativeMode) {
 				BiomeGenBase biome = world.getBiomeGenForCoords(currentX, currentZ);
 
 				Float coldStrength = biomeToCold.get(biome);
@@ -147,11 +148,11 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 						boolean noWarmNear = !isBoxWarm(world,
 								currentX - 5, currentY - 4, currentZ - 5, 
 								currentX + 5, currentY + 3, currentZ + 5);
-						
-						
-						
+
 						if (noWarmNear) {
 							player.attackEntityFrom(UDamageSource.cold, -warmnessDelta);
+
+                            timer.schedule(new FrostRenderTask(-warmnessDelta), 0, 250);
 						}
 					}
 				} else {
@@ -204,6 +205,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 						
 						if (warmnessDelta < 0) {
 							player.attackEntityFrom(UDamageSource.hot, -warmnessDelta);
+                            timer.schedule(new HeatRenderTask(-warmnessDelta), 0, 250);
 						}
 					}
 				}
@@ -277,8 +279,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 
 	/**
 	 * Just like World's method, but can insert custom warm bloc id's
-	 * 
-	 * @param par1AxisAlignedBB
+	 *
 	 * @param world
 	 * @return
 	 */
@@ -345,4 +346,58 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 		return tickStep;
 	}
 
+    private class FrostRenderTask extends TimerTask {
+        private float power = 1.05F;
+        private float powerStep = 0.05F;
+
+        private FrostRenderTask(float power) {
+            if(SurvivalGui.isDoRenderFrost()) {
+                power = -0.1F;
+            }
+            if(power> 2.0F) {
+                this.power = 2.0F;
+            } else {
+                this.power = power;
+            }
+        }
+
+        @Override
+        public void run() {
+            power = power - powerStep;
+            if(power >= 0.0F) {
+                SurvivalGui.setDoRenderFrost(true);
+                SurvivalGui.setPower(power);
+            } else {
+                SurvivalGui.setDoRenderFrost(false);
+                this.cancel();
+            }
+        }
+    }
+    private class HeatRenderTask extends TimerTask {
+        private float power = 1.05F;
+        private float powerStep = 0.09F;
+
+        private HeatRenderTask(float power) {
+            if(SurvivalGui.isDoRenderFrost()) {
+                power = -0.1F;
+            }
+            if(power> 2.0F) {
+                this.power = 2.0F;
+            } else {
+                this.power = power;
+            }
+        }
+
+        @Override
+        public void run() {
+            power = power - powerStep;
+            if(power >= 0.0F) {
+                SurvivalGui.setDoRenderHeat(true);
+                SurvivalGui.setPower(power);
+            } else {
+                SurvivalGui.setDoRenderHeat(false);
+                this.cancel();
+            }
+        }
+    }
 }

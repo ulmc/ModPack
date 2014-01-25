@@ -24,6 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.UltimateSounds;
+import ru.ulmc.extender.gui.SurvivalGui;
 import ru.ulmc.extender.render.RenderBones;
 import ru.ulmc.extender.render.RenderCart;
 import ru.ulmc.extender.render.RenderFlags;
@@ -47,6 +48,7 @@ public class ClientProxy extends CommonProxy {
 	public void preInit() {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(new UltimateSounds());
+		MinecraftForge.EVENT_BUS.register(new SurvivalGui());
 	}
 
 	@Override

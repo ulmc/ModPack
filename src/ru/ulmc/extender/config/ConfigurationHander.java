@@ -88,7 +88,7 @@ public class ConfigurationHander {
     }
 
     private static void initSurvivalSeason() {
-        ssConfig.setEnabled(getBoolean(tcConfig.getModuleName(), SurvivalSeasonConfig.FIELD_ENABLED, true));
+        ssConfig.setEnabled(getBoolean(ssConfig.getModuleName(), SurvivalSeasonConfig.FIELD_ENABLED, true));
     }
 
 }

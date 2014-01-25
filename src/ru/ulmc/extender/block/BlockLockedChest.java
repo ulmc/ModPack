@@ -254,10 +254,8 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 				if(updateEntity) {
 					UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
 				}
-				//player.addChatMessage(failChatMessage);
 			}
-			//UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5, z + random.nextFloat());
-			return false;
+			return true;
 	//	}
 	//	return true;
 	}

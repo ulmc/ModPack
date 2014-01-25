@@ -99,3 +99,4 @@ tile.blockLockedChest.name=Сундук с замком
 tile.blockGrinder.name=Точильня
 
 msg.sirenAlarm=Кто-то пытается открыть твой сундук!
+death.attack.cold=Промерз насквозь
