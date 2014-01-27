@@ -57,16 +57,6 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 	}
 
     @Override
-    public boolean isBlockSolidOnSide (World world,int x, int y, int z, ForgeDirection side) {
-        return false;
-    }
-
-    @Override
-    public boolean isBlockReplaceable(World world, int x, int y, int z) {
-        return false;
-    }
-
-    @Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, int par5) {		
 		TileEntityFiller tileEntity = (TileEntityFiller) world.getBlockTileEntity(x, y, z);
 		if (tileEntity != null) {
@@ -101,6 +91,21 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 
 	}
 
+
+    @Override
+    public boolean isBlockSolidOnSide (World world,int x, int y, int z, ForgeDirection side) {
+        return false;
+    }
+    @Override
+    public boolean isBlockNormalCube(World world, int x, int y, int z) {
+        return false;
+    }
+
+    @Override
+    public boolean isBlockReplaceable(World world, int x, int y, int z) {
+        return false;
+    }
+
 	@Override
 	public boolean shouldSideBeRendered(IBlockAccess iblockaccess, int i, int j, int k, int l) {
 		return false;
@@ -110,7 +115,10 @@ public class FillerBlock extends BlockContainer implements UlmcBlock {
 	public boolean isOpaqueCube() {
 		return false;
 	}
-
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityFiller();

@@ -31,12 +31,13 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 
 public class ItemPicklock extends Item implements Grindable {
 
-	private int securityLevel = 0;
+	protected int securityLevel = 0;
 	public Icon placeholder;
-	private int useTime;
+    protected int useTime;
 	
 	public ItemPicklock(int i, String unlocalizedName, int securityLevel, int maxDamage) {
 		super(i);
@@ -48,6 +49,10 @@ public class ItemPicklock extends Item implements Grindable {
 		this.setMaxDamage(maxDamage);
 		this.useTime = 32 - securityLevel;
 	}
+
+    protected ItemPicklock(int i) {
+        super(i);
+    }
 
 	public int getSecurityLevel() {
 		return securityLevel;
@@ -122,20 +127,20 @@ public class ItemPicklock extends Item implements Grindable {
 		if (itemStack.stackTagCompound == null) {
 			createNBT(itemStack);
 		}
-		float bonus = itemStack.stackTagCompound.getFloat("bonus");		
-		if (bonus == 0) {
-			list.add(EnumChatFormatting.DARK_GREEN + "Common");
-		} else if (bonus < 0.5F) {
-			list.add(EnumChatFormatting.DARK_GREEN + "Simple");
-		} else if(bonus > 0.5F && bonus < 1.0F) {
-			list.add(EnumChatFormatting.DARK_GREEN + "Sharpen");
-		} else if(bonus < 2) {
-			list.add(EnumChatFormatting.GREEN + "Good");
-		} else if(bonus < 3) {
-			list.add(EnumChatFormatting.GREEN + "Epic");
-		} else {
-			list.add(EnumChatFormatting.GREEN + "Masterpiece");
-		}
+		float bonus = itemStack.stackTagCompound.getFloat("bonus");
+        if (bonus == 0) {
+            list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.common"));
+        } else if (bonus < 0.5F) {
+            list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.simple"));
+        } else if(bonus > 0.5F && bonus < 1.0F) {
+            list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.sharpen"));
+        } else if(bonus < 2) {
+            list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.good"));
+        } else if(bonus < 3) {
+            list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.epic"));
+        } else {
+            list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.masterpiece"));
+        }
 
 	}
 	

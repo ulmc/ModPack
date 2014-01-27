@@ -105,6 +105,8 @@ public class ItemManager {
             createPicklock(itemID++, 6, 80, "diamondPicklock");
             createPicklock(itemID++, 7, 95, "epicPicklock");
 
+            createLockProbe(itemID++, 3, 40, "lockProbe");
+
             createLockProtector(itemID++, 1, "capsuleEmpty", ProtectorType.DAMAGE_ABSORBER);
             createLockProtector(itemID++, 20, "capsuleAbsorber", ProtectorType.DAMAGE_ABSORBER);
             createLockProtector(itemID++, 10, "capsuleFirestarter", ProtectorType.FIRESTARTER);
@@ -114,6 +116,8 @@ public class ItemManager {
             createLockProtector(itemID++, 200, "capsuleSiren", ProtectorType.SIREN);
             createLockProtector(itemID++, 50, "capsuleAntipicklock", ProtectorType.ANTIPICKLOCK);
             createLockProtector(itemID++, 2, "capsuleTNT", ProtectorType.TNTLOCK);
+
+
         }
 
 		createCraftItem(alterItemID++, "boulder");
@@ -203,6 +207,10 @@ public class ItemManager {
 		ItemPicklock item = new ItemPicklock(ConfigurationHander.getItemID(itemName, itemID), itemName, security, maxDamage);
 		commonRegistrationActions(item, itemName);
 	}
+    protected static void createLockProbe(int itemID, int security, int maxDamage, String itemName) {
+        ItemLockProbe item = new ItemLockProbe(ConfigurationHander.getItemID(itemName, itemID), itemName, security, maxDamage);
+        commonRegistrationActions(item, itemName);
+    }
 
 	protected static void createGrindStone(int itemID, int durability, float bChance, float bPower, String itemName) {
 		ItemGrind item = new ItemGrind(ConfigurationHander.getItemID(itemName, itemID), itemName, durability, bChance,

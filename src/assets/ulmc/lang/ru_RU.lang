@@ -70,6 +70,7 @@ item.pebbles.name=Груда камней
 item.resin.name=Смола
 item.rottenWeat.name=Гнилая пшеница
 item.ash.name=Пепел
+item.lockProbe.name=Замочный щуп
 
 tile.blockWoodChair.name=Простой деревянный стул
 tile.blockWhiteCottonChair.name=Простой деревянный стул с белой сидушкой
@@ -101,3 +102,12 @@ tile.blockGrinder.name=Точильня
 msg.sirenAlarm=Кто-то пытается открыть твой сундук!
 death.attack.cold=%1$s промерз насквозь!
 death.attack.heat=%1$s запекся на солнышке!
+
+tc.itemStatus.common=Nothing special
+tc.itemStatus.simple=Simple
+tc.itemStatus.sharpen=Look nice
+tc.itemStatus.good=It is good
+tc.itemStatus.epic=Epic
+tc.itemStatus.masterpiece=Masterpiece!
+tc.keyStatus.blank=Blank
+tc.keyStatus.encrypted=Encrypted

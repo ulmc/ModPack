@@ -263,6 +263,52 @@ public class ItemLockProtector extends Item implements Grindable {
 		}
 		return TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED;
 	}
+
+    public int onProbingChance(TileEntityLockedChest tile, EntityPlayer player, ItemStack picklock) {
+        switch(type) {
+            case DAMAGE_ABSORBER:
+                if(tryToAbsorbDamage(type.getOnProbingChance(), tile)) {
+                    return TileEntityLockedChest.PICKLOCKING_PROTECTOR;
+                }
+                return TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED;
+            case SHOCKER:
+                if(tryToHurtThief(type.getOnProbingChance(), player, tile)) {
+                    return TileEntityLockedChest.PICKLOCKING_PROTECTOR;
+                }
+                break;
+            case FIRESTARTER:
+                if(tryToSetThiefOnFire(type.getOnProbingChance(), player, tile)) {
+                    return TileEntityLockedChest.PICKLOCKING_PROTECTOR;
+                }
+                break;
+            case SIREN:
+                if(tryToShoutLoud(type.getOnProbingChance(), player, tile)){
+                    return TileEntityLockedChest.PICKLOCKING_PROTECTOR;
+                }
+                break;
+            case LOGGER:
+                if(tryToLogThiefName(type.getOnProbingChance(), player, tile)) {
+                    return TileEntityLockedChest.PICKLOCKING_PROTECTOR;
+                }
+                break;
+            case REDSTONE:
+                if(tryToPowerUp(type.getOnProbingChance(), player, tile)){
+                    return TileEntityLockedChest.PICKLOCKING_PROTECTOR;
+                }
+                break;
+            case ANTIPICKLOCK:
+                if(tryToBrakePicklock(type.getOnProbingChance(), player, tile, picklock)){
+                    return TileEntityLockedChest.PICKLOCKING_PROTECTOR;
+                }
+                break;
+            case TNTLOCK:
+                if(tryExplodeEverything(type.getOnProbingChance(), player, tile)){
+                    return TileEntityLockedChest.PICKLOCKING_PROTECTOR;
+                }
+                break;
+        }
+        return TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED;
+    }
 	
 	private boolean tryToPowerUp(float chance, EntityPlayer player, TileEntityLockedChest tile) {
 		if(chance != 0.0f && random.nextFloat() < chance){
@@ -383,29 +429,32 @@ public class ItemLockProtector extends Item implements Grindable {
 	}	
 	
 	public enum ProtectorType {
-		DAMAGE_ABSORBER(0.2f, 0.0F, 0.95f), 
-		SHOCKER(1.0f, 0.10F, 0.6f), 
-		FIRESTARTER(0.8f, 0.05F, 0.6f), 
-		SIREN(0.9f, 0.15F, 0.8f),
-		LOGGER(0.0f, 0.25F, 0.8f),
-		REDSTONE(1.0f, 0.15F, 0.9f),
+		DAMAGE_ABSORBER(0.2f, 0.0F, 0.95f, 0.0F),
+		SHOCKER(1.0f, 0.10F, 0.6f, 0.1F),
+		FIRESTARTER(0.8f, 0.05F, 0.6f, 0.1F),
+		SIREN(0.9f, 0.15F, 0.8f, 0.1F),
+		LOGGER(0.0f, 0.25F, 0.8f, 0.1F),
+		REDSTONE(1.0f, 0.15F, 0.9f, 0.1F),
 		//REDSTONE(1.0f, 1.15F, 1.0f),
-		TNTLOCK(1.0f, 0.5F, 0.9f),
-		ANTIPICKLOCK(1.0f, 0.65F, 0.9f);
+		TNTLOCK(1.0f, 0.5F, 0.9f, 0.6F),
+		ANTIPICKLOCK(1.0f, 0.65F, 0.9f, 0.5F);
 		
 		private float onEnforceChance;
 		private float onFailChance;
 		private float onKeyDamageChance;
+        private float onProbingChance;
 		
 		public static final float SHOCKER_DAMAGE		= 5.0f;
 		public static final int   FIRESTARTER_FIRE_TIME	= 9; //in seconds
 		public static final int   ANTIPICKLOCK_STRENGTH	= 10; 
 		public static final float TNT_EXPLOSIONSIZE		= 5.0f; 
 		
-		private ProtectorType(float onEnforceChance, float onFailChance, float onKeyDamageChance) {
+		private ProtectorType(float onEnforceChance, float onFailChance, float onKeyDamageChance, float onProbingChance) {
 			this.onEnforceChance = onEnforceChance;
 			this.onFailChance = onFailChance;
 			this.onKeyDamageChance = onKeyDamageChance;
+			this.onProbingChance = onProbingChance;
+
 		}
 
 		public float getOnEnforceChance() {
@@ -419,6 +468,10 @@ public class ItemLockProtector extends Item implements Grindable {
 		public float getOnKeyDamageChance() {
 			return onKeyDamageChance;
 		}
+		public float getOnProbingChance() {
+			return onProbingChance;
+		}
+
 	}
 
 	@Override

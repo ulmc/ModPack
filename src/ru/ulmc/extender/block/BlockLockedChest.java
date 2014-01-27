@@ -40,6 +40,7 @@ import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.gui.GuiLockedChest;
+import ru.ulmc.extender.item.ItemLockProbe;
 import ru.ulmc.extender.item.ItemPicklock;
 import ru.ulmc.extender.render.particle.UParticle;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
@@ -175,91 +176,94 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 * Called upon block activation (right click on the block.)
 	 */
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
-			float par8, float par9) {
-		if(player.isUsingItem()) {
-			return false;
-		} 
-		
-	//	if (!world.isRemote) {
-			
-			TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getBlockTileEntity(x, y, z);
-			ItemStack hold = player.inventory.getCurrentItem();
-			boolean isAllowToOpen = false;
-			boolean updateEntity = false;
-			//String failChatMessage = "It's locked!";
-			
-			if (player.capabilities.isCreativeMode) {
-				isAllowToOpen = true;
-			} else if(isOcelotBlockingChest(world, x, y, z)) {
-				isAllowToOpen = false;
-			} else if (player.username != null && player.username.equals(lockedChestTE.getOwnerName())) {
-				isAllowToOpen = true;
-			} else if(!lockedChestTE.isChestProtected()) {
-				isAllowToOpen = true;
-				if(hold != null && (hold.getItem() instanceof ItemPicklock)) {
-					updateEntity = true;
-					lockedChestTE.enforceChest(player.username);
-				}
-			} else {
-				if(hold == null) {
-					isAllowToOpen = false;
-                    UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y+1.5f, z + random.nextFloat());
-				} else {
-					if((hold.getItem() instanceof ItemPicklock)) {
-						
-						// Cooldown timeout		
-						ItemPicklock picklock = (ItemPicklock)hold.getItem();
-						hold = picklock.onItemRightClick(hold, world, player);
-						
-						int picklockingStatus = lockedChestTE.tryToEnforceChest(hold, player);
-						if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
-							updateEntity = true;
-							isAllowToOpen = true;							
-							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.enforce"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
-						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
-							//updateEntity = true; if some effects will realised
-							world.spawnParticle("crit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
-							world.spawnParticle("crit", x + random.nextFloat()*0.1, y+1.1, z + random.nextFloat()*0.1, 0, 0, 0);
-							world.spawnParticle("crit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
-							world.spawnParticle("crit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
-							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
-							//failChatMessage = "Key was damaged!";
-						} else if(picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
-							//updateEntity = true; if some effects will realised
-							world.spawnParticle("magicCrit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
-							world.spawnParticle("magicCrit", x + random.nextFloat()*0.1, y+1.1, z + random.nextFloat()*0.1, 0, 0, 0);
-							world.spawnParticle("magicCrit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
-							world.spawnParticle("magicCrit", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
-							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
-							//failChatMessage = "Protector Tratata";
-						} else {
-							world.spawnParticle("spell", x + random.nextFloat(), y+1.1, z + random.nextFloat(), 0, 0, 0);
-							world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f-random.nextFloat(),  1.0f + random.nextFloat()/5);
-							//failChatMessage = "picklocking failed!";
-						}
-						
-					} else if(lockedChestTE.isKeyAndCipherMatches(hold)) {
-						isAllowToOpen = true;
-					} else {
-						UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y+1.5f, z + random.nextFloat());
-					}
-				}				
-			}
-			
-			if (isAllowToOpen) {
-				player.openGui(UltimateExtender.instance, GuiLockedChest.GUI_ID, world, x, y, z);
-				
-			} else {
-				if(updateEntity) {
-					UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
-				}
-			}
-			return true;
-	//	}
-	//	return true;
-	}
-	@Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
+                                    float par8, float par9) {
+        if (player.isUsingItem()) {
+            return false;
+        }
+
+        TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getBlockTileEntity(x, y, z);
+        ItemStack hold = player.inventory.getCurrentItem();
+        boolean isAllowToOpen = false;
+        boolean updateEntity = false;
+        //String failChatMessage = "It's locked!";
+
+        if (player.capabilities.isCreativeMode) {
+            isAllowToOpen = true;
+        } else if (isOcelotBlockingChest(world, x, y, z)) {
+            isAllowToOpen = false;
+        } else if (player.username != null && player.username.equals(lockedChestTE.getOwnerName())) {
+            isAllowToOpen = true;
+        } else if (!lockedChestTE.isChestProtected()) {
+            isAllowToOpen = true;
+            if (hold != null && (hold.getItem() instanceof ItemPicklock)) {
+                updateEntity = true;
+                lockedChestTE.enforceChest(player.username);
+            }
+        } else {
+            if (hold == null) {
+                isAllowToOpen = false;
+                if (world.isRemote) {
+                    UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());
+                }
+            } else {
+                if (hold.getItem() instanceof ItemPicklock && !(hold.getItem() instanceof ItemLockProbe)) {
+
+                    // Cooldown timeout
+                    ItemPicklock picklock = (ItemPicklock) hold.getItem();
+                    hold = picklock.onItemRightClick(hold, world, player);
+
+                    int picklockingStatus = lockedChestTE.tryToEnforceChest(hold, player);
+                    if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
+                        updateEntity = true;
+                        isAllowToOpen = true;
+                        world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.enforce"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+                    } else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
+                        //updateEntity = true; if some effects will realised
+                        world.spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                        world.spawnParticle("crit", x + random.nextFloat() * 0.1, y + 1.1, z + random.nextFloat() * 0.1, 0, 0, 0);
+                        world.spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                        world.spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                        world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+                        //failChatMessage = "Key was damaged!";
+                    } else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
+                        //updateEntity = true; if some effects will realised
+                        world.spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                        world.spawnParticle("magicCrit", x + random.nextFloat() * 0.1, y + 1.1, z + random.nextFloat() * 0.1, 0, 0, 0);
+                        world.spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                        world.spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                        world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+                        //failChatMessage = "Protector Tratata";
+                    } else {
+                        world.spawnParticle("spell", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                        world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+                        //failChatMessage = "picklocking failed!";
+                    }
+
+                } else if (lockedChestTE.isKeyAndCipherMatches(hold)) {
+                    isAllowToOpen = true;
+                } else if (hold.getItem() instanceof ItemLockProbe) {
+                    lockedChestTE.tryToProbeChest(hold, player);
+                } else {
+                    if (world.isRemote) {
+                        UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());
+                    }
+                }
+            }
+        }
+
+        if (isAllowToOpen) {
+            player.openGui(UltimateExtender.instance, GuiLockedChest.GUI_ID, world, x, y, z);
+
+        } else {
+            if (updateEntity) {
+                UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
+            }
+        }
+        return true;
+    }
+
+    @Override
 	public boolean removeBlockByPlayer(World world, EntityPlayer player, int x, int y, int z) {
 		TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getBlockTileEntity(x, y, z);
 		if (player.username.equals(lockedChestTE.getOwnerName()) || player.capabilities.isCreativeMode) {

@@ -113,18 +113,18 @@ public class ItemKey extends Item implements Grindable {
 		int cipher = itemStack.stackTagCompound.getInteger("cipher");
 		float bonus = itemStack.stackTagCompound.getFloat("bonus");
 		if (cipher > 0) {
-			list.add(EnumChatFormatting.DARK_GREEN + "Encrypted");
+			list.add(EnumChatFormatting.DARK_GREEN +  UltimateExtender.loc("tc.keyStatus.encrypted"));
 		} else {
-			list.add(EnumChatFormatting.RED + "Blank");
+			list.add(EnumChatFormatting.RED + UltimateExtender.loc("tc.keyStatus.blank"));
 		}	
 		if (bonus == 0) {
-			list.add(EnumChatFormatting.DARK_GREEN + "Common");
+			list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.common"));
 		} else if(bonus < 1) {
-			list.add(EnumChatFormatting.DARK_GREEN + "Simple");
+			list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.simple"));
 		} else if(bonus < 2) {
-			list.add(EnumChatFormatting.GREEN + "Good");
+			list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.good"));
 		} else if(bonus > 2) {
-			list.add(EnumChatFormatting.GREEN + "Epic");
+			list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.epic"));
 		}
 
 	}

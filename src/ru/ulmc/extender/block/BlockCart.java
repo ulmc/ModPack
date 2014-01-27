@@ -107,6 +107,11 @@ public class BlockCart extends BasicStandingBlock {
     }
 
     @Override
+    public boolean isBlockNormalCube(World world, int x, int y, int z) {
+        return false;
+    }
+
+    @Override
     public void setBlockBoundsBasedOnState(IBlockAccess block, int x, int y, int z) {
         int meta = block.getBlockMetadata(x, y, z);
         this.setBlockBounds(bounds[meta][0], bounds[meta][1], bounds[meta][2],

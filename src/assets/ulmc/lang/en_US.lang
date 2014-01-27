@@ -70,6 +70,7 @@ item.pebbles.name=Pebbles
 item.resin.name=Resin
 item.rottenWeat.name=Rotten weat
 item.ash.name=Ash
+item.lockProbe.name=Lock probe
 
 tile.blockWoodChair.name=Plain Wood Chair
 tile.blockWhiteCottonChair.name=Plain Wood Chair with white
@@ -101,3 +102,12 @@ tile.blockGrinder.name=Grinder
 msg.sirenAlarm=Someone trying to unlock your chest!
 death.attack.cold=%1$s is now cold as ice.
 death.attack.heat=%1$s is baked. Bon appetit!
+
+tc.itemStatus.common=Ничего особенного
+tc.itemStatus.simple=Простой
+tc.itemStatus.sharpen=Выглядит неплохо
+tc.itemStatus.good=Хорошо заточен
+tc.itemStatus.epic=Эпично
+tc.itemStatus.masterpiece=Шедевр!
+tc.keyStatus.blank=Без шифра
+tc.keyStatus.encrypted=Зашифрован

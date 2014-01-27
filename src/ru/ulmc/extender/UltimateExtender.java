@@ -36,6 +36,7 @@ import ru.ulmc.extender.item.ItemManager;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.proxy.PacketManager;
 import ru.ulmc.extender.render.particle.EntityLockFX;
+import ru.ulmc.extender.render.particle.EntityTestFX;
 import ru.ulmc.extender.render.particle.UParticle;
 import ru.ulmc.extender.tickhandler.WarmTickSheduler;
 import cpw.mods.fml.common.FMLLog;
@@ -114,6 +115,9 @@ public class UltimateExtender {
 		case UParticle.LOCK:
 			particle = new EntityLockFX(world, x, y, z);
 			break;
+        case UParticle.TEST:
+            particle = new EntityTestFX(world, x, y, z);
+            break;
 		}
 		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 	}

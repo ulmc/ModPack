@@ -30,11 +30,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockLockedChest;
 import ru.ulmc.extender.container.ContainerLockedChest;
 import ru.ulmc.extender.item.ItemKey;
+import ru.ulmc.extender.item.ItemLockProbe;
 import ru.ulmc.extender.item.ItemLockProtector;
 import ru.ulmc.extender.item.ItemPicklock;
+import ru.ulmc.extender.render.particle.UParticle;
 
 public class TileEntityLockedChest extends ExtendedTileEntity implements IInventory {
 	public static final int PICKLOCKING_FAILED = 0; 
@@ -84,12 +87,53 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		return false;
 	}
 
+    public void tryToProbeChest(ItemStack lockProbe, EntityPlayer player) {
+      //  player.worldObj;
+        ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
+        ItemStack protectorStack = inv[ContainerLockedChest.PROTECTOR_SLOT_ID];
+
+        boolean passToProtector;
+        ItemLockProtector protector;
+
+        if(protectorStack == null || !(protectorStack.getItem() instanceof ItemLockProtector)) {
+            passToProtector = false;
+            protector = null;
+        } else {
+            passToProtector = true;
+            protector = (ItemLockProtector)protectorStack.getItem();
+        }
+
+        int keyLevel = ((ItemKey) key.getItem()).getSecurityLevel();
+        float keyBonus = ItemKey.getBonus(key);
+        float lockProbeBonus = ItemLockProbe.getBonus(lockProbe);
+        int lockProbeLevel = ((ItemLockProbe)lockProbe.getItem()).getSecurityLevel();
+        double chance = Math.random();
+        double multiplier = ((lockProbeLevel + lockProbeBonus) / (keyLevel + keyBonus));
+        double minRequried = 0.23F * multiplier;
+
+        if(passToProtector) {
+            if(protector.onEnforce(this, player, lockProbe) != PICKLOCKING_PROTECTOR) {
+                if (chance < minRequried) {
+                    double informationType = Math.random();
+                    if(informationType < 0.25F) {
+
+                    } else if(informationType < 0.50F) {
+
+                    } else {
+
+                    }
+                }
+            }
+        }
+        UltimateExtender.spawnParticle(UParticle.TEST, player.getEntityWorld(), this.xCoord + 0.5f,  this.yCoord + 0.9f,  this.zCoord + 0.5f);
+    }
+
 	public int tryToEnforceChest(ItemStack picklock, EntityPlayer player) {
 		ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
-		ItemStack protectorStack = inv[ContainerLockedChest.PROTECTOR_SLOT_ID];	
+		ItemStack protectorStack = inv[ContainerLockedChest.PROTECTOR_SLOT_ID];
 		boolean passToProtector;
 		ItemLockProtector protector;
-		
+
 		if(protectorStack == null || !(protectorStack.getItem() instanceof ItemLockProtector)) {
 			passToProtector = false;
 			protector = null;
