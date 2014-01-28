@@ -38,15 +38,17 @@ import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
-public class ItemLockProtector extends Item implements Grindable {
+public class ItemLockProtector extends Item implements Grindable, UItem {
 
 	public Icon placeholder;
 	private ProtectorType type;	
 	private static Random random = new Random();
+    private String clearItemName;
 
 	public ItemLockProtector(int i, String unlocalizedName, int durability, ProtectorType type) {
 		super(i);
 		setUnlocalizedName(unlocalizedName);
+        clearItemName = unlocalizedName;
 		setTextureName(Reference.RES_NAME + unlocalizedName);
 		setCreativeTab(CreativeTabs.tabTools);
         if("capsuleEmpty".equals(unlocalizedName)) {
@@ -426,9 +428,14 @@ public class ItemLockProtector extends Item implements Grindable {
 		} else {
 			tile.damageKey();
 		}		
-	}	
-	
-	public enum ProtectorType {
+	}
+
+    @Override
+    public String getClearItemName() {
+        return clearItemName;
+    }
+
+    public enum ProtectorType {
 		DAMAGE_ABSORBER(0.2f, 0.0F, 0.95f, 0.0F),
 		SHOCKER(1.0f, 0.10F, 0.6f, 0.1F),
 		FIRESTARTER(0.8f, 0.05F, 0.6f, 0.1F),

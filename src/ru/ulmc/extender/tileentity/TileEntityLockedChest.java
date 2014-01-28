@@ -30,13 +30,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockLockedChest;
 import ru.ulmc.extender.container.ContainerLockedChest;
-import ru.ulmc.extender.item.ItemKey;
-import ru.ulmc.extender.item.ItemLockProbe;
-import ru.ulmc.extender.item.ItemLockProtector;
-import ru.ulmc.extender.item.ItemPicklock;
+import ru.ulmc.extender.item.*;
 import ru.ulmc.extender.render.particle.UParticle;
 
 public class TileEntityLockedChest extends ExtendedTileEntity implements IInventory {
@@ -88,7 +86,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	}
 
     public void tryToProbeChest(ItemStack lockProbe, EntityPlayer player) {
-      //  player.worldObj;
+        World world = player.getEntityWorld();
         ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
         ItemStack protectorStack = inv[ContainerLockedChest.PROTECTOR_SLOT_ID];
 
@@ -102,30 +100,46 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
             passToProtector = true;
             protector = (ItemLockProtector)protectorStack.getItem();
         }
-
-        int keyLevel = ((ItemKey) key.getItem()).getSecurityLevel();
+        ItemKey keyItem = (ItemKey) key.getItem();
+        int keyLevel = keyItem.getSecurityLevel();
         float keyBonus = ItemKey.getBonus(key);
         float lockProbeBonus = ItemLockProbe.getBonus(lockProbe);
         int lockProbeLevel = ((ItemLockProbe)lockProbe.getItem()).getSecurityLevel();
-        double chance = Math.random();
+        double chance = 2;
         double multiplier = ((lockProbeLevel + lockProbeBonus) / (keyLevel + keyBonus));
-        double minRequried = 0.23F * multiplier;
-
+        double minRequried = 0.33F * multiplier;
+        boolean continueProbing = !passToProtector;
+        float startX = xCoord + 0.5f;
+        float startY = yCoord + 0.9f;
+        float startZ = zCoord + 0.5f;
         if(passToProtector) {
-            if(protector.onEnforce(this, player, lockProbe) != PICKLOCKING_PROTECTOR) {
-                if (chance < minRequried) {
-                    double informationType = Math.random();
-                    if(informationType < 0.25F) {
+            if(protector.onProbingChance(this, player, lockProbe) != PICKLOCKING_PROTECTOR) {
+                continueProbing = true;
+                chance = Math.random();
 
-                    } else if(informationType < 0.50F) {
+            } else {
+                world.spawnParticle("magicCrit", startX, startY + 0.5f, startZ, 0, 0, 0);
+            }
+        } else {
+            chance = Math.random();
+        }
 
-                    } else {
-
-                    }
+        //UltimateExtender.logger.info("Gotcha! " + protector.getClearItemName() + " " + chance + " " + passToProtector + " " + continueProbing + " " + minRequried + " " + multiplier);
+        if (continueProbing && chance < minRequried) {
+            double informationType = Math.random();
+            if(informationType < 0.25F && protector != null) {
+                if(world.isRemote) {
+                    UltimateExtender.spawnParticle(protector.getClearItemName(), world, startX, startY, startZ);
                 }
+            } else if(informationType < 0.50F) {
+                if(world.isRemote) {
+                    UltimateExtender.spawnParticle(keyItem.getClearItemName(), world, startX, startY, startZ);
+                }
+            } else {
+                world.spawnParticle("spell", startX, startY, startZ, 0, 0, 0);
             }
         }
-        UltimateExtender.spawnParticle(UParticle.TEST, player.getEntityWorld(), this.xCoord + 0.5f,  this.yCoord + 0.9f,  this.zCoord + 0.5f);
+        //UltimateExtender.spawnParticle(UParticle.TEST, player.getEntityWorld(), this.xCoord + 0.5f,  this.yCoord + 0.9f,  this.zCoord + 0.5f);
     }
 
 	public int tryToEnforceChest(ItemStack picklock, EntityPlayer player) {

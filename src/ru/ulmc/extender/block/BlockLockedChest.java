@@ -207,7 +207,11 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
                     UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());
                 }
             } else {
-                if (hold.getItem() instanceof ItemPicklock && !(hold.getItem() instanceof ItemLockProbe)) {
+                if (hold.getItem() instanceof ItemLockProbe) {
+                    ItemLockProbe probe = (ItemLockProbe) hold.getItem();
+                    hold = probe.onItemRightClick(hold, world, player);
+                    lockedChestTE.tryToProbeChest(hold, player);
+                } else if (hold.getItem() instanceof ItemPicklock) {
 
                     // Cooldown timeout
                     ItemPicklock picklock = (ItemPicklock) hold.getItem();
@@ -242,8 +246,6 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 
                 } else if (lockedChestTE.isKeyAndCipherMatches(hold)) {
                     isAllowToOpen = true;
-                } else if (hold.getItem() instanceof ItemLockProbe) {
-                    lockedChestTE.tryToProbeChest(hold, player);
                 } else {
                     if (world.isRemote) {
                         UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());

@@ -35,6 +35,7 @@ import ru.ulmc.extender.gui.handler.GuiHandler;
 import ru.ulmc.extender.item.ItemManager;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.proxy.PacketManager;
+import ru.ulmc.extender.render.particle.EntityChestContentFX;
 import ru.ulmc.extender.render.particle.EntityLockFX;
 import ru.ulmc.extender.render.particle.EntityTestFX;
 import ru.ulmc.extender.render.particle.UParticle;
@@ -116,11 +117,24 @@ public class UltimateExtender {
 			particle = new EntityLockFX(world, x, y, z);
 			break;
         case UParticle.TEST:
+        default:
             particle = new EntityTestFX(world, x, y, z);
             break;
 		}
 		Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 	}
+
+    /**
+     * Spawns Special Locked Chest Content Particle
+     * @param particleImageName - unlocalizedName without "item."
+     * @param world
+     * @param x
+     * @param y
+     * @param z
+     */
+    public static void spawnParticle(String particleImageName, World world, double x, double y, double z) {
+        Minecraft.getMinecraft().effectRenderer.addEffect(new EntityChestContentFX(particleImageName, world, x, y, z));
+    }
 
     /**
      * Returns localized string from file.

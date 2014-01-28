@@ -34,14 +34,16 @@ import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 
-public class ItemKey extends Item implements Grindable {
+public class ItemKey extends Item implements Grindable, UItem {
 
 	private int securityLevel = 0;
 	public Icon placeholder;
+    private String clearItemName;
 
 	public ItemKey(int i, String unlocalizedName, int securityLevel, int maxDamage) {
 		super(i);
 		setUnlocalizedName(unlocalizedName);
+        clearItemName = unlocalizedName;
 		setTextureName(Reference.RES_NAME + unlocalizedName);
 		setCreativeTab(CreativeTabs.tabTools);
 		this.securityLevel = securityLevel;
@@ -185,4 +187,8 @@ public class ItemKey extends Item implements Grindable {
 		return damageGinder;
 	}
 
+    @Override
+    public String getClearItemName() {
+        return clearItemName;
+    }
 }

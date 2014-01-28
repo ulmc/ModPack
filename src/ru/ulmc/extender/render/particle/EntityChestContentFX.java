@@ -1,7 +1,5 @@
 package ru.ulmc.extender.render.particle;
 
-import org.lwjgl.opengl.GL11;
-import ru.ulmc.extender.Reference;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -9,19 +7,22 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+import ru.ulmc.extender.Reference;
 
 @SideOnly(Side.CLIENT)
-public class EntityTestFX extends EntityFX implements UParticle {
+public class EntityChestContentFX extends EntityFX implements UParticle {
     float particleScaleOverTime;
-    private static ResourceLocation texture = new ResourceLocation(Reference.RES_NAME_C, "textures/items/capsuleLogger.png");
+    private ResourceLocation texture;
 
-    public EntityTestFX(World par1World, double par2, double par4, double par6) {
+    public EntityChestContentFX(String itemName, World par1World, double par2, double par4, double par6) {
         super(par1World, par2, par4, par6);
         particleMaxAge = 45;
         particleGravity = -1.13f;
         particleScale = 0.7f;
         particleScaleOverTime = 2.0F;
         noClip = true;
+        texture = new ResourceLocation(Reference.RES_NAME_C, "textures/items/".concat(itemName).concat(".png"));
        // setRBGColorF(0.5f + rand.nextFloat() / 2, 0.1f + rand.nextFloat() / 2, 0.1f + rand.nextFloat() / 2);
     }
 
@@ -41,8 +42,6 @@ public class EntityTestFX extends EntityFX implements UParticle {
         float x = (float) (prevPosX + (posX - prevPosX) * partialTicks - interpPosX);
         float y = (float) (prevPosY + (posY - prevPosY) * partialTicks - interpPosY);
         float z = (float) (prevPosZ + (posZ - prevPosZ) * partialTicks - interpPosZ);
-        float f14 = 1.0F;
-        //tess.setColorRGBA_F(this.particleRed * f14, this.particleGreen * f14, this.particleBlue * f14, this.particleAlpha);
         tess.addVertexWithUV(x + par3 * scale + par6 * scale, y + par4 * scale, z + par5 * scale + par7 * scale, 0.0, 0.0);
         tess.addVertexWithUV(x + par3 * scale - par6 * scale, y - par4 * scale, z + par5 * scale - par7 * scale, 0.0, 1.0);
         tess.addVertexWithUV(x - par3 * scale - par6 * scale, y - par4 * scale, z - par5 * scale - par7 * scale, 1.0, 1.0);
@@ -51,7 +50,6 @@ public class EntityTestFX extends EntityFX implements UParticle {
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glDepthMask(true);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-        //UltimateExtender.logger.info("render at:" + partialTicks);
     }
 
     @Override

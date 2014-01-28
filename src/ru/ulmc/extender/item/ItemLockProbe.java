@@ -45,9 +45,9 @@ public class ItemLockProbe extends ItemPicklock {
 		setTextureName(Reference.RES_NAME + unlocalizedName);
 		setCreativeTab(CreativeTabs.tabTools);
 		this.securityLevel = securityLevel;
-		this.setMaxStackSize(999);
+		this.setMaxStackSize(1);
 		this.setMaxDamage(maxDamage);
-		this.useTime = (int)(128 - securityLevel*1.3);
+		this.useTime = (int)(64 - securityLevel*1.3);
 	}
 
 	public int getSecurityLevel() {
