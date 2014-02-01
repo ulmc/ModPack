@@ -47,7 +47,7 @@ public class ItemLockProbe extends ItemPicklock {
 		this.securityLevel = securityLevel;
 		this.setMaxStackSize(1);
 		this.setMaxDamage(maxDamage);
-		this.useTime = (int)(64 - securityLevel*1.3);
+		this.useTime = (int)(54 - securityLevel*1.3);
 	}
 
 	public int getSecurityLevel() {
@@ -57,22 +57,6 @@ public class ItemLockProbe extends ItemPicklock {
 	@Override
 	public int getMaxItemUseDuration(ItemStack par1ItemStack) {
 		return this.useTime;
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
-			int par6, int par7, float par8, float par9, float par10) {
-		if (par2EntityPlayer.worldObj.isRemote && par2EntityPlayer.isUsingItem()) {
-			if (useTime - 2 < par2EntityPlayer.getItemInUseCount()) {
-				return false;
-			}
-		}
-		return false;
 	}
 
 	@Override
@@ -86,12 +70,6 @@ public class ItemLockProbe extends ItemPicklock {
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
-		return par1ItemStack;
-	}
-	
-	@Override
-	public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-		//par2World.playSoundAtEntity(par3EntityPlayer, "random.bowhit", 0.5F, par2World.rand.nextFloat() * 0.1F + 0.9F);
 		return par1ItemStack;
 	}
 	

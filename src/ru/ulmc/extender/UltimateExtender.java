@@ -61,6 +61,7 @@ public class UltimateExtender {
 	public static UltimateExtender instance;
 	public static Logger logger;
 	private static StringBuilder stringBuilder = new StringBuilder();
+    private TimerManager timerManager = new TimerManager();
 
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY, serverSide = Reference.COMMON_PROXY)
 	public static CommonProxy proxy;
@@ -144,5 +145,10 @@ public class UltimateExtender {
     public static String loc(String key) {
        return LanguageRegistry.instance().getStringLocalization(key);
     }
+
+    public TimerManager getTimerManager() {
+        return timerManager;
+    }
+
 
 }

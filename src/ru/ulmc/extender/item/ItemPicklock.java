@@ -73,10 +73,8 @@ public class ItemPicklock extends Item implements Grindable {
 	@Override
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
 			int par6, int par7, float par8, float par9, float par10) {
-		if (par2EntityPlayer.worldObj.isRemote && par2EntityPlayer.isUsingItem()) {
-			if (useTime - 2 < par2EntityPlayer.getItemInUseCount()) {
-				return false;
-			}
+		if (par2EntityPlayer.isUsingItem()) {
+            return true;
 		}
 		return false;
 
@@ -100,7 +98,10 @@ public class ItemPicklock extends Item implements Grindable {
 	@Override
 	public ItemStack onEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		//par2World.playSoundAtEntity(par3EntityPlayer, "random.bowhit", 0.5F, par2World.rand.nextFloat() * 0.1F + 0.9F);
-		return par1ItemStack;
+        if(!par3EntityPlayer.getEntityWorld().isRemote) {
+            UltimateExtender.instance.getTimerManager().runTask(par3EntityPlayer);
+        }
+        return par1ItemStack;
 	}
 	
 	public static void setBonus(ItemStack stack, float bonus) {

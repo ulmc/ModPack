@@ -40,7 +40,6 @@ import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.gui.GuiLockedChest;
-import ru.ulmc.extender.item.ItemLockProbe;
 import ru.ulmc.extender.item.ItemPicklock;
 import ru.ulmc.extender.render.particle.UParticle;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
@@ -207,42 +206,11 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
                     UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());
                 }
             } else {
-                if (hold.getItem() instanceof ItemLockProbe) {
-                    ItemLockProbe probe = (ItemLockProbe) hold.getItem();
-                    hold = probe.onItemRightClick(hold, world, player);
-                    lockedChestTE.tryToProbeChest(hold, player);
-                } else if (hold.getItem() instanceof ItemPicklock) {
-
+                if (hold.getItem() instanceof ItemPicklock) {
                     // Cooldown timeout
-                    ItemPicklock picklock = (ItemPicklock) hold.getItem();
-                    hold = picklock.onItemRightClick(hold, world, player);
 
-                    int picklockingStatus = lockedChestTE.tryToEnforceChest(hold, player);
-                    if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
-                        updateEntity = true;
-                        isAllowToOpen = true;
-                        world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.enforce"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                    } else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
-                        //updateEntity = true; if some effects will realised
-                        world.spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                        world.spawnParticle("crit", x + random.nextFloat() * 0.1, y + 1.1, z + random.nextFloat() * 0.1, 0, 0, 0);
-                        world.spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                        world.spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                        world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                        //failChatMessage = "Key was damaged!";
-                    } else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
-                        //updateEntity = true; if some effects will realised
-                        world.spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                        world.spawnParticle("magicCrit", x + random.nextFloat() * 0.1, y + 1.1, z + random.nextFloat() * 0.1, 0, 0, 0);
-                        world.spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                        world.spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                        world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                        //failChatMessage = "Protector Tratata";
-                    } else {
-                        world.spawnParticle("spell", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                        world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                        //failChatMessage = "picklocking failed!";
-                    }
+                    setWorkTimerForThief(hold, player, lockedChestTE);
+                    return false;
 
                 } else if (lockedChestTE.isKeyAndCipherMatches(hold)) {
                     isAllowToOpen = true;
@@ -253,16 +221,23 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
                 }
             }
         }
-
         if (isAllowToOpen) {
             player.openGui(UltimateExtender.instance, GuiLockedChest.GUI_ID, world, x, y, z);
-
         } else {
             if (updateEntity) {
                 UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
             }
         }
         return true;
+    }
+
+    private void setWorkTimerForThief(ItemStack hold, EntityPlayer player, TileEntityLockedChest lockedChestTE) {
+        ItemPicklock picklock = (ItemPicklock) hold.getItem();
+        hold = picklock.onItemRightClick(hold, player.getEntityWorld(), player);
+        if(!player.getEntityWorld().isRemote) {
+            UltimateExtender.instance.getTimerManager().markUsingChest(player, hold, lockedChestTE);
+        }
+
     }
 
     @Override
@@ -276,41 +251,34 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		}
 	}
 	@Override
-	public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6)
-    {
-		TileEntityLockedChest chestTE = (TileEntityLockedChest)par1World.getBlockTileEntity(par2, par3, par4);
+    public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6) {
+        TileEntityLockedChest chestTE = (TileEntityLockedChest) par1World.getBlockTileEntity(par2, par3, par4);
 
-        if (chestTE != null)
-        {
-            for (int j1 = 0; j1 < chestTE.getSizeInventory(); ++j1)
-            {
+        if (chestTE != null) {
+            for (int j1 = 0; j1 < chestTE.getSizeInventory(); ++j1) {
                 ItemStack itemstack = chestTE.getStackInSlot(j1);
 
-                if (itemstack != null)
-                {
+                if (itemstack != null) {
                     float f = this.random.nextFloat() * 0.8F + 0.1F;
                     float f1 = this.random.nextFloat() * 0.8F + 0.1F;
                     EntityItem entityitem;
 
-                    for (float f2 = this.random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World.spawnEntityInWorld(entityitem))
-                    {
+                    for (float f2 = this.random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World.spawnEntityInWorld(entityitem)) {
                         int k1 = this.random.nextInt(21) + 10;
 
-                        if (k1 > itemstack.stackSize)
-                        {
+                        if (k1 > itemstack.stackSize) {
                             k1 = itemstack.stackSize;
                         }
 
                         itemstack.stackSize -= k1;
                         entityitem = new EntityItem(par1World, par2 + f, par3 + f1, par4 + f2, new ItemStack(itemstack.itemID, k1, itemstack.getItemDamage()));
                         float f3 = 0.05F;
-                        entityitem.motionX = (float)this.random.nextGaussian() * f3;
-                        entityitem.motionY = (float)this.random.nextGaussian() * f3 + 0.2F;
-                        entityitem.motionZ = (float)this.random.nextGaussian() * f3;
+                        entityitem.motionX = (float) this.random.nextGaussian() * f3;
+                        entityitem.motionY = (float) this.random.nextGaussian() * f3 + 0.2F;
+                        entityitem.motionZ = (float) this.random.nextGaussian() * f3;
 
-                        if (itemstack.hasTagCompound())
-                        {
-                            entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+                        if (itemstack.hasTagCompound()) {
+                            entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
                         }
                     }
                 }
@@ -321,8 +289,8 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 
         super.breakBlock(par1World, par2, par3, par4, par5, par6);
     }
-	
-	/**
+
+    /**
 	 * Returns a new instance of a block's tile entity class. Called on placing
 	 * the block.
 	 */

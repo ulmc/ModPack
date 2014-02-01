@@ -21,6 +21,7 @@ package ru.ulmc.extender.tileentity;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockLockedChest;
 import ru.ulmc.extender.container.ContainerLockedChest;
@@ -46,6 +48,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	private int filledSlots;
 	private String ownerName;
 	private int chestType;
+    private static Random random = new Random();
 
 	/** The current angle of the lid (between 0 and 1) */
 	public float lidAngle;
@@ -70,6 +73,39 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		
 		
 	}
+
+    public void doWork(ItemStack hold, EntityPlayer player) {
+        if (hold.getItem() instanceof ItemLockProbe) {
+            this.tryToProbeChest(hold, player);
+        } else if (hold.getItem() instanceof ItemPicklock) {
+            boolean updateEntity = false;
+            int x = this.xCoord;
+            int z = this.zCoord;
+            int y = this.yCoord;
+            int picklockingStatus = this.tryToEnforceChest(hold, player);
+            if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
+                updateEntity = true;
+                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.enforce"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+            } else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
+                //updateEntity = true; if some effects will realised
+                //this.getWorldObj().spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+                //failChatMessage = "Key was damaged!";
+            } else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
+                //updateEntity = true; if some effects will realised
+               // this.getWorldObj().spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+                //failChatMessage = "Protector Tratata";
+            } else {
+               // this.getWorldObj().spawnParticle("spell", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+                //failChatMessage = "picklocking failed!";
+            }
+            if (updateEntity) {
+                UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
+            }
+        }
+    }
 
 	public boolean isKeyAndCipherMatches(ItemStack cipher) {
 		ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
@@ -116,9 +152,9 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
             if(protector.onProbingChance(this, player, lockProbe) != PICKLOCKING_PROTECTOR) {
                 continueProbing = true;
                 chance = Math.random();
-
             } else {
                 world.spawnParticle("magicCrit", startX, startY + 0.5f, startZ, 0, 0, 0);
+                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
             }
         } else {
             chance = Math.random();
@@ -128,16 +164,18 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
         if (continueProbing && chance < minRequried) {
             double informationType = Math.random();
             if(informationType < 0.25F && protector != null) {
-                if(world.isRemote) {
+               // if(world.isRemote) {
+                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
                     UltimateExtender.spawnParticle(protector.getClearItemName(), world, startX, startY, startZ);
-                }
+              //  }
             } else if(informationType < 0.50F) {
-                if(world.isRemote) {
+               // if(world.isRemote) {
+                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
                     UltimateExtender.spawnParticle(keyItem.getClearItemName(), world, startX, startY, startZ);
-                }
-            } else {
-                world.spawnParticle("spell", startX, startY, startZ, 0, 0, 0);
+              //  }
             }
+        } else {
+            world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
         }
         //UltimateExtender.spawnParticle(UParticle.TEST, player.getEntityWorld(), this.xCoord + 0.5f,  this.yCoord + 0.9f,  this.zCoord + 0.5f);
     }
