@@ -21,6 +21,7 @@
 package ru.ulmc.extender.config;
 
 import java.io.File;
+import java.util.Map;
 import java.util.logging.Level;
 
 import net.minecraftforge.common.Configuration;
@@ -33,6 +34,7 @@ public class ConfigurationHander {
 
     public static final ThievesCraftConfig tcConfig = new ThievesCraftConfig();
     public static final SurvivalSeasonConfig ssConfig = new SurvivalSeasonConfig();
+    public static final StringsConfig stringsConfig = new StringsConfig();
 
 	public static void init() {
 		config = new Configuration(new File("config" + File.separator + Reference.MOD_ID + File.separator + "main.cfg"));
@@ -41,6 +43,7 @@ public class ConfigurationHander {
 			config.load();
             initThievesCraft();
             initSurvivalSeason();
+            initStrings();
 		} catch (Exception e) {
 			FMLLog.log(Level.SEVERE, e, Reference.MOD_ID + "Has a problem loading the config file");
 		} finally {
@@ -82,6 +85,18 @@ public class ConfigurationHander {
             config.save();
         }
     }
+    public static String getString(String module, String param, String def) {
+        try {
+            Property prop = config.get(module, param, def);
+
+            return prop.getString();
+        } catch (Exception e) {
+            FMLLog.log(Level.SEVERE, e, Reference.MOD_ID + "Has a problem loading the config file");
+            return def;
+        } finally {
+            config.save();
+        }
+    }
 
     private static void initThievesCraft() {
         tcConfig.setEnabled(getBoolean(tcConfig.getModuleName(), ThievesCraftConfig.FIELD_ENABLED, true));
@@ -89,6 +104,13 @@ public class ConfigurationHander {
 
     private static void initSurvivalSeason() {
         ssConfig.setEnabled(getBoolean(ssConfig.getModuleName(), SurvivalSeasonConfig.FIELD_ENABLED, true));
+    }
+
+    private static void initStrings() {
+        Map<String, String> map = stringsConfig.getMap();
+        for(String key : map.keySet()) {
+            stringsConfig.setLocale(key, getString(stringsConfig.getModuleName(), key, map.get(key)));
+        }
     }
 
 }

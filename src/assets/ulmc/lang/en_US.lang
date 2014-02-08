@@ -99,38 +99,5 @@ tile.blockBarbedWire.name=Barbed Wire
 tile.blockLockedChest.name=Locked chest
 tile.blockGrinder.name=Grinder
 
-msg.sirenAlarm=Someone trying to unlock your chest!
 death.attack.cold=%1$s is now cold as ice.
 death.attack.heat=%1$s is baked. Bon appetit!
-
-tc.itemStatus.common=Nothing special
-tc.itemStatus.simple=Simple
-tc.itemStatus.sharpen=Look nice
-tc.itemStatus.good=It is good
-tc.itemStatus.epic=Epic
-tc.itemStatus.masterpiece=Masterpiece!
-tc.keyStatus.blank=Blank
-tc.keyStatus.encrypted=Encrypted
-
-
-epic.key.name0=Elder key
-epic.key.name1=Safe key
-epic.key.name2=Jack's key
-epic.key.name3=Stive's key
-epic.key.name4=Mustafa's key
-epic.key.name5=Witch's key
-epic.key.name6=Herobrine's key
-epic.key.name7=Prophet's key
-epic.key.name8=Strange key
-epic.key.name9=Mystic key
-
-epic.picklock.name0=Living wire
-epic.picklock.name1=One-eyed-Joe's tool
-epic.picklock.name2=Evidence No. 5
-epic.picklock.name3=Elder hairpin
-epic.picklock.name4=Penetrator
-epic.picklock.name5=Enforcer
-epic.picklock.name6=Rusty nail
-epic.picklock.name7=Kosoy's picklock
-epic.picklock.name8=Jail picklock
-epic.picklock.name9=Bloody stick

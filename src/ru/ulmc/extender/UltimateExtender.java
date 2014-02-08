@@ -90,9 +90,6 @@ public class UltimateExtender {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
         logger.info(loc("epic.key.name0"));
-        logger.info(loc("tc.itemStatus.common"));
-        logger.info(loc("tile.blockGrinder.name"));
-        logger.info(LanguageRegistry.instance().getStringLocalization("item.skull"));
 	}
 
 	private static void registerEventHooks() {
@@ -146,7 +143,8 @@ public class UltimateExtender {
      * @return
      */
     public static String loc(String key) {
-       return LanguageRegistry.instance().getStringLocalization(key);
+      // return LanguageRegistry.instance().getStringLocalization(key);
+        return ConfigurationHander.stringsConfig.getLocale(key);
     }
 
     public TimerManager getTimerManager() {
