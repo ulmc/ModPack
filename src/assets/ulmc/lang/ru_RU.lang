@@ -103,11 +103,34 @@ msg.sirenAlarm=Кто-то пытается открыть твой сундук
 death.attack.cold=%1$s промерз насквозь!
 death.attack.heat=%1$s запекся на солнышке!
 
-tc.itemStatus.common=Nothing special
-tc.itemStatus.simple=Simple
-tc.itemStatus.sharpen=Look nice
-tc.itemStatus.good=It is good
-tc.itemStatus.epic=Epic
-tc.itemStatus.masterpiece=Masterpiece!
-tc.keyStatus.blank=Blank
-tc.keyStatus.encrypted=Encrypted
+tc.itemStatus.common=Ничего особенного
+tc.itemStatus.simple=Простой
+tc.itemStatus.sharpen=Выглядит неплохо
+tc.itemStatus.good=Хорошо заточен
+tc.itemStatus.epic=Эпично
+tc.itemStatus.masterpiece=Шедевр!
+tc.keyStatus.blank=Без шифра
+tc.keyStatus.encrypted=Зашифрован
+
+epic.key.name0=Старинный ключ
+epic.key.name1=Ключ от сейфа
+epic.key.name2=Ключ Джека
+epic.key.name3=Ключ Стива
+epic.key.name4=Ключ Мустафы
+epic.key.name5=Ключ Ведьмы
+epic.key.name6=Ключ Херобрина
+epic.key.name7=Ключ провидца
+epic.key.name8=Странный ключ
+epic.key.name9=Мистический ключ
+
+epic.picklock.name0=Живая проволока
+epic.picklock.name1=Инструмент одноглазого Джо
+epic.picklock.name2=Улика номер пять
+epic.picklock.name3=Раритетная шпилька
+epic.picklock.name4=Замочный пенетратор
+epic.picklock.name5=Взломщик
+epic.picklock.name6=Ржавый гвоздь
+epic.picklock.name7=Отмычка Косого
+epic.picklock.name8=Тюремная отмычка
+epic.picklock.name9=Окровавленная тыкалка
+

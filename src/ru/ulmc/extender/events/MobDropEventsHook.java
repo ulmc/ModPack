@@ -19,22 +19,30 @@
  */
 package ru.ulmc.extender.events;
 
+import java.util.Random;
 import java.util.logging.Level;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.item.ItemKey;
 import ru.ulmc.extender.item.ItemManager;
+import ru.ulmc.extender.item.ItemPicklock;
 
 public class MobDropEventsHook {
-	
+	private static Random random = new Random();
 	private static final float baseDropRawLambMeat = 0.6F;
 	private static final float baseDropPigFat = 0.5F;
-	
+	private static final float chanseDropEpicKey = 0.2F;
+	private static final float chanseDropEpicPiclock = 0.2F;
+
 	@ForgeSubscribe
 	public void sheepDropFix(LivingDropsEvent event) {
 				
@@ -56,6 +64,18 @@ public class MobDropEventsHook {
 		}
 		
 	}
+
+    @ForgeSubscribe
+    public void epicLoot(LivingDropsEvent event) {
+        if(event.entityLiving instanceof EntitySkeleton) {
+            if(random.nextFloat()/(event.specialDropValue*0.5f) < chanseDropEpicKey) {
+                dropItemStack(event, ItemManager.getEpicItem(ItemKey.class));
+            } else if(random.nextFloat()/(event.specialDropValue*0.5f)  < chanseDropEpicPiclock) {
+                dropItemStack(event, ItemManager.getEpicItem(ItemPicklock.class));
+            }
+        }
+
+    }
 	
 	private int getDropCount(LivingDropsEvent event, float baseDrop){
 		return
@@ -69,5 +89,11 @@ public class MobDropEventsHook {
 			UltimateExtender.logger.log(Level.WARNING, "Can't find item to drop. Look into " + this.getClass().toString());
 		}
 	}
+
+    private void dropItemStack(LivingDropsEvent event, ItemStack itemStack){
+        event.drops.add(new EntityItem( event.entity.worldObj, event.entityLiving.posX,
+                                        event.entityLiving.posY, event.entityLiving.posZ,
+                                        itemStack));
+    }
 
 }

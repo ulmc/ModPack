@@ -89,7 +89,10 @@ public class UltimateExtender {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
-		// TODO: Add Post-Initialization code such as mod hooks
+        logger.info(loc("epic.key.name0"));
+        logger.info(loc("tc.itemStatus.common"));
+        logger.info(loc("tile.blockGrinder.name"));
+        logger.info(LanguageRegistry.instance().getStringLocalization("item.skull"));
 	}
 
 	private static void registerEventHooks() {

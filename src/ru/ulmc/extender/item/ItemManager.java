@@ -24,6 +24,8 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.config.ConfigurationHander;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.item.ItemLockProtector.ProtectorType;
@@ -223,4 +225,26 @@ public class ItemManager {
 		items.put(itemName, item);
 	}
 
+    public static ItemStack getEpicItem(Class iClass) {
+
+        ItemStack is = null;
+        if(iClass == ItemPicklock.class) {
+            is = new ItemStack(ItemManager.getItem("epicPicklock"));
+            is.setItemName(getRandomItemName("picklock"));
+        } else if(iClass == ItemKey.class) {
+            is = new ItemStack(ItemManager.getItem("epicKey"));
+            is.setItemName(getRandomItemName("key"));
+        } else {
+            UltimateExtender.logger.warning("This is not supposed to happen, check ItemManager.generateEpicItem");
+            return null;
+        }
+        ItemPicklock.setBonus(is, (float)Math.random());
+        return is;
+    }
+
+    public static String getRandomItemName(String type) {
+        int randomNum = (int)(Math.random()*(11));
+        UltimateExtender.logger.info(UltimateExtender.loc("epic.".concat(type).concat(".name") + randomNum));
+        return UltimateExtender.loc("epic.".concat(type).concat(".name") + randomNum);
+    }
 }
