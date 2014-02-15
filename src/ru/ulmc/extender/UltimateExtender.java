@@ -55,7 +55,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
-@NetworkMod(channels = { Reference.NETWORK_CHANNEL }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
+@NetworkMod(channels = { Reference.NETWORK_CHANNEL, Reference.NETWORK_CHANNEL_HEAT }, clientSideRequired = true, serverSideRequired = true, packetHandler = PacketManager.class)
 public class UltimateExtender {
 
 	@Instance

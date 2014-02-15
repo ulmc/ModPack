@@ -19,17 +19,28 @@
  */
 package ru.ulmc.extender.tickhandler;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.util.*;
 import java.util.logging.Level;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.block.Block;
+import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.mco.ExceptionMcoHttp;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.gui.SurvivalGui;
 import ru.ulmc.extender.item.IWarmArmor;
@@ -59,7 +70,6 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 	private EnumSet<TickType> tick = EnumSet.of(TickType.PLAYER);
 	private static Map<BiomeGenBase, Float> biomeToCold = new HashMap<BiomeGenBase, Float>();
 	private static Map<BiomeGenBase, Float> biomeToHot = new HashMap<BiomeGenBase, Float>();
-    private Timer timer = new Timer();
 
 	public final int BOOTS = 0; 
 	public final int PANTS = 1; 
@@ -152,8 +162,10 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 
 						if (noWarmNear) {
                             player.attackEntityFrom(UDamageSource.cold, -warmnessDelta);
+                            PacketDispatcher.sendPacketToPlayer(getPacket(true, -warmnessDelta), (Player)player);
                             if(player.getEntityWorld().isRemote) {
-                                timer.schedule(new FrostRenderTask(-warmnessDelta), 0, 50);
+
+
                             }
 						}
 					}
@@ -207,9 +219,7 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 						
 						if (warmnessDelta < 0) {
 							player.attackEntityFrom(UDamageSource.hot, -warmnessDelta);
-                            if(player.getEntityWorld().isRemote) {
-                                timer.schedule(new HeatRenderTask(-warmnessDelta), 0, 50);
-                            }
+                            PacketDispatcher.sendPacketToPlayer(getPacket(false, -warmnessDelta), (Player)player);
 						}
 					}
 				}
@@ -350,70 +360,27 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 		return tickStep;
 	}
 
-    /**
+       /**
      * Управляет задачей по рендеру эффекта.
      */
-    private class FrostRenderTask extends TimerTask {
-        private float power = 1.05F;
-        public float powerStep = 0.01F;
-
-        private FrostRenderTask(float power) {
-            if(SurvivalGui.isDoRenderFrost() || SurvivalGui.isDoRenderHeat()) {
-                power = -0.1F;
-            }
-            if(power> 1.5F) {
-                this.power = 1.5F;
+    private Packet250CustomPayload getPacket(boolean isCold, float delta) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(8);
+        DataOutputStream outputStream = new DataOutputStream(bos);
+        try {
+            if(isCold) {
+                outputStream.writeByte(0);
             } else {
-                this.power = power;
+                outputStream.writeByte(1);
             }
-        }
-
-        @Override
-        public void run() {
-            power = power - powerStep;
-            if(power >= 0.0F) {
-                SurvivalGui.setDoRenderFrost(true);
-                SurvivalGui.setPower(power);
-            } else {
-                SurvivalGui.setDoRenderFrost(false);
-                this.cancel();
-            }
-        }
-        public int getShedulePeriod() {
-            return (int) (1.0F / powerStep * (250 *  powerStep));
-        }
-    }
-    /**
-     * Управляет задачей по рендеру эффекта.
-     */
-    private class HeatRenderTask extends TimerTask {
-        private float power = 1.05F;
-        public float powerStep = 0.01F;
-
-        private HeatRenderTask(float power) {
-            if(SurvivalGui.isDoRenderHeat() || SurvivalGui.isDoRenderFrost()) {
-                power = -0.1F;
-            }
-            if(power> 1.5F) {
-                this.power = 1.5F;
-            } else {
-                this.power = power;
-            }
+            outputStream.writeFloat(delta);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
-        @Override
-        public void run() {
-            power = power - powerStep;
-            if(power >= 0.0F) {
-                SurvivalGui.setDoRenderHeat(true);
-                SurvivalGui.setPower(power);
-            } else {
-                SurvivalGui.setDoRenderHeat(false);
-                this.cancel();
-            }
-        }
-        public int getShedulePeriod() {
-            return (int) (1.0F / powerStep * (250 *  powerStep));
-        }
+        Packet250CustomPayload packet = new Packet250CustomPayload();
+        packet.channel = Reference.NETWORK_CHANNEL_HEAT;
+        packet.data = bos.toByteArray();
+        packet.length = bos.size();
+        return packet;
     }
 }

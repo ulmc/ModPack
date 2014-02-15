@@ -22,6 +22,8 @@ package ru.ulmc.extender.proxy;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
@@ -34,51 +36,24 @@ import com.google.common.io.ByteStreams;
 
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
+import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.gui.SurvivalGui;
 
 public class PacketManager implements IPacketHandler {
-	// thanks to DarkGuardsman ^_^
+    private Timer timer = new Timer();
+
 	@Override
 	public void onPacketData(INetworkManager network, Packet250CustomPayload packet, Player player) {
 		try {
-			ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-			int x = data.readInt();
-			int y = data.readInt();
-			int z = data.readInt();
-			// the following two are not used but can be for sorting packets by
-			// ID and restricting packet reading by lengths
-			// int id = data.readInt();//packet ID your welcome to set to zero
-			// int l = data.readInt(); //packet length a safety var to make sure
-			// only data is read.
-			EntityPlayer ePlayer = (EntityPlayer) player;
-			if (ePlayer != null) {
-				TileEntity tileEntity = ePlayer.worldObj.getBlockTileEntity(x, y, z);
-
-				if (tileEntity != null) {
-					if (tileEntity instanceof IPacketReceiver) {
-						((IPacketReceiver) tileEntity).handlePacketData(network, packet.channel, data);
-
-					}
-				}
-			}
+            if (packet.channel.equals(Reference.NETWORK_CHANNEL_HEAT)) {
+                handleRenderHeatEffect(packet);
+            }
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * 
-	 * @param sender
-	 *            - TileEntity sending this packet
-	 * @param channelName
-	 *            - channel name "channelName"
-	 * @param id
-	 *            - packet id
-	 * @param sendData
-	 *            - list of Integers to be sent is read after main data
-	 * @param string
-	 *            - list of strings to be sent is read last
-	 * @return a constructed packet ready to be sent
-	 */
 	public static Packet TECommonPacket(TileEntity sender, String channelName, int id, int[] sendData) {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		DataOutputStream data = new DataOutputStream(bytes);
@@ -98,11 +73,88 @@ public class PacketManager implements IPacketHandler {
 		}
 
 		Packet250CustomPayload packet = new Packet250CustomPayload();
-		packet.channel = "UltimateExtender";
+		packet.channel = Reference.NETWORK_CHANNEL;
 		packet.data = bytes.toByteArray();
 		packet.length = packet.data.length;
 		packet.isChunkDataPacket = true;
 		return packet;
 	}
+
+    private void handleRenderHeatEffect(Packet250CustomPayload packet) {
+        ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+        byte isFrost = data.readByte();
+        float warmnessDelta = data.readFloat();
+        if(isFrost == 0) {
+            timer.schedule(new FrostRenderTask(warmnessDelta), 0, 50);
+        } else {
+            timer.schedule(new HeatRenderTask(warmnessDelta), 0, 50);
+        }
+
+    }
+
+    private class HeatRenderTask extends TimerTask {
+        private float power = 1.05F;
+        public float powerStep = 0.01F;
+
+        private HeatRenderTask(float power) {
+            if(SurvivalGui.isDoRenderHeat() || SurvivalGui.isDoRenderFrost()) {
+                power = -0.1F;
+            }
+            if(power> 1.5F) {
+                this.power = 1.5F;
+            } else {
+                this.power = power;
+            }
+        }
+
+        @Override
+        public void run() {
+            power = power - powerStep;
+            if(power >= 0.0F) {
+                SurvivalGui.setDoRenderHeat(true);
+                SurvivalGui.setPower(power);
+            } else {
+                SurvivalGui.setDoRenderHeat(false);
+                this.cancel();
+            }
+        }
+        public int getShedulePeriod() {
+            return (int) (1.0F / powerStep * (250 *  powerStep));
+        }
+    }
+
+    /**
+     * Управляет задачей по рендеру эффекта.
+     */
+    private class FrostRenderTask extends TimerTask {
+        private float power = 1.05F;
+        public float powerStep = 0.01F;
+
+        private FrostRenderTask(float power) {
+            if(SurvivalGui.isDoRenderFrost() || SurvivalGui.isDoRenderHeat()) {
+                power = -0.1F;
+            }
+            if(power> 1.5F) {
+                this.power = 1.5F;
+            } else {
+                this.power = power;
+            }
+        }
+
+        @Override
+        public void run() {
+            power = power - powerStep;
+            if(power >= 0.0F) {
+                SurvivalGui.setDoRenderFrost(true);
+                SurvivalGui.setPower(power);
+            } else {
+                SurvivalGui.setDoRenderFrost(false);
+                this.cancel();
+            }
+        }
+        public int getShedulePeriod() {
+            return (int) (1.0F / powerStep * (250 *  powerStep));
+        }
+    }
 
 }
