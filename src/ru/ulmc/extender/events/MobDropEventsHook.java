@@ -40,8 +40,8 @@ public class MobDropEventsHook {
 	private static Random random = new Random();
 	private static final float baseDropRawLambMeat = 0.6F;
 	private static final float baseDropPigFat = 0.5F;
-	private static final float chanseDropEpicKey = 0.2F;
-	private static final float chanseDropEpicPiclock = 0.2F;
+	private static final float chanseDropEpicKey = 0.01F;
+	private static final float chanseDropEpicPicklock = 0.01F;
 
 	@ForgeSubscribe
 	public void sheepDropFix(LivingDropsEvent event) {
@@ -70,7 +70,7 @@ public class MobDropEventsHook {
         if(event.entityLiving instanceof EntitySkeleton) {
             if(random.nextFloat()/(event.specialDropValue*0.5f) < chanseDropEpicKey) {
                 dropItemStack(event, ItemManager.getEpicItem(ItemKey.class));
-            } else if(random.nextFloat()/(event.specialDropValue*0.5f)  < chanseDropEpicPiclock) {
+            } else if(random.nextFloat()/(event.specialDropValue*0.5f)  < chanseDropEpicPicklock) {
                 dropItemStack(event, ItemManager.getEpicItem(ItemPicklock.class));
             }
         }

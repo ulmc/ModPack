@@ -150,27 +150,34 @@ public class BlockManager {
 
 	private static BlockChair createBlockChair(int blockID, float hardness, float explosionResistance, String name) {
 		BlockChair block = (BlockChair) registerBlock(new BlockChair(ConfigurationHander.getBlockID(name, blockID), TileEntityChair.class, hardness, explosionResistance, name));
-		RenderChairs.registerResource(block.getUnlocalizedName());
+		try{
+             RenderChairs.registerResource(block.getUnlocalizedName());
+        } catch (Throwable e) {
+        }
 		return block;
 	}
 
 	private static BlockEliteChair createBlockEliteChair(int blockID, float hardness, float explosionResistance, String name) {
 		BlockEliteChair block = (BlockEliteChair) registerBlock(new BlockEliteChair(ConfigurationHander.getBlockID(name, blockID),
 				TileEntityEliteChair.class, hardness, explosionResistance, name));
-		RenderChairs.registerResource(block.getUnlocalizedName());
+        try{ RenderChairs.registerResource(block.getUnlocalizedName());} catch (Throwable e) {
+        }
 		return block;
 	}
 
 	private static BlockTable createBlockTable(int blockID, float hardness, float explosionResistance, String name, int model) {
 		BlockTable block = (BlockTable)registerBlock(new BlockTable(ConfigurationHander.getBlockID(name, blockID), hardness, explosionResistance, name, model));
-		RenderTables.registerResource(block.getUnlocalizedName());
-		return block;
+        try{  RenderTables.registerResource(block.getUnlocalizedName());} catch (Throwable e) {
+        }
+       	return block;
 	}
 
 	private static BlockFlag createBlockFlag(int blockID, float hardness, float explosionResistance, String name, int blockType,
 			FillerBlock filler) {
 		BlockFlag block =  (BlockFlag) registerBlock(new BlockFlag(ConfigurationHander.getBlockID(name, blockID), TileEntityFlag.class, hardness, explosionResistance, name, blockType, filler));
-		RenderFlags.registerResource(blockType, block.getUnlocalizedName());
+        try{  RenderFlags.registerResource(blockType, block.getUnlocalizedName());} catch (Throwable e) {
+        }
+
 		return block;
 	}
 

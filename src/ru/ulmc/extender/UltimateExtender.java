@@ -23,6 +23,7 @@ package ru.ulmc.extender;
 import java.util.logging.Logger;
 
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.world.World;
@@ -110,7 +111,7 @@ public class UltimateExtender {
 		}
 		return stringBuilder.toString();		
 	}
-	
+	@SideOnly(Side.CLIENT)
 	public static void spawnParticle(int particleID, World world, double x, double y, double z) {
 		EntityFX particle = null;
 		switch(particleID) {
@@ -133,6 +134,7 @@ public class UltimateExtender {
      * @param y
      * @param z
      */
+    @SideOnly(Side.CLIENT)
     public static void spawnParticle(String particleImageName, World world, double x, double y, double z) {
         Minecraft.getMinecraft().effectRenderer.addEffect(new EntityChestContentFX(particleImageName, world, x, y, z));
     }
