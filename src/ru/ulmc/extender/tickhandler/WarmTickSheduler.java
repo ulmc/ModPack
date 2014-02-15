@@ -151,8 +151,10 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 								currentX + 5, currentY + 3, currentZ + 5);
 
 						if (noWarmNear) {
-							player.attackEntityFrom(UDamageSource.cold, -warmnessDelta);
-                            timer.schedule(new FrostRenderTask(-warmnessDelta), 0, 50);
+                            player.attackEntityFrom(UDamageSource.cold, -warmnessDelta);
+                            if(player.getEntityWorld().isRemote) {
+                                timer.schedule(new FrostRenderTask(-warmnessDelta), 0, 50);
+                            }
 						}
 					}
 				} else {
@@ -205,7 +207,9 @@ public class WarmTickSheduler implements IScheduledTickHandler {
 						
 						if (warmnessDelta < 0) {
 							player.attackEntityFrom(UDamageSource.hot, -warmnessDelta);
-                            timer.schedule(new HeatRenderTask(-warmnessDelta), 0, 50);
+                            if(player.getEntityWorld().isRemote) {
+                                timer.schedule(new HeatRenderTask(-warmnessDelta), 0, 50);
+                            }
 						}
 					}
 				}
