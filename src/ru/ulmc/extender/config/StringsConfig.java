@@ -50,6 +50,9 @@ public class StringsConfig extends BaseModuleConfig {
             keysToValues.put("tc.keyStatus.blank", "Без шифра");
             keysToValues.put("tc.keyStatus.encrypted", "Зашифрован");
 
+            keysToValues.put("death.attack.cold", "{player} is now cold as ice.");
+            keysToValues.put("death.attack.heat", "{player} is baked. Bon appetit!");
+
             keysToValues.put("msg.sirenAlarm", prefix3 + "Кто-то пытается открыть твой сундук!");
         } else {
             keysToValues.put("epic.key.name0", prefix1 + "Elder key");
@@ -83,7 +86,11 @@ public class StringsConfig extends BaseModuleConfig {
 
             keysToValues.put("tc.keyStatus.blank", "Blank");
             keysToValues.put("tc.keyStatus.encrypted", "Encrypted");
+
             keysToValues.put("msg.sirenAlarm", prefix3 + "Someone trying to unlock your chest!");
+
+            keysToValues.put("death.attack.cold", "{player} промерз насквозь!");
+            keysToValues.put("death.attack.heat", "{player} запекся на солнышке!");
         }
         this.moduleName = "Strings";
     }

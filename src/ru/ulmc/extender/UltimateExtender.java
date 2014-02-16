@@ -90,7 +90,7 @@ public class UltimateExtender {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt) {
-        logger.info(loc("epic.key.name0"));
+
 	}
 
 	private static void registerEventHooks() {

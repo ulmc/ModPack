@@ -19,14 +19,30 @@
  */
 package ru.ulmc.extender.util;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.StatCollector;
+import ru.ulmc.extender.UltimateExtender;
 
 public class UDamageSource extends DamageSource {
 	public static DamageSource cold = (new UDamageSource("cold")).setDamageBypassesArmor();
 	public static DamageSource hot = (new UDamageSource("hot")).setDamageBypassesArmor();
 	protected UDamageSource(String par1Str) {
 		super(par1Str);
-		
+
 	}
+
+    public ChatMessageComponent getDeathMessage(EntityLivingBase par1EntityLivingBase)
+    {
+        EntityLivingBase eLiving = par1EntityLivingBase.func_94060_bK();
+        String key = "death.attack." + this.damageType;
+        String localizedMessage = UltimateExtender.loc(key);        if(localizedMessage != null) {
+
+            return ChatMessageComponent.createFromText(localizedMessage.replace("{player}", par1EntityLivingBase.getTranslatedEntityName()));
+        }
+        return ChatMessageComponent.createFromTranslationWithSubstitutions(key);
+
+    }
 
 }
