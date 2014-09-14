@@ -1,0 +1,16 @@
+[
+{
+  "modid": "UltimateExtender",
+  "name": "ULMC's Extender",
+  "description": "Uranus, prepare to battle!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["bormoshka"],
+  "credits": "Mojang когда уже API будет, сволочи?",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
