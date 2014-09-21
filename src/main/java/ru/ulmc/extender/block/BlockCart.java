@@ -51,7 +51,6 @@ public class BlockCart extends BasicStandingBlock {
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack stack) {
 		if (!world.isRemote) {
-
 			boolean canPlace = true;
 			int[] shift;
 			int dir = MathHelper.floor_double((entityLiving.rotationYaw * 4F) / 360F + 0.5D) & 3;
@@ -63,27 +62,30 @@ public class BlockCart extends BasicStandingBlock {
 			} else if (dir == 2) {
 				aByte = 2;
 			}
-			world.setBlockMetadataWithNotify(x, y, z, aByte, 4);
+
+			int sX; int sZ;
 			for (int i = 0; i < fillers.length; i++) {
 				shift = rotXZByDir(fillers[i][0], y, fillers[i][2], dir);
-				if (!world.isAirBlock(x + shift[0], y, z + shift[2]) &&
-						world.getBlock(x + shift[0], y, z + shift[2])
-								.isReplaceable(world, x + shift[0], y, z + shift[2])) {
+				sX = x + shift[0]; sZ = z + shift[2];
+				if (!world.isAirBlock(sX, y,sZ) && !world.getBlock(sX, y, sZ).isReplaceable(world, sX, y, sZ)) {
 					canPlace = false;
 				}
-				if (!world.isSideSolid(x + shift[0], y - 1, z + shift[2], ForgeDirection.UP)) {
+				if (!world.isSideSolid(sX, y - 1, sZ, ForgeDirection.UP)) {
 					canPlace = false;
 				}
 			}
 
 			UltimateExtender.logger.info("META: " + aByte);
 			if (canPlace) {
+				world.setBlockMetadataWithNotify(x, y, z, aByte, 4);
+
 				TileEntityCart cartTE = (TileEntityCart) world.getTileEntity(x, y, z);
 
 				for (int i = 0; i < fillers.length; i++) {
 					shift = rotXZByDir(fillers[i][0], y, fillers[i][2], dir);
-					world.setBlock(x + shift[0], y, z + shift[2], fillerBlock, dir, 2);
-					TileEntityFiller tileFiller = (TileEntityFiller) world.getTileEntity(x + shift[0], y, z + shift[2]);
+					sX = x + shift[0]; sZ = z + shift[2];
+					world.setBlock(sX, y, sZ, fillerBlock, dir, 2);
+					TileEntityFiller tileFiller = (TileEntityFiller) world.getTileEntity(sX, y, sZ);
 					if (tileFiller != null) {
 						tileFiller.setPrimaryX(x);
 						tileFiller.setPrimaryY(y);
