@@ -166,6 +166,12 @@ public class WarmHandler {
 	}
 
 	@SubscribeEvent
+	public void clearMap(PlayerEvent.PlayerRespawnEvent event) {
+		playersTicks.remove(event.player);
+		//playersThermalLevel.remove(event.player); будем сохранять температу игрока... чтобы не спасались логаутами
+	}
+
+	@SubscribeEvent
 	public void doTheWork(LivingEvent.LivingUpdateEvent event) {
 		if (!(event.entityLiving instanceof EntityPlayerMP)) {
 			return;

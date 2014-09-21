@@ -29,12 +29,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.item.ItemManager;
-import ru.ulmc.extender.network.WarmPacket;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 
 import java.util.ArrayList;
@@ -79,33 +79,15 @@ public class PlayerEventsHook {
 	@SubscribeEvent
 	public void setBlockOfBones(PlayerDropsEvent event) {
 		if (event.entityPlayer != null && !event.entityPlayer.worldObj.isRemote) {
-			int coordX = (int) event.entityPlayer.posX;
-			int coordY = (int) event.entityPlayer.posY;
-			int coordZ = (int) event.entityPlayer.posZ;
+			int coordX = MathHelper.floor_double(event.entityPlayer.posX);
+			int coordY = MathHelper.floor_double(event.entityPlayer.posY);
+			int coordZ = MathHelper.floor_double(event.entityPlayer.posZ);
 			boolean allowToPlace = false;
-			if (event.entityPlayer.worldObj.isAirBlock(coordX, coordY, coordZ)) {
-				allowToPlace = true;
-			} else {
-				if (event.entityPlayer.worldObj.isAirBlock(coordX, coordY - 1, coordZ)) {
-					allowToPlace = true;
-					coordY--;
-				} else if (event.entityPlayer.worldObj.isAirBlock(coordX - 1, coordY, coordZ)) {
-					allowToPlace = true;
-					coordX--;
-				} else if (event.entityPlayer.worldObj.isAirBlock(coordX + 1, coordY, coordZ)) {
-					allowToPlace = true;
-					coordX++;
-				} else if (event.entityPlayer.worldObj.isAirBlock(coordX, coordY, coordZ - 1)) {
-					allowToPlace = true;
-					coordZ--;
-				} else if (event.entityPlayer.worldObj.isAirBlock(coordX, coordY, coordZ + 1)) {
-					allowToPlace = true;
-					coordZ--;
-				} else if (event.entityPlayer.worldObj.isAirBlock(coordX, coordY + 1, coordZ)) {
-					allowToPlace = true;
-					coordY++;
-				}
-			}
+			World world = event.entityPlayer.worldObj;
+			allowToPlace =  canPlaceOnThatHeight(world, coordX, coordY, coordZ) ||
+							canPlaceOnThatHeight(world, coordX, coordY + 1, coordZ) ||
+							canPlaceOnThatHeight(world, coordX, coordY - 1, coordZ);
+					
 			if (allowToPlace) {
 				event.entityPlayer.worldObj.setBlock(coordX, coordY, coordZ, BlockManager.blockBones);
 				int p = MathHelper.floor_double((event.entityPlayer.rotationYaw * 4F) / 360F + 0.5D) & 3;
@@ -171,5 +153,21 @@ public class PlayerEventsHook {
 				event.drops.addAll(newDrop);
 			}
 		}
+	}
+	
+	private boolean canPlaceOnThatHeight(World world, int x, int y, int z) {
+		return  checkIfCanPlace(world, x, y, z) ||
+				checkIfCanPlace(world, x, y + 1, z) ||
+				checkIfCanPlace(world, x, y - 1, z) ||
+				checkIfCanPlace(world, x - 1, y, z) ||
+				checkIfCanPlace(world, x + 1, y, z) ||
+				checkIfCanPlace(world, x, y, z - 1) ||
+				checkIfCanPlace(world, x, y, z + 1) ||
+				checkIfCanPlace(world, x + 1, y, z + 1) ||
+				checkIfCanPlace(world, x - 1, y, z - 1);
+	}
+
+	private boolean checkIfCanPlace(World world, int x, int y, int z) {
+		return world.isAirBlock(x, y , z) || world.getBlock(x,y,z).isReplaceable(world, x, y, z);
 	}
 }
