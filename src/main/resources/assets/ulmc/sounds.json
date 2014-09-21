@@ -1,0 +1,15 @@
+{
+    "grinder.empty": {"category": "master","sounds": [{"name": "grinder/empty","stream": false}]},
+    "grinder.random": {"category": "master","sounds": [
+        {"name": "grinder/grinder1","stream": false},
+        {"name": "grinder/grinder2","stream": false}
+
+    ]},
+
+    "thief.enforce": {"category": "master","sounds": [{"name": "thief/enforce","stream": false}]},
+    "thief.picklock": {"category": "master","sounds": [
+        {"name": "thief/picklock1","stream": false},
+        {"name": "thief/picklock2","stream": false}]},
+    "thief.protector": {"category": "master","sounds": [{"name": "thief/protector","stream": false}]},
+    "thief.key": {"category": "master","sounds": [{"name": "thief/key","stream": false}]}
+}

@@ -5,27 +5,27 @@ package ru.ulmc.extender.config;
  */
 public class BaseModuleConfig {
 
-    public static final String FIELD_ENABLED = "isEnabled";
+	public static final String FIELD_ENABLED = "isEnabled";
 
-    protected boolean isEnabled;
-    protected String moduleName = "change this value";
+	protected boolean isEnabled;
+	protected String moduleName = "change this value";
 
-    public BaseModuleConfig(boolean isEnabled) {
-        this.isEnabled = isEnabled;
-    }
+	public BaseModuleConfig(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
 
-    public BaseModuleConfig() {
-    }
+	public BaseModuleConfig() {
+	}
 
-    public boolean isEnabled() {
-        return isEnabled;
-    }
+	public boolean isEnabled() {
+		return isEnabled;
+	}
 
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
-    }
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
 
-    public String getModuleName() {
-        return moduleName;
-    }
+	public String getModuleName() {
+		return moduleName;
+	}
 }

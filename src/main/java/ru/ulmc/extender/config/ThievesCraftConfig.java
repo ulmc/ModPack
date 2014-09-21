@@ -5,7 +5,7 @@ package ru.ulmc.extender.config;
  */
 public class ThievesCraftConfig extends BaseModuleConfig {
 
-    public ThievesCraftConfig() {
-        this.moduleName = "ThievesCraft";
-    }
+	public ThievesCraftConfig() {
+		this.moduleName = "ThievesCraft";
+	}
 }

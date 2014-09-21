@@ -27,25 +27,25 @@ import ru.ulmc.extender.Reference;
 
 public class BlockChair extends BasicStandingBlock {
 
-    @SuppressWarnings("rawtypes")
-    public BlockChair(Class entity, float aHardness, float aResistance,
-                      String aBlockName) {
-        super(Material.wood, entity, aBlockName);
-        anEntityClass = entity;
-        setHardness(aHardness);
-        setResistance(aResistance);
-        setStepSound(Block.soundTypeWood);
-        setCreativeTab(CreativeTabs.tabDecorations);
-        setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
-        setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 0.7F, 0.9F);
-    }
+	@SuppressWarnings("rawtypes")
+	public BlockChair(Class entity, float aHardness, float aResistance,
+	                  String aBlockName) {
+		super(Material.wood, entity, aBlockName);
+		anEntityClass = entity;
+		setHardness(aHardness);
+		setResistance(aResistance);
+		setStepSound(Block.soundTypeWood);
+		setCreativeTab(CreativeTabs.tabDecorations);
+		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
+		setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 0.7F, 0.9F);
+	}
 
-    @Override
-    public TileEntity getBlockEntity() {
-        try {
-            return (TileEntity) anEntityClass.newInstance();
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
-    }
+	@Override
+	public TileEntity getBlockEntity() {
+		try {
+			return (TileEntity) anEntityClass.newInstance();
+		} catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
 }

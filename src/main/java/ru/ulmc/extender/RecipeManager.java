@@ -1,47 +1,48 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 
 package ru.ulmc.extender;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import ru.ulmc.extender.config.ConfigurationHander;
+import ru.ulmc.extender.config.Config;
 import ru.ulmc.extender.item.ItemManager;
 import ru.ulmc.extender.proxy.CommonProxy;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecipeManager {
-	
+
 	private static void addShapeless(Item item, int quantity, Object... combination) {
 		GameRegistry.addShapelessRecipe(new ItemStack(item, quantity), combination);
 	}
-	
+
 	private static void addSmelting(Item item, int quantity, float xp, Item inputitem) {
 		GameRegistry.addSmelting(inputitem, new ItemStack(item, quantity), xp);
 	}
+
 	private static void addRecipe(Item item, int quantity, Object... objs) {
 		GameRegistry.addRecipe(new ItemStack(item, quantity), objs);
 	}
-	
+
 	private static void addRecipe(Item item, int quantity, int meta, Object... objs) {
 		GameRegistry.addRecipe(new ItemStack(item, quantity, meta), objs);
 	}
@@ -101,53 +102,53 @@ public class RecipeManager {
 		Item diamondGrindstone = ItemManager.getItem("diamondGrindstone");
 
 		addRecipe(woodenGrindstoneBlank, 1,
-				" x ", 
-				"xyx", 
-				" x ", 
+				" x ",
+				"xyx",
+				" x ",
 				'x', Blocks.planks,
 				'y', Items.stick);
 		addRecipe(ironGrindstoneBlank, 1,
-				" x ", 
-				"xyx", 
-				" x ", 
-				'x', Items.iron_ingot, 
+				" x ",
+				"xyx",
+				" x ",
+				'x', Items.iron_ingot,
 				'y', Items.stick);
 		addRecipe(coarseGrindstone, 1,
-				" x ", 
-				"xyx", 
-				" x ", 
-				'x', Blocks.stone, 
+				" x ",
+				"xyx",
+				" x ",
+				'x', Blocks.stone,
 				'y', woodenGrindstoneBlank);
 		addRecipe(enhancedGrindstone, 1,
-				" x ", 
-				"xyx", 
-				" x ", 
-				'x', obsidianBrick, 
+				" x ",
+				"xyx",
+				" x ",
+				'x', obsidianBrick,
 				'y', ironGrindstoneBlank);
 		addRecipe(diamondGrindstone, 1,
-				" x ", 
-				"xyx", 
-				" x ", 
-				'x', diamondDust, 
+				" x ",
+				"xyx",
+				" x ",
+				'x', diamondDust,
 				'y', ironGrindstoneBlank);
-		
+
 		addRecipe(diamondGrindstone, 1,
-				" x ", 
-				"xyx", 
-				" x ", 
-				'x', diamondDust, 
+				" x ",
+				"xyx",
+				" x ",
+				'x', diamondDust,
 				'y', ironGrindstoneBlank);
-		
+
 		addShapeless(diamondDust, 2, Items.diamond);
 		addShapeless(goldDust, 1, Items.gold_nugget, Items.gold_nugget, Items.gold_nugget, Items.gold_nugget);
-		
+
 		addShapeless(spool, 1, Items.string, Items.string, Items.string);
 		addShapeless(leatherStrap, 4, Items.leather);
 		addShapeless(fabricStrap, 1, spool, spool, spool);
-		addShapeless(fabricRoll, 1, fabricStrap, fabricStrap, fabricStrap, fabricStrap, fabricStrap, fabricStrap);		
+		addShapeless(fabricRoll, 1, fabricStrap, fabricStrap, fabricStrap, fabricStrap, fabricStrap, fabricStrap);
 		addShapeless(obsidianAlloyBlank, 1, Items.iron_ingot, obsidianBrick);
 		addShapeless(obsidianBrick, 2, Blocks.obsidian);
-		
+
 		// Соление/вяление		
 		addShapeless(jerkedBeef, 1, salt, Items.beef);
 		addShapeless(jerkedPork, 1, salt, Items.porkchop);
@@ -159,10 +160,10 @@ public class RecipeManager {
 		addSmelting(obsidianAlloyIngot, 1, 1, obsidianAlloyBlank);
 		addSmelting(lambFried, 1, 1, lambRawMeat);
 		addSmelting(salt, 8, 0.1F, Items.water_bucket);
-		
+
 		addSmelting(cementSack, 8, 0.3F, cementMix);
 		addSmelting(salt, 8, 0.1F, Items.water_bucket);
-		
+
 		addShapeless(goldSpool, 1, goldDust, spool);
 		addShapeless(diamondSpool, 1, diamondDust, spool);
 		addShapeless(goldFabricStrap, 1, goldSpool, goldSpool, goldSpool);
@@ -170,115 +171,115 @@ public class RecipeManager {
 		addShapeless(diamondFabricStrap, 1, diamondSpool, diamondSpool, diamondSpool);
 		addShapeless(diamondFabricRoll, 1, diamondFabricStrap, diamondFabricStrap, diamondFabricStrap, diamondFabricStrap, diamondFabricStrap, diamondFabricStrap);
 		addShapeless(chevron, 1, spool, fabricRoll, spool);
-		
+
 		addShapeless(chevronWithGoldThread, 1, goldSpool, fabricStrap, goldSpool);
 		addShapeless(chevronWithDiamondThread, 1, diamondSpool, fabricStrap, diamondSpool);
-		addShapeless(goldChevronWithGoldThread, 1,goldSpool, goldFabricStrap, goldSpool);
+		addShapeless(goldChevronWithGoldThread, 1, goldSpool, goldFabricStrap, goldSpool);
 		addShapeless(goldChevronWithDiamondThread, 1, diamondSpool, goldFabricStrap, diamondSpool);
 		addShapeless(diamondChevronWithDiamondThread, 1, diamondSpool, diamondFabricStrap, diamondSpool);
 		addShapeless(diamondChevronWithGoldThread, 1, goldSpool, diamondFabricStrap, goldSpool);
-		
+
 		addShapeless(medivalSymbol, 1, fabricStrap, spool, new ItemStack(Items.dye, 1, 11));
 		addShapeless(technoSymbol, 1, fabricStrap, spool, new ItemStack(Items.dye, 1, 1));
 
-        if(ConfigurationHander.tcConfig.isEnabled()) {
-            Item capsuleEmpty = ItemManager.getItem("capsuleEmpty");
-            Item capsuleAbsorber = ItemManager.getItem("capsuleAbsorber");
-            Item capsuleFirestarter = ItemManager.getItem("capsuleFirestarter");
-            Item capsuleLogger = ItemManager.getItem("capsuleLogger");
-            Item capsuleRedstone = ItemManager.getItem("capsuleRedstone");
-            Item capsuleShocker = ItemManager.getItem("capsuleShocker");
-            Item capsuleSiren = ItemManager.getItem("capsuleSiren");
-            Item capsuleAntipicklock = ItemManager.getItem("capsuleAntipicklock");
-            Item capsuleTNT = ItemManager.getItem("capsuleTNT");
+		if (Config.tcConfig.isEnabled()) {
+			Item capsuleEmpty = ItemManager.getItem("capsuleEmpty");
+			Item capsuleAbsorber = ItemManager.getItem("capsuleAbsorber");
+			Item capsuleFirestarter = ItemManager.getItem("capsuleFirestarter");
+			Item capsuleLogger = ItemManager.getItem("capsuleLogger");
+			Item capsuleRedstone = ItemManager.getItem("capsuleRedstone");
+			Item capsuleShocker = ItemManager.getItem("capsuleShocker");
+			Item capsuleSiren = ItemManager.getItem("capsuleSiren");
+			Item capsuleAntipicklock = ItemManager.getItem("capsuleAntipicklock");
+			Item capsuleTNT = ItemManager.getItem("capsuleTNT");
 
-            Item ironBlank = ItemManager.getItem("ironBlank");
-            Item ironKey = ItemManager.getItem("ironKey");
-            Item goldenKey = ItemManager.getItem("goldenKey");
-            Item diamondKey = ItemManager.getItem("diamondKey");
-            Item ironPicklock = ItemManager.getItem("ironPicklock");
-            Item goldenPicklock = ItemManager.getItem("goldenPicklock");
-            Item diamondPicklock = ItemManager.getItem("diamondPicklock");
+			Item ironBlank = ItemManager.getItem("ironBlank");
+			Item ironKey = ItemManager.getItem("ironKey");
+			Item goldenKey = ItemManager.getItem("goldenKey");
+			Item diamondKey = ItemManager.getItem("diamondKey");
+			Item ironPicklock = ItemManager.getItem("ironPicklock");
+			Item goldenPicklock = ItemManager.getItem("goldenPicklock");
+			Item diamondPicklock = ItemManager.getItem("diamondPicklock");
 
-            addRecipe(capsuleEmpty, 1,
-                    " y ",
-                    " x ",
-                    " y ",
-                    'x', Blocks.glass,
-                    'y', ironBlank);
+			addRecipe(capsuleEmpty, 1,
+					" y ",
+					" x ",
+					" y ",
+					'x', Blocks.glass,
+					'y', ironBlank);
 
-            addRecipe(capsuleAbsorber, 1,
-                    "zxz",
-                    "zyz",
-                    "zzz",
-                    'x', diamondDust,
-                    'z', goldDust,
-                    'y', capsuleEmpty);
+			addRecipe(capsuleAbsorber, 1,
+					"zxz",
+					"zyz",
+					"zzz",
+					'x', diamondDust,
+					'z', goldDust,
+					'y', capsuleEmpty);
 
-            addRecipe(capsuleFirestarter, 1,
-                    "zyz",
-                    "xyx",
-                    "xxx",
-                    'x', Items.blaze_powder,
-                    'z', Items.magma_cream,
-                    'y', capsuleEmpty);
+			addRecipe(capsuleFirestarter, 1,
+					"zyz",
+					"xyx",
+					"xxx",
+					'x', Items.blaze_powder,
+					'z', Items.magma_cream,
+					'y', capsuleEmpty);
 
-            addRecipe(capsuleLogger, 1,
-                    "xzx",
-                    "xyx",
-                    'x', goldDust,
-                    'z', Items.book,
-                    'y', capsuleEmpty);
+			addRecipe(capsuleLogger, 1,
+					"xzx",
+					"xyx",
+					'x', goldDust,
+					'z', Items.book,
+					'y', capsuleEmpty);
 
-            addRecipe(capsuleRedstone, 1,
-                    "xxx",
-                    "ryr",
-                    "xxx",
-                    'x', goldDust,
-                    'r', Items.redstone,
-                    'y', capsuleEmpty);
+			addRecipe(capsuleRedstone, 1,
+					"xxx",
+					"ryr",
+					"xxx",
+					'x', goldDust,
+					'r', Items.redstone,
+					'y', capsuleEmpty);
 
-            addRecipe(capsuleShocker, 1,
-                    "   ",
-                    "qyq",
-                    "rrr",
-                    'q', Items.quartz,
-                    'x', Items.redstone,
-                    'y', capsuleEmpty);
+			addRecipe(capsuleShocker, 1,
+					"   ",
+					"qyq",
+					"rrr",
+					'q', Items.quartz,
+					'x', Items.redstone,
+					'y', capsuleEmpty);
 
-            addRecipe(capsuleSiren, 1,
-                    " n ",
-                    "nyn",
-                    " n ",
-                    'n', Blocks.noteblock,
-                    'y', capsuleEmpty);
+			addRecipe(capsuleSiren, 1,
+					" n ",
+					"nyn",
+					" n ",
+					'n', Blocks.noteblock,
+					'y', capsuleEmpty);
 
-            addRecipe(capsuleAntipicklock, 1,
-                    "rxr",
-                    "byb",
-                    "rxr",
-                    'x', diamondDust,
-                    'b', Items.blaze_rod,
-                    'r', Items.redstone,
-                    'y', capsuleEmpty);
+			addRecipe(capsuleAntipicklock, 1,
+					"rxr",
+					"byb",
+					"rxr",
+					'x', diamondDust,
+					'b', Items.blaze_rod,
+					'r', Items.redstone,
+					'y', capsuleEmpty);
 
-            addRecipe(capsuleTNT, 1,
-                    "xxx",
-                    "ryr",
-                    "xxx",
-                    'r', Items.redstone,
-                    'x', Items.gunpowder,
-                    'y', capsuleEmpty);
+			addRecipe(capsuleTNT, 1,
+					"xxx",
+					"ryr",
+					"xxx",
+					'r', Items.redstone,
+					'x', Items.gunpowder,
+					'y', capsuleEmpty);
 
-            addShapeless(ironBlank, 4, Items.iron_ingot);
-            addShapeless(ironKey, 1, ironBlank);
-            addShapeless(goldenKey, 1, ironBlank, goldDust);
-            addShapeless(diamondKey, 1, ironBlank, diamondDust);
+			addShapeless(ironBlank, 4, Items.iron_ingot);
+			addShapeless(ironKey, 1, ironBlank);
+			addShapeless(goldenKey, 1, ironBlank, goldDust);
+			addShapeless(diamondKey, 1, ironBlank, diamondDust);
 
-            addShapeless(ironPicklock, 1, ironBlank, ironBlank);
-            addShapeless(goldenPicklock, 1, ironBlank, ironBlank, goldDust, goldDust);
-            addShapeless(diamondPicklock, 1, ironBlank, ironBlank, diamondDust, diamondDust);
-        }
+			addShapeless(ironPicklock, 1, ironBlank, ironBlank);
+			addShapeless(goldenPicklock, 1, ironBlank, ironBlank, goldDust, goldDust);
+			addShapeless(diamondPicklock, 1, ironBlank, ironBlank, diamondDust, diamondDust);
+		}
 
 
 		

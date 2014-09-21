@@ -1,54 +1,47 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.proxy;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import ru.ulmc.extender.UltimateSounds;
-import ru.ulmc.extender.gui.SurvivalGui;
-import ru.ulmc.extender.render.RenderBones;
-import ru.ulmc.extender.render.RenderCart;
-import ru.ulmc.extender.render.RenderFlags;
-import ru.ulmc.extender.render.RenderLockedChest;
-import ru.ulmc.extender.render.RenderTables;
-import ru.ulmc.extender.render.RenderChairs;
-import ru.ulmc.extender.tileentity.TileEntityBones;
-import ru.ulmc.extender.tileentity.TileEntityCart;
-import ru.ulmc.extender.tileentity.TileEntityChair;
-import ru.ulmc.extender.tileentity.TileEntityEliteChair;
-import ru.ulmc.extender.tileentity.TileEntityFlag;
-import ru.ulmc.extender.tileentity.TileEntityLockedChest;
-import ru.ulmc.extender.tileentity.TileEntityTable;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import ru.ulmc.extender.config.Config;
+import ru.ulmc.extender.gui.SurvivalGui;
+import ru.ulmc.extender.network.WarmPacket;
+import ru.ulmc.extender.render.*;
+import ru.ulmc.extender.tileentity.*;
 
 public class ClientProxy extends CommonProxy {
 	@Override
 	public void preInit() {
+		super.preInit();
 		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new UltimateSounds());
 		MinecraftForge.EVENT_BUS.register(new SurvivalGui());
+		WarmPacket.renderMultiplier = Config.getSurvivalFloat("thermal.multiplier.render");
+		SurvivalGui.setThermometerRenderPosition(Config.getSurvivalInt("thermal.gui.thermometer.x"),
+				Config.getSurvivalInt("thermal.gui.thermometer.y"));
 	}
 
 	@Override
@@ -80,8 +73,9 @@ public class ClientProxy extends CommonProxy {
 	public void prepareBlock(Block aBlock) {
 		GameRegistry.registerBlock(aBlock, aBlock.getUnlocalizedName());
 	}
+
 	@Override
-	public int getArmorPrefix(String name){
-    	return RenderingRegistry.addNewArmourRendererPrefix(name);
-    }
+	public int getArmorPrefix(String name) {
+		return RenderingRegistry.addNewArmourRendererPrefix(name);
+	}
 }

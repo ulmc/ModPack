@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.block;
 
@@ -120,12 +120,13 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		if (!par1World.isRemote) {
 			TileEntityLockedChest te = (TileEntityLockedChest) par1World.getTileEntity(x, y, z);
 
-			if (te.isPowered() != 0) {				
+			if (te.isPowered() != 0) {
 				te.setProvidingPower(false);
 				par1World.notifyBlocksOfNeighborChange(x, y, z, this);
 			}
 		}
 	}
+
 	@Override
 	public int tickRate(World par1World) {
 		return 20;
@@ -145,7 +146,7 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	 */
 	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
-			ItemStack par6ItemStack) {
+	                            ItemStack par6ItemStack) {
 		byte b0 = 0;
 		int l = MathHelper.floor_double(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
@@ -160,135 +161,135 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 		}
 
 		par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 2);
-		
+
 		if (par5EntityLivingBase instanceof EntityPlayer) {
 			TileEntityLockedChest chestTE = (TileEntityLockedChest) par1World.getTileEntity(par2, par3, par4);
-			
-			chestTE.setOwnerName(((EntityPlayer)par5EntityLivingBase).getDisplayName());
+
+			chestTE.setOwnerName(((EntityPlayer) par5EntityLivingBase).getDisplayName());
 		}
 	}
 
-	
+
 	/*
 	 * Called upon block activation (right click on the block.)
 	 */
 	@Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
-                                    float par8, float par9) {
-        if (player.isUsingItem()) {
-            return false;
-        }
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
+	                                float par8, float par9) {
+		if (player.isUsingItem()) {
+			return false;
+		}
 
-        TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getTileEntity(x, y, z);
-        ItemStack hold = player.inventory.getCurrentItem();
-        boolean isAllowToOpen = false;
-        boolean updateEntity = false;
-        //String failChatMessage = "It's locked!";
+		TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getTileEntity(x, y, z);
+		ItemStack hold = player.inventory.getCurrentItem();
+		boolean isAllowToOpen = false;
+		boolean updateEntity = false;
+		//String failChatMessage = "It's locked!";
 
-        if (player.capabilities.isCreativeMode) {
-            isAllowToOpen = true;
-        } else if (false) { //isOcelotBlockingChest(world, x, y, z)) {
-            isAllowToOpen = false;
-        } else if (player.getDisplayName() != null && player.getDisplayName().equals(lockedChestTE.getOwnerName())) {
-            isAllowToOpen = true;
-        } else if (!lockedChestTE.isChestProtected()) {
-            isAllowToOpen = true;
-            if (hold != null && (hold.getItem() instanceof ItemPicklock)) {
-                updateEntity = true;
-                lockedChestTE.enforceChest(player.getDisplayName());
-            }
-        } else {
-            if (hold == null) {
-                isAllowToOpen = false;
-                if (world.isRemote) {
-                    UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());
-                }
-            } else {
-                if (hold.getItem() instanceof ItemPicklock) {
-                    // Cooldown timeout
+		if (player.capabilities.isCreativeMode) {
+			isAllowToOpen = true;
+		} else if (false) { //isOcelotBlockingChest(world, x, y, z)) {
+			isAllowToOpen = false;
+		} else if (player.getDisplayName() != null && player.getDisplayName().equals(lockedChestTE.getOwnerName())) {
+			isAllowToOpen = true;
+		} else if (!lockedChestTE.isChestProtected()) {
+			isAllowToOpen = true;
+			if (hold != null && (hold.getItem() instanceof ItemPicklock)) {
+				updateEntity = true;
+				lockedChestTE.enforceChest(player.getDisplayName());
+			}
+		} else {
+			if (hold == null) {
+				isAllowToOpen = false;
+				if (world.isRemote) {
+					UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());
+				}
+			} else {
+				if (hold.getItem() instanceof ItemPicklock) {
+					// Cooldown timeout
 
-                    setWorkTimerForThief(hold, player, lockedChestTE);
-                    return false;
+					setWorkTimerForThief(hold, player, lockedChestTE);
+					return false;
 
-                } else if (lockedChestTE.isKeyAndCipherMatches(hold)) {
-                    isAllowToOpen = true;
-                } else {
-                    if (world.isRemote) {
-                        UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());
-                    }
-                }
-            }
-        }
-        if (isAllowToOpen) {
-            player.openGui(UltimateExtender.instance, GuiLockedChest.GUI_ID, world, x, y, z);
-        } else {
-            if (updateEntity) {
-                UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
-            }
-        }
-        return true;
-    }
+				} else if (lockedChestTE.isKeyAndCipherMatches(hold)) {
+					isAllowToOpen = true;
+				} else {
+					if (world.isRemote) {
+						UltimateExtender.spawnParticle(UParticle.LOCK, world, x + random.nextFloat(), y + 1.5f, z + random.nextFloat());
+					}
+				}
+			}
+		}
+		if (isAllowToOpen) {
+			player.openGui(UltimateExtender.instance, GuiLockedChest.GUI_ID, world, x, y, z);
+		} else {
+			if (updateEntity) {
+				UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
+			}
+		}
+		return true;
+	}
 
-    private void setWorkTimerForThief(ItemStack hold, EntityPlayer player, TileEntityLockedChest lockedChestTE) {
-        ItemPicklock picklock = (ItemPicklock) hold.getItem();
-        hold = picklock.onItemRightClick(hold, player.getEntityWorld(), player);
-        if(!player.getEntityWorld().isRemote) {
-            UltimateExtender.instance.getTimerManager().markUsingChest(player, hold, lockedChestTE);
-        }
+	private void setWorkTimerForThief(ItemStack hold, EntityPlayer player, TileEntityLockedChest lockedChestTE) {
+		ItemPicklock picklock = (ItemPicklock) hold.getItem();
+		hold = picklock.onItemRightClick(hold, player.getEntityWorld(), player);
+		if (!player.getEntityWorld().isRemote) {
+			UltimateExtender.instance.getTimerManager().markUsingChest(player, hold, lockedChestTE);
+		}
 
-    }
+	}
 
-    @Override
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
-        TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getTileEntity(x, y, z);
-        if (player.getDisplayName().equals(lockedChestTE.getOwnerName()) || player.capabilities.isCreativeMode) {
-            this.dropBlockAsItem(world, x, y, z, 1, 0);
-            return world.setBlockToAir(x, y, z);
-        } else {
-            return false;
-        }
-    }
+	@Override
+	public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest) {
+		TileEntityLockedChest lockedChestTE = (TileEntityLockedChest) world.getTileEntity(x, y, z);
+		if (player.getDisplayName().equals(lockedChestTE.getOwnerName()) || player.capabilities.isCreativeMode) {
+			this.dropBlockAsItem(world, x, y, z, 1, 0);
+			return world.setBlockToAir(x, y, z);
+		} else {
+			return false;
+		}
+	}
 
-    @Override
-    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6) {
-        TileEntityLockedChest chestTE = (TileEntityLockedChest) par1World.getTileEntity(par2, par3, par4);
+	@Override
+	public void breakBlock(World par1World, int x, int y, int z, Block par5, int par6) {
+		TileEntityLockedChest chestTE = (TileEntityLockedChest) par1World.getTileEntity(x, y, z);
 
-        if (chestTE != null) {
-            for (int j1 = 0; j1 < chestTE.getSizeInventory(); ++j1) {
-                ItemStack itemstack = chestTE.getStackInSlot(j1);
+		if (chestTE != null) {
+			for (int j1 = 0; j1 < chestTE.getSizeInventory(); ++j1) {
+				ItemStack itemstack = chestTE.getStackInSlot(j1);
 
-                if (itemstack != null) {
-                    float f = this.random.nextFloat() * 0.8F + 0.1F;
-                    float f1 = this.random.nextFloat() * 0.8F + 0.1F;
-                    EntityItem entityitem;
+				if (itemstack != null) {
+					float f = this.random.nextFloat() * 0.8F + 0.1F;
+					float f1 = this.random.nextFloat() * 0.8F + 0.1F;
+					EntityItem entityitem;
 
-                    for (float f2 = this.random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World.spawnEntityInWorld(entityitem)) {
-                        int k1 = this.random.nextInt(21) + 10;
+					for (float f2 = this.random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World.spawnEntityInWorld(entityitem)) {
+						int k1 = this.random.nextInt(21) + 10;
 
-                        if (k1 > itemstack.stackSize) {
-                            k1 = itemstack.stackSize;
-                        }
+						if (k1 > itemstack.stackSize) {
+							k1 = itemstack.stackSize;
+						}
 
-                        itemstack.stackSize -= k1;
-                        entityitem = new EntityItem(par1World, par2 + f, par3 + f1, par4 + f2, new ItemStack(itemstack.getItem(), k1, itemstack.getItemDamage()));
-                        float f3 = 0.05F;
-                        entityitem.motionX = (float) this.random.nextGaussian() * f3;
-                        entityitem.motionY = (float) this.random.nextGaussian() * f3 + 0.2F;
-                        entityitem.motionZ = (float) this.random.nextGaussian() * f3;
+						itemstack.stackSize -= k1;
+						entityitem = new EntityItem(par1World, x + f, y + f1, z + f2, new ItemStack(itemstack.getItem(), k1, itemstack.getItemDamage()));
+						float f3 = 0.05F;
+						entityitem.motionX = (float) this.random.nextGaussian() * f3;
+						entityitem.motionY = (float) this.random.nextGaussian() * f3 + 0.2F;
+						entityitem.motionZ = (float) this.random.nextGaussian() * f3;
 
-                        if (itemstack.hasTagCompound()) {
-                            entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
-                        }
-                    }
-                }
-            }
-            par1World.setBlock(par2, par3, par4, par5);
-        }
+						if (itemstack.hasTagCompound()) {
+							entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+						}
+					}
+				}
+			}
+			par1World.setBlockToAir(x, y, z);
+		}
 
-        super.breakBlock(par1World, par2, par3, par4, par5, par6);
-    }
+		super.breakBlock(par1World, x, y, z, par5, par6);
+	}
 
-    /**
+	/**
 	 * Returns a new instance of a block's tile entity class. Called on placing
 	 * the block.
 	 */
@@ -321,7 +322,6 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 
 		return true;
 	}*/
-
 	@SideOnly(Side.CLIENT)
 	/**
 	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
@@ -344,7 +344,5 @@ public class BlockLockedChest extends BlockContainer implements UlmcBlock {
 	public String getSystemName() {
 		return name;
 	}
-
-	
 
 }

@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.item;
 
@@ -36,27 +36,19 @@ import java.util.List;
 
 public class ItemKey extends Item implements Grindable, UItem {
 
-	private int securityLevel = 0;
 	public IIcon placeholder;
-    private String clearItemName;
+	private int securityLevel = 0;
+	private String clearItemName;
 
 	public ItemKey(String unlocalizedName, int securityLevel, int maxDamage) {
 		super();
 		setUnlocalizedName(unlocalizedName);
-        clearItemName = unlocalizedName;
+		clearItemName = unlocalizedName;
 		setTextureName(Reference.RES_NAME + unlocalizedName);
 		setCreativeTab(CreativeTabs.tabTools);
 		this.securityLevel = securityLevel;
 		maxStackSize = 1;
 		this.setMaxDamage(maxDamage);
-	}
-
-
-
-	@Override
-	public void registerIcons(IIconRegister par1IconRegister) {
-		super.registerIcons(par1IconRegister);
-		this.placeholder = par1IconRegister.registerIcon(Reference.RES_NAME + "placeholderKey");
 	}
 
 	public static void setRandomCipher(ItemStack stack) {
@@ -91,46 +83,7 @@ public class ItemKey extends Item implements Grindable, UItem {
 			target.setTagCompound(new NBTTagCompound());
 			tag = target.getTagCompound();
 		}
-		tag.setInteger("cipher", source.stackTagCompound.getInteger("cipher"));		
-	}
-
-	/*
-	 * @SideOnly(Side.CLIENT)
-	 * 
-	 * @Override public int getColorFromItemStack(ItemStack stack, int par2) {
-	 * NBTTagCompound tag = stack.getTagCompound(); if(tag == null) { return
-	 * 1454545; } return tag.getInteger("cipher"); }
-	 */
-	@Override
-	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-		itemStack.stackTagCompound = new NBTTagCompound();
-		itemStack.stackTagCompound.setInteger("cipher", -1);
-		itemStack.stackTagCompound.setFloat("bonus", 0.0F);
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
-		if (itemStack.stackTagCompound == null) {
-			createNBT(itemStack);
-		}
-		int cipher = itemStack.stackTagCompound.getInteger("cipher");
-		float bonus = itemStack.stackTagCompound.getFloat("bonus");
-		if (cipher > 0) {
-			list.add(EnumChatFormatting.DARK_GREEN +  UltimateExtender.loc("tc.keyStatus.encrypted"));
-		} else {
-			list.add(EnumChatFormatting.RED + UltimateExtender.loc("tc.keyStatus.blank"));
-		}	
-		if (bonus == 0) {
-			list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.common"));
-		} else if(bonus < 1) {
-			list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.simple"));
-		} else if(bonus < 2) {
-			list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.good"));
-		} else if(bonus > 2) {
-			list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.epic"));
-		}
-
+		tag.setInteger("cipher", source.stackTagCompound.getInteger("cipher"));
 	}
 
 	public static void createNBT(ItemStack itemStack) {
@@ -156,6 +109,51 @@ public class ItemKey extends Item implements Grindable, UItem {
 		return hold.stackTagCompound.getInteger("cipher");
 	}
 
+	@Override
+	public void registerIcons(IIconRegister par1IconRegister) {
+		super.registerIcons(par1IconRegister);
+		this.placeholder = par1IconRegister.registerIcon(Reference.RES_NAME + "placeholderKey");
+	}
+
+	/*
+	 * @SideOnly(Side.CLIENT)
+	 *
+	 * @Override public int getColorFromItemStack(ItemStack stack, int par2) {
+	 * NBTTagCompound tag = stack.getTagCompound(); if(tag == null) { return
+	 * 1454545; } return tag.getInteger("cipher"); }
+	 */
+	@Override
+	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
+		itemStack.stackTagCompound = new NBTTagCompound();
+		itemStack.stackTagCompound.setInteger("cipher", -1);
+		itemStack.stackTagCompound.setFloat("bonus", 0.0F);
+	}
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	@Override
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4) {
+		if (itemStack.stackTagCompound == null) {
+			createNBT(itemStack);
+		}
+		int cipher = itemStack.stackTagCompound.getInteger("cipher");
+		float bonus = itemStack.stackTagCompound.getFloat("bonus");
+		if (cipher > 0) {
+			list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.keyStatus.encrypted"));
+		} else {
+			list.add(EnumChatFormatting.RED + UltimateExtender.loc("tc.keyStatus.blank"));
+		}
+		if (bonus == 0) {
+			list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.common"));
+		} else if (bonus < 1) {
+			list.add(EnumChatFormatting.DARK_GREEN + UltimateExtender.loc("tc.itemStatus.simple"));
+		} else if (bonus < 2) {
+			list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.good"));
+		} else if (bonus > 2) {
+			list.add(EnumChatFormatting.GREEN + UltimateExtender.loc("tc.itemStatus.epic"));
+		}
+
+	}
+
 	/*
 	 * @SideOnly(Side.CLIENT)
 	 * 
@@ -171,26 +169,26 @@ public class ItemKey extends Item implements Grindable, UItem {
 		boolean damageGinder = false;
 		if (example != null && example.getItem() instanceof ItemKey) {
 			ItemKey.cloneCipher(example, hold);
-			if(grindStone.isGoodEnoughForRenaming()) {
+			if (grindStone.isGoodEnoughForRenaming()) {
 				hold.setStackDisplayName(example.getDisplayName());
 			}
 			damageGinder = true;
 		} else if (example == null) {
 			ItemKey.setRandomCipher(hold);
 			damageGinder = true;
-			if(grindStone.isGoodEnoughForRenaming()) {
+			if (grindStone.isGoodEnoughForRenaming()) {
 				hold.setStackDisplayName(UltimateExtender.concat(
 						StatCollector.translateToLocal(hold.getItem().getUnlocalizedName().concat(".name")),
 						" (", player.getDisplayName(), ")"
-						));
+				));
 			}
 		}
 		ItemKey.setBonus(hold, grindStone.getRandomBuff());
 		return damageGinder;
 	}
 
-    @Override
-    public String getClearItemName() {
-        return clearItemName;
-    }
+	@Override
+	public String getClearItemName() {
+		return clearItemName;
+	}
 }

@@ -1,27 +1,23 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.tileentity;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,32 +32,41 @@ import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockLockedChest;
 import ru.ulmc.extender.container.ContainerLockedChest;
-import ru.ulmc.extender.item.*;
-import ru.ulmc.extender.render.particle.UParticle;
+import ru.ulmc.extender.item.ItemKey;
+import ru.ulmc.extender.item.ItemLockProbe;
+import ru.ulmc.extender.item.ItemLockProtector;
+import ru.ulmc.extender.item.ItemPicklock;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class TileEntityLockedChest extends ExtendedTileEntity implements IInventory {
-	public static final int PICKLOCKING_FAILED = 0; 
-	public static final int PICKLOCKING_SUCCESSED = 1; 
-	public static final int PICKLOCKING_KEY_DAMAGED = 2; 
-	public static final int PICKLOCKING_PROTECTOR = 3; 
+	public static final int PICKLOCKING_FAILED = 0;
+	public static final int PICKLOCKING_SUCCESSED = 1;
+	public static final int PICKLOCKING_KEY_DAMAGED = 2;
+	public static final int PICKLOCKING_PROTECTOR = 3;
+	private static Random random = new Random();
+	/**
+	 * The current angle of the lid (between 0 and 1)
+	 */
+	public float lidAngle;
+	/**
+	 * The angle of the lid last tick
+	 */
+	public float prevLidAngle;
+	/**
+	 * The number of players currently using this chest
+	 */
+	public int numUsingPlayers;
+	public int isPowered;
 	private ItemStack[] inv = new ItemStack[38];
 	private int filledSlots;
 	private String ownerName;
 	private int chestType;
-    private static Random random = new Random();
-
-	/** The current angle of the lid (between 0 and 1) */
-	public float lidAngle;
-
-	/** The angle of the lid last tick */
-	public float prevLidAngle;
-
-	/** The number of players currently using this chest */
-	public int numUsingPlayers;
-	
-	public int isPowered;
-
-	/** Server sync counter (once per 20 ticks) */
+	/**
+	 * Server sync counter (once per 20 ticks)
+	 */
 	private int ticksSinceSync;
 
 	public TileEntityLockedChest(int chestType, Block block) {
@@ -70,42 +75,42 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	}
 
 	public TileEntityLockedChest() {
-		
-		
+
+
 	}
 
-    public void doWork(ItemStack hold, EntityPlayer player) {
-        if (hold.getItem() instanceof ItemLockProbe) {
-            this.tryToProbeChest(hold, player);
-        } else if (hold.getItem() instanceof ItemPicklock) {
-            boolean updateEntity = false;
-            int x = this.xCoord;
-            int z = this.zCoord;
-            int y = this.yCoord;
-            int picklockingStatus = this.tryToEnforceChest(hold, player);
-            if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
-                updateEntity = true;
-                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.enforce"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-            } else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
-                //updateEntity = true; if some effects will realised
-                //this.getWorldObj().spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                //failChatMessage = "Key was damaged!";
-            } else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
-                //updateEntity = true; if some effects will realised
-               // this.getWorldObj().spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                //failChatMessage = "Protector Tratata";
-            } else {
-               // this.getWorldObj().spawnParticle("spell", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
-                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                //failChatMessage = "picklocking failed!";
-            }
-            if (updateEntity) {
-                UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
-            }
-        }
-    }
+	public void doWork(ItemStack hold, EntityPlayer player) {
+		if (hold.getItem() instanceof ItemLockProbe) {
+			this.tryToProbeChest(hold, player);
+		} else if (hold.getItem() instanceof ItemPicklock) {
+			boolean updateEntity = false;
+			int x = this.xCoord;
+			int z = this.zCoord;
+			int y = this.yCoord;
+			int picklockingStatus = this.tryToEnforceChest(hold, player);
+			if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_SUCCESSED) {
+				updateEntity = true;
+				this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.enforce"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+			} else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_KEY_DAMAGED) {
+				//updateEntity = true; if some effects will realised
+				//this.getWorldObj().spawnParticle("crit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+				this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+				//failChatMessage = "Key was damaged!";
+			} else if (picklockingStatus == TileEntityLockedChest.PICKLOCKING_PROTECTOR) {
+				//updateEntity = true; if some effects will realised
+				// this.getWorldObj().spawnParticle("magicCrit", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+				this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+				//failChatMessage = "Protector Tratata";
+			} else {
+				// this.getWorldObj().spawnParticle("spell", x + random.nextFloat(), y + 1.1, z + random.nextFloat(), 0, 0, 0);
+				this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+				//failChatMessage = "picklocking failed!";
+			}
+			if (updateEntity) {
+				UltimateExtender.markSomeBlockForUpdate(player.worldObj, x, y, z);
+			}
+		}
+	}
 
 	public boolean isKeyAndCipherMatches(ItemStack cipher) {
 		ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
@@ -121,64 +126,64 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		return false;
 	}
 
-    public void tryToProbeChest(ItemStack lockProbe, EntityPlayer player) {
-        World world = player.getEntityWorld();
-        ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
-        ItemStack protectorStack = inv[ContainerLockedChest.PROTECTOR_SLOT_ID];
+	public void tryToProbeChest(ItemStack lockProbe, EntityPlayer player) {
+		World world = player.getEntityWorld();
+		ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
+		ItemStack protectorStack = inv[ContainerLockedChest.PROTECTOR_SLOT_ID];
 
-        boolean passToProtector;
-        ItemLockProtector protector;
+		boolean passToProtector;
+		ItemLockProtector protector;
 
-        if(protectorStack == null || !(protectorStack.getItem() instanceof ItemLockProtector)) {
-            passToProtector = false;
-            protector = null;
-        } else {
-            passToProtector = true;
-            protector = (ItemLockProtector)protectorStack.getItem();
-        }
-        ItemKey keyItem = (ItemKey) key.getItem();
-        int keyLevel = keyItem.getSecurityLevel();
-        float keyBonus = ItemKey.getBonus(key);
-        float lockProbeBonus = ItemLockProbe.getBonus(lockProbe);
-        int lockProbeLevel = ((ItemLockProbe)lockProbe.getItem()).getSecurityLevel();
-        double chance = 2;
-        double multiplier = ((lockProbeLevel + lockProbeBonus) / (keyLevel + keyBonus));
-        double minRequried = 0.33F * multiplier;
-        boolean continueProbing = !passToProtector;
-        float startX = xCoord + 0.5f;
-        float startY = yCoord + 0.9f;
-        float startZ = zCoord + 0.5f;
-        if(passToProtector) {
-            if(protector.onProbingChance(this, player, lockProbe) != PICKLOCKING_PROTECTOR) {
-                continueProbing = true;
-                chance = Math.random();
-            } else {
-                world.spawnParticle("magicCrit", startX, startY + 0.5f, startZ, 0, 0, 0);
-                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-            }
-        } else {
-            chance = Math.random();
-        }
+		if (protectorStack == null || !(protectorStack.getItem() instanceof ItemLockProtector)) {
+			passToProtector = false;
+			protector = null;
+		} else {
+			passToProtector = true;
+			protector = (ItemLockProtector) protectorStack.getItem();
+		}
+		ItemKey keyItem = (ItemKey) key.getItem();
+		int keyLevel = keyItem.getSecurityLevel();
+		float keyBonus = ItemKey.getBonus(key);
+		float lockProbeBonus = ItemLockProbe.getBonus(lockProbe);
+		int lockProbeLevel = ((ItemLockProbe) lockProbe.getItem()).getSecurityLevel();
+		double chance = 2;
+		double multiplier = ((lockProbeLevel + lockProbeBonus) / (keyLevel + keyBonus));
+		double minRequried = 0.33F * multiplier;
+		boolean continueProbing = !passToProtector;
+		float startX = xCoord + 0.5f;
+		float startY = yCoord + 0.9f;
+		float startZ = zCoord + 0.5f;
+		if (passToProtector) {
+			if (protector.onProbingChance(this, player, lockProbe) != PICKLOCKING_PROTECTOR) {
+				continueProbing = true;
+				chance = Math.random();
+			} else {
+				world.spawnParticle("magicCrit", startX, startY + 0.5f, startZ, 0, 0, 0);
+				this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.protector"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+			}
+		} else {
+			chance = Math.random();
+		}
 
-        //UltimateExtender.logger.info("Gotcha! " + protector.getClearItemName() + " " + chance + " " + passToProtector + " " + continueProbing + " " + minRequried + " " + multiplier);
-        if (continueProbing && chance < minRequried) {
-            double informationType = Math.random();
-            if(informationType < 0.25F && protector != null) {
-               // if(world.isRemote) {
-                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                    UltimateExtender.spawnParticle(protector.getClearItemName(), world, startX, startY, startZ);
-              //  }
-            } else if(informationType < 0.50F) {
-               // if(world.isRemote) {
-                this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-                    UltimateExtender.spawnParticle(keyItem.getClearItemName(), world, startX, startY, startZ);
-              //  }
-            }
-        } else {
-            world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
-        }
-        //UltimateExtender.spawnParticle(UParticle.TEST, player.getEntityWorld(), this.xCoord + 0.5f,  this.yCoord + 0.9f,  this.zCoord + 0.5f);
-    }
+		//UltimateExtender.logger.info("Gotcha! " + protector.getClearItemName() + " " + chance + " " + passToProtector + " " + continueProbing + " " + minRequried + " " + multiplier);
+		if (continueProbing && chance < minRequried) {
+			double informationType = Math.random();
+			if (informationType < 0.25F && protector != null) {
+				// if(world.isRemote) {
+				this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+				UltimateExtender.spawnParticle(protector.getClearItemName(), world, startX, startY, startZ);
+				//  }
+			} else if (informationType < 0.50F) {
+				// if(world.isRemote) {
+				this.getWorldObj().playSoundAtEntity(player, Reference.RES_NAME.concat("thief.key"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+				UltimateExtender.spawnParticle(keyItem.getClearItemName(), world, startX, startY, startZ);
+				//  }
+			}
+		} else {
+			world.playSoundAtEntity(player, Reference.RES_NAME.concat("thief.picklock"), 1.3f - random.nextFloat(), 1.0f + random.nextFloat() / 5);
+		}
+		//UltimateExtender.spawnParticle(UParticle.TEST, player.getEntityWorld(), this.xCoord + 0.5f,  this.yCoord + 0.9f,  this.zCoord + 0.5f);
+	}
 
 	public int tryToEnforceChest(ItemStack picklock, EntityPlayer player) {
 		ItemStack key = inv[ContainerLockedChest.KEY_SLOT_ID];
@@ -186,22 +191,22 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		boolean passToProtector;
 		ItemLockProtector protector;
 
-		if(protectorStack == null || !(protectorStack.getItem() instanceof ItemLockProtector)) {
+		if (protectorStack == null || !(protectorStack.getItem() instanceof ItemLockProtector)) {
 			passToProtector = false;
 			protector = null;
 		} else {
 			passToProtector = true;
-			protector = (ItemLockProtector)protectorStack.getItem();
+			protector = (ItemLockProtector) protectorStack.getItem();
 		}
-		
+
 		if (picklock == null) {
 			return PICKLOCKING_FAILED;
 		}
-		
+
 		if (key == null) {
 			enforceChest(player.getDisplayName());
 			return PICKLOCKING_SUCCESSED;
-		} else if (!(picklock.getItem() instanceof ItemPicklock)) {			
+		} else if (!(picklock.getItem() instanceof ItemPicklock)) {
 			return PICKLOCKING_FAILED;
 		} else {
 			int keyLevel = ((ItemKey) key.getItem()).getSecurityLevel();
@@ -210,7 +215,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			float picklockBonus = ItemPicklock.getBonus(picklock);
 
 			double multiplier = ((picklockLevel + picklockBonus) / (keyLevel + keyBonus));
-			
+
 			double minRequried = 0.01D * multiplier;
 			double damageRequried = 0.06D * multiplier;
 
@@ -219,31 +224,31 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			/*UltimateExtender.logger.info("minRequried: " + minRequried + " chance:" + chance
 					+ "picklockLevel, picklockBonus: " + picklockLevel + " : " + picklockBonus + "keyLevel, keyBonus: "
 					+ keyLevel + " : " + keyBonus + " | multiplier = " + multiplier);*/
-			if (chance < minRequried) {				
-				if(passToProtector) {
+			if (chance < minRequried) {
+				if (passToProtector) {
 					int result = protector.onEnforce(this, player, picklock);
-					if(result == PICKLOCKING_SUCCESSED) {
+					if (result == PICKLOCKING_SUCCESSED) {
 						enforceChest(player.getDisplayName());
-						picklock.damageItem(1, player);						
-					} 
+						picklock.damageItem(1, player);
+					}
 					return result;
 				}
 				enforceChest(player.getDisplayName());
 				return PICKLOCKING_SUCCESSED;
-				
+
 			} else {
-				chance =  Math.random();
+				chance = Math.random();
 				if (chance < damageRequried) {
 					damageKey();
 					//UltimateExtender.logger.info("DAMAGE! damageRequried: " + damageRequried + " chance:" + chance + " | multiplier = " + multiplier);
-					if(passToProtector) {			
+					if (passToProtector) {
 						picklock.damageItem(1, player);
 						return protector.onKeyDamage(this, player, picklock);
 					}
 					picklock.damageItem(1, player);
 					return PICKLOCKING_KEY_DAMAGED;
 				} else {
-					if(passToProtector) {
+					if (passToProtector) {
 						picklock.damageItem(1, player);
 						return protector.onPicklockFail(this, player, picklock);
 					}
@@ -261,7 +266,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			inv[ContainerLockedChest.KEY_SLOT_ID] = null;
 		}
 	}
-	
+
 	public void damageProtector() {
 		ItemStack protector = getCurrentProtector();
 		protector.setItemDamage(protector.getItemDamage() + 1);
@@ -269,27 +274,29 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			inv[ContainerLockedChest.PROTECTOR_SLOT_ID] = null;
 		}
 	}
-	
+
 	public void setProvidingPower(boolean isIt) {
-		if(isIt) {
+		if (isIt) {
 			isPowered = 15;
 		} else {
 			isPowered = 0;
 		}
-		
+
 	}
+
 	public int isPowered() {
 		return isPowered;
 	}
-	
-	
+
+
 	public void destroyProtector() {
 		inv[ContainerLockedChest.PROTECTOR_SLOT_ID] = null;
 	}
-	
+
 	public ItemStack getCurrentKey() {
 		return inv[ContainerLockedChest.KEY_SLOT_ID];
 	}
+
 	public ItemStack getCurrentProtector() {
 		return inv[ContainerLockedChest.PROTECTOR_SLOT_ID];
 	}
@@ -352,7 +359,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		this.filledSlots = 0;
-		NBTTagList tagList = tagCompound.getTagList("Inventory", 0);
+		NBTTagList tagList = tagCompound.getTagList("Inventory", Reference.NBT_TAG_LIST_ID);
 		for (int i = 0; i < tagList.tagCount(); i++) {
 			NBTTagCompound tag = (NBTTagCompound) tagList.getCompoundTagAt(i);
 			byte slot = tag.getByte("Slot");
@@ -398,12 +405,12 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 		return "tco.tileentitylockedchest";
 	}
 
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
+	@Override
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
 
-    @Override
+	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		// TODO Auto-generated method stub
 		return false;
@@ -433,7 +440,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	 * inside its implementation.
 	 */
 	@Override
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({"rawtypes"})
 	public void updateEntity() {
 		super.updateEntity();
 		++this.ticksSinceSync;
@@ -445,10 +452,10 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			f = 5.0F;
 			List list = this.worldObj.getEntitiesWithinAABB(
 					EntityPlayer.class,
-                    AxisAlignedBB.getBoundingBox(this.xCoord - f,
-                            this.yCoord - f, this.zCoord - f,
-                            this.xCoord + 1 + f, this.yCoord + 1 + f,
-                            this.zCoord + 1 + f));
+					AxisAlignedBB.getBoundingBox(this.xCoord - f,
+							this.yCoord - f, this.zCoord - f,
+							this.xCoord + 1 + f, this.yCoord + 1 + f,
+							this.zCoord + 1 + f));
 			Iterator iterator = list.iterator();
 
 			while (iterator.hasNext()) {
@@ -558,6 +565,7 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 	public ItemStack getStackInSlot(int slot) {
 		return inv[slot];
 	}
+
 	/**
 	 * Warning! this method is destroying all content of a chest
 	 */
@@ -566,5 +574,5 @@ public class TileEntityLockedChest extends ExtendedTileEntity implements IInvent
 			inv[i] = null;
 		}
 	}
-	
+
 }

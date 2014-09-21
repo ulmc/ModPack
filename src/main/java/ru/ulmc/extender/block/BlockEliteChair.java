@@ -19,31 +19,31 @@
  */
 package ru.ulmc.extender.block;
 
-import ru.ulmc.extender.tileentity.TileEntityEliteChair;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import ru.ulmc.extender.tileentity.TileEntityEliteChair;
 
 public class BlockEliteChair extends BlockChair {
-    private Class anEntityClass;
+	private Class anEntityClass;
 
-    public BlockEliteChair(Class class1, float aHardness, float aResistance, String aBlockName) {
-        super(class1, aHardness, aResistance, aBlockName);
-        anEntityClass = class1;
-    }
+	public BlockEliteChair(Class class1, float aHardness, float aResistance, String aBlockName) {
+		super(class1, aHardness, aResistance, aBlockName);
+		anEntityClass = class1;
+	}
 
-    @Override
-    public TileEntity getBlockEntity() {
-        try {
-            return (TileEntity) anEntityClass.newInstance();
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
-    }
+	@Override
+	public TileEntity getBlockEntity() {
+		try {
+			return (TileEntity) anEntityClass.newInstance();
+		} catch (Exception exception) {
+			throw new RuntimeException(exception);
+		}
+	}
 
-    @Override
-    public TileEntity createNewTileEntity(World var1, int meta) {
-        TileEntityEliteChair tileEntityEliteChair = new TileEntityEliteChair();
-        /*tileEntityEliteChair.setType(itemDrop.getType());*/
-        return tileEntityEliteChair;
-    }
+	@Override
+	public TileEntity createNewTileEntity(World var1, int meta) {
+		TileEntityEliteChair tileEntityEliteChair = new TileEntityEliteChair();
+		/*tileEntityEliteChair.setType(itemDrop.getType());*/
+		return tileEntityEliteChair;
+	}
 }

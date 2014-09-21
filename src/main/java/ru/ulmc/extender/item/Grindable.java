@@ -5,10 +5,9 @@ import net.minecraft.item.ItemStack;
 
 public interface Grindable {
 	/**
-	 * 
 	 * @param player
 	 * @param grinder - GrindStone installed
-	 * @param hold - Item Player holds
+	 * @param hold    - Item Player holds
 	 * @param example - Item placed in second grinders slot
 	 * @return
 	 */

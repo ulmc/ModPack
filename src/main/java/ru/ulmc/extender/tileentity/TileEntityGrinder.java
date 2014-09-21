@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.tileentity;
 
@@ -24,6 +24,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.container.ContainerGrinder;
 import ru.ulmc.extender.item.Grindable;
@@ -37,20 +38,20 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 	}
 
 	public boolean grindItem(EntityPlayer player) {
-		ItemStack grinder 		= getGrinder();
-		ItemStack hold			= player.inventory.getCurrentItem();
-		
-		if (grinder == null || hold == null || !(grinder.getItem() instanceof ItemGrind) 
+		ItemStack grinder = getGrinder();
+		ItemStack hold = player.inventory.getCurrentItem();
+
+		if (grinder == null || hold == null || !(grinder.getItem() instanceof ItemGrind)
 				|| !(hold.getItem() instanceof Grindable)) {
 			return false;
-		}		
-		Grindable item = (Grindable)hold.getItem();
+		}
+		Grindable item = (Grindable) hold.getItem();
 
-		if (item.grindItem(player, grinder, hold, getExample())) {			
+		if (item.grindItem(player, grinder, hold, getExample())) {
 			damageGrinder(grinder);
 			return true;
-			
-		} 
+
+		}
 		return false;
 	}
 
@@ -61,7 +62,7 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 	private ItemStack getGrinder() {
 		return inv[ContainerGrinder.GRIND_SLOT_ID];
 	}
-	
+
 	public boolean isGrinderSetup() {
 		return !(inv[ContainerGrinder.GRIND_SLOT_ID] == null);
 	}
@@ -114,20 +115,20 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 				&& player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
 	}
 
-    @Override
-    public void openInventory() {
+	@Override
+	public void openInventory() {
 
-    }
+	}
 
-    @Override
-    public void closeInventory() {
+	@Override
+	public void closeInventory() {
 
-    }
+	}
 
-    @Override
+	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		NBTTagList tagList = tagCompound.getTagList("Inventory", 0);
+		NBTTagList tagList = tagCompound.getTagList("Inventory", Reference.NBT_TAG_LIST_ID);
 		for (int i = 0; i < tagList.tagCount(); i++) {
 			NBTTagCompound tag = (NBTTagCompound) tagList.getCompoundTagAt(i);
 			byte slot = tag.getByte("Slot");
@@ -153,18 +154,18 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 		tagCompound.setTag("Inventory", itemList);
 	}
 
-    @Override
-    public String getInventoryName() {
-        return "tco.tileentitylockedchest";
-    }
+	@Override
+	public String getInventoryName() {
+		return "tco.tileentitylockedchest";
+	}
 
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
+	@Override
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
 
 
-    @Override
+	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		// TODO Auto-generated method stub
 		return false;

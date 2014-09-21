@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.container;
 
@@ -34,7 +34,7 @@ public class ContainerBones extends Container {
 	protected int inLine = 9;
 	protected int totalItems = 18;
 	protected int playerInventoryOffset = 9;
-	
+
 
 	public ContainerBones(InventoryPlayer inventoryPlayer, TileEntityBones te) {
 		tileEntity = te;
@@ -46,7 +46,7 @@ public class ContainerBones extends Container {
 			}
 		}
 
-		bindPlayerInventory(inventoryPlayer); 
+		bindPlayerInventory(inventoryPlayer);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class ContainerBones extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
-		
+
 		// null checks and checks if the item can be stacked (maxStackSize > 1)
 		if (slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
@@ -99,11 +99,12 @@ public class ContainerBones extends Container {
 		}
 		return stack;
 	}
+
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		
+
 		UltimateExtender.markSomeBlockForUpdate(player.worldObj, tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
-		
+
 	}
 }

@@ -1,25 +1,23 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.block;
-
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -33,27 +31,47 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.config.StringsConfig;
 import ru.ulmc.extender.entity.item.EntityFallingBlock;
+
+import java.util.Random;
 
 public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 
+	public static boolean fallInstantly = true;
 	@SuppressWarnings("rawtypes")
 	protected Class anEntityClass;
-	public static boolean fallInstantly = true;
 	private String name;
+
 	@SuppressWarnings("rawtypes")
 	public BasicFallingBlock(Material material, Class class1, String aBlockName) {
 		super(material);
 		anEntityClass = class1;
-        setBlockName(aBlockName);
+		setBlockName(aBlockName);
 		name = aBlockName;
-        setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
+		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
 	}
 
 	public BasicFallingBlock(Material material, String aBlockName) {
 		super(material);
-        setBlockName(aBlockName);
-        setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
+		setBlockName(aBlockName);
+		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
+	}
+
+	/**
+	 * Checks to see if the sand can fall into the block below it
+	 */
+	public static boolean canFallBelow(World par0World, int par1, int par2, int par3) {
+		Block l = par0World.getBlock(par1, par2, par3);
+
+		if (par0World.isAirBlock(par1, par2, par3)) {
+			return true;
+		} else if (Blocks.fire.equals(l)) {
+			return true;
+		} else {
+			Material material = l.getMaterial();
+			return material == Material.water ? true : material == Material.lava;
+		}
 	}
 
 	public TileEntity getBlockEntity() {
@@ -130,9 +148,9 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 				if (y > 0) {
 					par1World.setBlock(x, y, z, this);
 				}
-				
+
 				par1World.setBlockToAir(x, originY, z);
-				
+
 			}
 		}
 	}
@@ -140,9 +158,9 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	/**
 	 * Called when the falling block entity for this block is created
 	 */
-	
+
 	protected void onStartFalling(EntityFallingBlock par1EntityFallingSand) {
-		
+
 	}
 
 	/**
@@ -151,22 +169,6 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	@Override
 	public int tickRate(World par1World) {
 		return 2;
-	}
-
-	/**
-	 * Checks to see if the sand can fall into the block below it
-	 */
-	public static boolean canFallBelow(World par0World, int par1, int par2, int par3) {
-		Block l = par0World.getBlock(par1, par2, par3);
-
-		if (par0World.isAirBlock(par1, par2, par3)) {
-			return true;
-		} else if (Blocks.fire.equals(l)) {
-			return true;
-		} else {
-			Material material = l.getMaterial();
-			return material == Material.water ? true : material == Material.lava;
-		}
 	}
 
 	/**
@@ -208,7 +210,7 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 
 	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
-			ItemStack par6ItemStack) {
+	                            ItemStack par6ItemStack) {
 		int p = MathHelper.floor_double((par5EntityLivingBase.rotationYaw * 4F) / 360F + 0.5D) & 3;
 
 		int aByte = 3;
@@ -228,4 +230,5 @@ public class BasicFallingBlock extends BlockContainer implements UlmcBlock {
 	public String getSystemName() {
 		return name;
 	}
+
 }

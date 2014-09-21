@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.render.model;
 
@@ -57,7 +57,7 @@ public class ModelWheel extends ModelBase implements SimpleUlmcModel {
 		Diagonal2.setRotationPoint(-5.6F, 9.6F, wheelShift);
 		Diagonal2.setTextureSize(128, 64);
 		Diagonal2.mirror = true;
-		setRotation(Diagonal2, 0F, 0F, 0.7941248F);		
+		setRotation(Diagonal2, 0F, 0F, 0.7941248F);
 		Vertical = new ModelRenderer(this, 6, 0);
 		Vertical.addBox(0F, 0F, 0F, 1, 14, 1);
 		Vertical.setRotationPoint(-0.5F, 9F, wheelShift);

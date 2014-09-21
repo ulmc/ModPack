@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.block;
 
@@ -34,7 +34,7 @@ public class BlockTable extends BasicStandingBlock {
 	protected int tableModel;
 
 	public BlockTable(float aHardness, float aResistance,
-			String aBlockName, int tableModel) {
+	                  String aBlockName, int tableModel) {
 		super(Material.wood, aBlockName);
 		setHardness(aHardness);
 		setResistance(aResistance);
@@ -43,25 +43,28 @@ public class BlockTable extends BasicStandingBlock {
 		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
 		this.tableModel = tableModel;
 	}
+
 	@Override
 	public TileEntity getBlockEntity() {
 		return new TileEntityTable();
 	}
+
 	@Override
 	public TileEntity createNewTileEntity(World var1, int i) {
 		return new TileEntityTable();
 	}
+
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z,
-			EntityLivingBase entityLiving, ItemStack par6ItemStack) {
+	                            EntityLivingBase entityLiving, ItemStack par6ItemStack) {
 		if (!world.isRemote) {
-			
+
 			TileEntityTable flagTE = (TileEntityTable) world.getTileEntity(x, y, z);
 			flagTE.setModel(tableModel);
-			
+
 			flagTE.blockType = this;
-			int p = MathHelper.floor_double((entityLiving.rotationYaw * 4F) / 360F + 0.5D) & 3; 
-			
+			int p = MathHelper.floor_double((entityLiving.rotationYaw * 4F) / 360F + 0.5D) & 3;
+
 			int aByte = 3;
 			if (p == 0) {
 				aByte = 0;

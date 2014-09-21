@@ -1,44 +1,35 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.block;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import ru.ulmc.extender.config.ConfigurationHander;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.render.RenderChairs;
 import ru.ulmc.extender.render.RenderFlags;
 import ru.ulmc.extender.render.RenderTables;
-import ru.ulmc.extender.tileentity.TileEntityFiller;
-import ru.ulmc.extender.tileentity.TileEntityBones;
-import ru.ulmc.extender.tileentity.TileEntityCart;
-import ru.ulmc.extender.tileentity.TileEntityChair;
-import ru.ulmc.extender.tileentity.TileEntityEliteChair;
-import ru.ulmc.extender.tileentity.TileEntityFlag;
-import ru.ulmc.extender.tileentity.TileEntityGrinder;
-import ru.ulmc.extender.tileentity.TileEntityLockedChest;
-import ru.ulmc.extender.tileentity.TileEntityTable;
-import cpw.mods.fml.common.registry.GameRegistry;
+import ru.ulmc.extender.tileentity.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlockManager {
 
@@ -74,17 +65,14 @@ public class BlockManager {
 
 	public static BlockBones blockBones;
 	public static BlockCart blockCart;
-
+	protected static CommonProxy proxy;
 	private static int blockID = 850;
 	private static int metaBlockID = 1656;
-	
 	private static Map<String, Block> blocks = new HashMap<String, Block>();
-
-	protected static CommonProxy proxy;
 
 	public static void init(CommonProxy aProxy) {
 		proxy = aProxy;
-		
+
 		blockWoodChair = createBlockChair(0.5F, 3.0F, "blockWoodChair");
 		blockWhiteCottonChair = createBlockChair(0.5F, 3.0F, "blockWhiteCottonChair");
 		blockBlueCottonChair = createBlockChair(0.5F, 3.0F, "blockBlueCottonChair");
@@ -114,15 +102,15 @@ public class BlockManager {
 
 		blockBones = createBlockBones("blockOfBones");
 
-		blockFlag = createBlockFlag(0.5f, 1.0f, "blockNeutralFlag", 0, flagFillerBlock);
+		/*blockFlag = createBlockFlag(0.5f, 1.0f, "blockNeutralFlag", 0, flagFillerBlock);
 		blockMedivalFlag = createBlockFlag(0.5f, 1.0f, "blockMedivalFlag", 1, flagFillerBlock);
-		blockTechnoFlag = createBlockFlag(0.5f, 1.0f, "blockTechnoFlag", 2, flagFillerBlock);
+		blockTechnoFlag = createBlockFlag(0.5f, 1.0f, "blockTechnoFlag", 2, flagFillerBlock);*/
 
 		blockBarbedWire = createBlockBarbedWire("barbedWire");
 		blockLockedChest = createBlockLockedChest("blockLockedChest");
 		blockGrinder = createBlockGrinder("blockGrinder");
-		
-		cartFillerBlock = createFillerBlock(Material.wood, "fillerBlockCart",  Block.soundTypeWood);
+
+		cartFillerBlock = createFillerBlock(Material.wood, "fillerBlockCart", Block.soundTypeWood);
 		cartFillerBlock.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		blockCart = createBlockCart("blockCart", cartFillerBlock);
 
@@ -143,32 +131,38 @@ public class BlockManager {
 
 	private static BlockChair createBlockChair(float hardness, float explosionResistance, String name) {
 		BlockChair block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, hardness, explosionResistance, name));
-		try{
-             RenderChairs.registerResource(block.getUnlocalizedName());
-        } catch (Throwable e) {
-        }
+		try {
+			RenderChairs.registerResource(block.getUnlocalizedName());
+		} catch (Throwable e) {
+		}
 		return block;
 	}
 
 	private static BlockEliteChair createBlockEliteChair(float hardness, float explosionResistance, String name) {
 		BlockEliteChair block = (BlockEliteChair) registerBlock(new BlockEliteChair(TileEntityEliteChair.class, hardness, explosionResistance, name));
-        try{ RenderChairs.registerResource(block.getUnlocalizedName());} catch (Throwable e) {
-        }
+		try {
+			RenderChairs.registerResource(block.getUnlocalizedName());
+		} catch (Throwable e) {
+		}
 		return block;
 	}
 
 	private static BlockTable createBlockTable(float hardness, float explosionResistance, String name, int model) {
-		BlockTable block = (BlockTable)registerBlock(new BlockTable(hardness, explosionResistance, name, model));
-        try{  RenderTables.registerResource(block.getUnlocalizedName());} catch (Throwable e) {
-        }
-       	return block;
+		BlockTable block = (BlockTable) registerBlock(new BlockTable(hardness, explosionResistance, name, model));
+		try {
+			RenderTables.registerResource(block.getUnlocalizedName());
+		} catch (Throwable e) {
+		}
+		return block;
 	}
 
 	private static BlockFlag createBlockFlag(float hardness, float explosionResistance, String name, int blockType,
-			FillerBlock filler) {
-		BlockFlag block =  (BlockFlag) registerBlock(new BlockFlag(TileEntityFlag.class, hardness, explosionResistance, name, blockType, filler));
-        try{  RenderFlags.registerResource(blockType, block.getUnlocalizedName());} catch (Throwable e) {
-        }
+	                                         FillerBlock filler) {
+		BlockFlag block = (BlockFlag) registerBlock(new BlockFlag(TileEntityFlag.class, hardness, explosionResistance, name, blockType, filler));
+		try {
+			RenderFlags.registerResource(blockType, block.getUnlocalizedName());
+		} catch (Throwable e) {
+		}
 
 		return block;
 	}
@@ -192,12 +186,12 @@ public class BlockManager {
 	private static BlockCart createBlockCart(String name, Block filler) {
 		return (BlockCart) registerBlock(new BlockCart(name, filler));
 	}
+
 	private static UlmcBlock registerBlock(UlmcBlock block) {
-		proxy.prepareBlock((Block)block);
-		blocks.put(block.getSystemName(), (Block)block);
+		proxy.prepareBlock((Block) block);
+		blocks.put(block.getSystemName(), (Block) block);
 		return block;
 	}
-	
-	
+
 
 }

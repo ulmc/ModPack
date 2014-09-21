@@ -1,30 +1,28 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.render;
 
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.render.model.ModelCartBody;
 import ru.ulmc.extender.render.model.ModelWheel;
@@ -36,7 +34,8 @@ public class RenderCart extends TileEntitySpecialRenderer {
 	private ModelCartBody modelBody = new ModelCartBody();
 	private ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/woodenCart.png");
 
-	public RenderCart() { }
+	public RenderCart() {
+	}
 
 	public void renderModel(TileEntityCart tileEntityBones, double d, double d1, double d2, float f) {
 		int i = tileEntityBones.getBlockMetadata();

@@ -34,47 +34,47 @@ import ru.ulmc.extender.Reference;
  */
 public class ItemThiefKnife extends ItemSword implements Grindable, UItem {
 
-    public ItemThiefKnife(String unlocalizedName, int durability, ToolMaterial par2EnumToolMaterial) {
-        super(par2EnumToolMaterial);
-        setUnlocalizedName(unlocalizedName);
-        setMaxDamage(durability);
-        setTextureName(Reference.RES_NAME + unlocalizedName);
-        setCreativeTab(CreativeTabs.tabCombat);
-    }
+	public ItemThiefKnife(String unlocalizedName, int durability, ToolMaterial par2EnumToolMaterial) {
+		super(par2EnumToolMaterial);
+		setUnlocalizedName(unlocalizedName);
+		setMaxDamage(durability);
+		setTextureName(Reference.RES_NAME + unlocalizedName);
+		setCreativeTab(CreativeTabs.tabCombat);
+	}
 
-    public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-        par1ItemStack.damageItem(1, par3EntityLivingBase);
-        return true;
-    }
+	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
+		par1ItemStack.damageItem(1, par3EntityLivingBase);
+		return true;
+	}
 
-    public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-        return EnumAction.block;
-    }
+	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
+		return EnumAction.block;
+	}
 
-    public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
-        par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
-        return par1ItemStack;
-    }
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
+		par3EntityPlayer.setItemInUse(par1ItemStack, this.getMaxItemUseDuration(par1ItemStack));
+		return par1ItemStack;
+	}
 
-    @Override
-    public boolean grindItem(EntityPlayer player, ItemStack grinder, ItemStack hold, ItemStack example) {
-        return false;
-    }
+	@Override
+	public boolean grindItem(EntityPlayer player, ItemStack grinder, ItemStack hold, ItemStack example) {
+		return false;
+	}
 
-    @Override
-    public String getClearItemName() {
-        return null;
-    }
+	@Override
+	public String getClearItemName() {
+		return null;
+	}
 
-    @Override
-    public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity) {
-        if (entity.worldObj.isRemote) {
-            return false;
-        } else if (entity instanceof EntityPlayer) {
-            EntityPlayer target = (EntityPlayer) entity;
-            //target.inventoryContainer;
-            return true;
-        }
-        return false;
-    }
+	@Override
+	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity) {
+		if (entity.worldObj.isRemote) {
+			return false;
+		} else if (entity instanceof EntityPlayer) {
+			EntityPlayer target = (EntityPlayer) entity;
+			//target.inventoryContainer;
+			return true;
+		}
+		return false;
+	}
 }

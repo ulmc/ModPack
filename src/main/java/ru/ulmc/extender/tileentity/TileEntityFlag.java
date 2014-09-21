@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.tileentity;
 
@@ -46,28 +46,28 @@ public class TileEntityFlag extends ExtendedTileEntity {
 		return this.angle;
 	}
 
-	public void setValues(byte i, byte j) {
-		this.type = i;
-		this.angle = j;
-	}
-
 	public void setAngle(int i) {
 		this.angle = i;
 	}
 
-	public void setType(int i) {
+	public void setValues(byte i, byte j) {
 		this.type = i;
-	}
-
-	public void setSkin(int i) {
-		this.skin = i;
+		this.angle = j;
 	}
 
 	public int getSkin() {
 		return this.skin;
 	}
 
+	public void setSkin(int i) {
+		this.skin = i;
+	}
+
 	public int getType() {
 		return this.type;
+	}
+
+	public void setType(int i) {
+		this.type = i;
 	}
 }

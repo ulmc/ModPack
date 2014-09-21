@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.item;
 
@@ -36,11 +36,11 @@ public class ItemGrind extends Item {
 		setUnlocalizedName(unlocalizedName);
 		setTextureName(Reference.RES_NAME + unlocalizedName);
 		setCreativeTab(CreativeTabs.tabTools);
-        if("woodenGrindstoneBlank".equals(unlocalizedName) || "ironGrindstoneBlank".equals(unlocalizedName)) {
-            this.setMaxStackSize(32);
-        } else {
-		    this.setMaxStackSize(1);
-        }
+		if ("woodenGrindstoneBlank".equals(unlocalizedName) || "ironGrindstoneBlank".equals(unlocalizedName)) {
+			this.setMaxStackSize(32);
+		} else {
+			this.setMaxStackSize(1);
+		}
 		this.setMaxDamage(durability);
 		this.chanceToBuff = chanceToBuff;
 		this.bufflevel = bufflevel;
@@ -55,28 +55,28 @@ public class ItemGrind extends Item {
 	public float getChanceToBuff() {
 		return chanceToBuff;
 	}
-	
+
 	public boolean isGoodEnoughForRenaming() {
-		if(bufflevel > 0.5) {
+		if (bufflevel > 0.5) {
 			return true;
-		} 
+		}
 		return false;
 	}
 
 	public float getRandomBuff() {
 		float buff = bufflevel;
 		double chance = Math.random();
-		if(chance < chanceToBuff / 10) {
+		if (chance < chanceToBuff / 10) {
 			buff += bufflevel * 2 + Math.random();
-		} else if(chance < chanceToBuff / 5) {
+		} else if (chance < chanceToBuff / 5) {
 			buff += bufflevel + Math.random();
-		}	else if(chance < chanceToBuff / 5) {
+		} else if (chance < chanceToBuff / 5) {
 			buff += bufflevel + Math.random();
-		} else if(chance < chanceToBuff / 2) {
+		} else if (chance < chanceToBuff / 2) {
 			buff += bufflevel / 4 + Math.random();
 		}
 		return buff;
 	}
-	
-	
+
+
 }

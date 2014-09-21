@@ -1,21 +1,21 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 
 package ru.ulmc.extender.tileentity;
@@ -23,12 +23,14 @@ package ru.ulmc.extender.tileentity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import ru.ulmc.extender.Reference;
 
 public class TileEntityBones extends TileEntity implements IInventory {
 	private ItemStack[] inv = new ItemStack[18];
@@ -122,22 +124,22 @@ public class TileEntityBones extends TileEntity implements IInventory {
 				&& player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
 	}
 
-    @Override
-    public void openInventory() {
+	@Override
+	public void openInventory() {
 
-    }
+	}
 
-    @Override
-    public void closeInventory() {
+	@Override
+	public void closeInventory() {
 
-    }
+	}
 
 
-    @Override
+	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		this.filledSlots = 0;
-		NBTTagList tagList = tagCompound.getTagList("Inventory", 0);
+		NBTTagList tagList = tagCompound.getTagList("Inventory", Reference.NBT_TAG_LIST_ID);
 		for (int i = 0; i < tagList.tagCount(); i++) {
 			NBTTagCompound tag = (NBTTagCompound) tagList.getCompoundTagAt(i);
 			byte slot = tag.getByte("Slot");
@@ -146,7 +148,7 @@ public class TileEntityBones extends TileEntity implements IInventory {
 			}
 		}
 		filledSlots = tagCompound.getInteger("filledSlots");
-		ownerName = tagCompound.getString("ownerName");		
+		ownerName = tagCompound.getString("ownerName");
 	}
 
 	@Override
@@ -154,6 +156,7 @@ public class TileEntityBones extends TileEntity implements IInventory {
 		super.writeToNBT(tagCompound);
 		this.filledSlots = 0;
 		NBTTagList itemList = new NBTTagList();
+
 		for (int i = 0; i < inv.length; i++) {
 			ItemStack stack = inv[i];
 			if (stack != null) {
@@ -171,17 +174,17 @@ public class TileEntityBones extends TileEntity implements IInventory {
 		}
 	}
 
-    @Override
-    public String getInventoryName() {
-        return "tco.tileentitybones";
-    }
+	@Override
+	public String getInventoryName() {
+		return "tco.tileentitybones";
+	}
 
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
+	@Override
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
 
-    @Override
+	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		// TODO Auto-generated method stub
 		return false;
@@ -194,8 +197,8 @@ public class TileEntityBones extends TileEntity implements IInventory {
 		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 4, nbttagcompound);
 	}
 
-    @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-        readFromNBT(pkt.func_148857_g());
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.func_148857_g());
+	}
 }

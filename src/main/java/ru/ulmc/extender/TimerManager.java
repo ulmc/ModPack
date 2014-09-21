@@ -23,34 +23,33 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
 
-import java.util.*;
-import java.util.logging.Level;
+import java.util.HashMap;
 
 /**
  * Created by 45 on 01.02.14.
  */
 public class TimerManager {
-    private final HashMap<EntityPlayer, Runnable> chestUsers = new HashMap<EntityPlayer, Runnable>();
+	private final HashMap<EntityPlayer, Runnable> chestUsers = new HashMap<EntityPlayer, Runnable>();
 
-    public synchronized void markUsingChest(final EntityPlayer player, final ItemStack itemStack, final TileEntityLockedChest chest) {
-        chestUsers.put(player, new Runnable() {
-            @Override
-            public void run() {
-                chest.doWork(itemStack, player);
-                //UltimateExtender.logger.log(Level.WARNING, "Running Task: " + !player.getEntityWorld().isRemote);
-                chestUsers.remove(player);
-       }
-        });
-    }
+	public synchronized void markUsingChest(final EntityPlayer player, final ItemStack itemStack, final TileEntityLockedChest chest) {
+		chestUsers.put(player, new Runnable() {
+			@Override
+			public void run() {
+				chest.doWork(itemStack, player);
+				//UltimateExtender.logger.log(Level.WARNING, "Running Task: " + !player.getEntityWorld().isRemote);
+				chestUsers.remove(player);
+			}
+		});
+	}
 
-    public synchronized void runTask(EntityPlayer player) {
-        if (chestUsers.containsKey(player)) {
-            chestUsers.get(player).run();
-        } else {
-            UltimateExtender.logger.error("Can't run task. There is no task for this player! at server: " + !player.getEntityWorld().isRemote);
-        }
+	public synchronized void runTask(EntityPlayer player) {
+		if (chestUsers.containsKey(player)) {
+			chestUsers.get(player).run();
+		} else {
+			UltimateExtender.logger.error("Can't run task. There is no task for this player! at server: " + !player.getEntityWorld().isRemote);
+		}
 
-    }
+	}
 
 }
 

@@ -1,26 +1,23 @@
 /**
  * Copyright (C) 2014 ulmc.ru (Alex K.)
- * 
+ *
  * This file part of ulmc.ru ModPack
- * 
+ *
  * ulmc.ru ModPack is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * ulmc.ru ModPack is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see [http://www.gnu.org/licenses/].
- * 
+ *
  */
 package ru.ulmc.extender.events;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -37,7 +34,11 @@ import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.item.ItemManager;
+import ru.ulmc.extender.network.WarmPacket;
 import ru.ulmc.extender.tileentity.TileEntityBones;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Name and cast of this class are irrelevant
@@ -46,22 +47,31 @@ public class PlayerEventsHook {
 
 	@SubscribeEvent
 	public void harvestingLockedChest(PlayerEvent.HarvestCheck event) {
-		if (!event.entityPlayer.worldObj.isRemote) {			
-			if (Block.getIdFromBlock(event.block) == Block.getIdFromBlock(BlockManager.blockLockedChest)) {
+		if (!event.entityPlayer.worldObj.isRemote && !event.entityPlayer.capabilities.isCreativeMode) {
+			if (Block.isEqualTo(BlockManager.blockLockedChest, event.block)) {
 				event.success = false;
+				event.setCanceled(true);
 			}
 		}
 	}
+
+/*	@SubscribeEvent
+	public void stopAllTimers(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent event) {
+		if(event.player instanceof EntityPlayer) {
+
+		}
+	}*/
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void hidePlayerDisplayName(RenderLivingEvent.Specials.Pre event) {
-		if(event.entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)event.entity;
-			if(player.getCurrentArmor(3) != null &&
-                    Item.getIdFromItem(player.getCurrentArmor(3).getItem()) == ItemManager.maskId) {
-				if(event.isCancelable()) {
+		if (event.entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) event.entity;
+			if (player.getCurrentArmor(3) != null &&
+					Item.getIdFromItem(player.getCurrentArmor(3).getItem()) == ItemManager.maskId) {
+				if (event.isCancelable()) {
 					event.setCanceled(true);
-				}	
+				}
 			}
 		}
 	}
