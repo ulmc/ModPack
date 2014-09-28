@@ -296,7 +296,7 @@ public class WarmHandler {
 	private void returnPlayerToNormal(EntityPlayerMP player) {
 		if (playersThermalLevel.get(player) != null && playersThermalLevel.get(player) != 0.0f) {
 			boolean isCold = playersThermalLevel.get(player) < 0;
-			float deltaMultiplied = normalization * playersThermalLevel.get(player) * (!isCold ? -1 : 1);
+			float deltaMultiplied = normalization * playersThermalLevel.get(player) * (-1);
 			playersThermalLevel.put(player, playersThermalLevel.get(player) + deltaMultiplied);
 			if (isCold && playersThermalLevel.get(player) +0.2 > 0 || !isCold && playersThermalLevel.get(player) -0.2 < 0) {
 				playersThermalLevel.put(player, null);
