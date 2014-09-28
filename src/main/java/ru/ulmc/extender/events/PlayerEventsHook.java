@@ -82,13 +82,16 @@ public class PlayerEventsHook {
 			int coordX = MathHelper.floor_double(event.entityPlayer.posX);
 			int coordY = MathHelper.floor_double(event.entityPlayer.posY);
 			int coordZ = MathHelper.floor_double(event.entityPlayer.posZ);
-			boolean allowToPlace = false;
 			World world = event.entityPlayer.worldObj;
-			allowToPlace =  canPlaceOnThatHeight(world, coordX, coordY, coordZ) ||
-							canPlaceOnThatHeight(world, coordX, coordY + 1, coordZ) ||
-							canPlaceOnThatHeight(world, coordX, coordY - 1, coordZ);
-					
-			if (allowToPlace) {
+			int[] coords = canPlaceOnThatHeight(world, coordX, coordY - 1, coordZ);
+			if( coords == null) {
+				canPlaceOnThatHeight(world, coordX, coordY, coordZ);
+			}
+			if( coords == null) {
+				coords = canPlaceOnThatHeight(world, coordX, coordY + 1, coordZ);
+			}
+			if (coords != null) {
+				coordX = coords[0]; coordY = coords[1]; coordZ = coords[2];
 				event.entityPlayer.worldObj.setBlock(coordX, coordY, coordZ, BlockManager.blockBones);
 				int p = MathHelper.floor_double((event.entityPlayer.rotationYaw * 4F) / 360F + 0.5D) & 3;
 
@@ -155,16 +158,38 @@ public class PlayerEventsHook {
 		}
 	}
 	
-	private boolean canPlaceOnThatHeight(World world, int x, int y, int z) {
-		return  checkIfCanPlace(world, x, y, z) ||
-				checkIfCanPlace(world, x, y + 1, z) ||
-				checkIfCanPlace(world, x, y - 1, z) ||
-				checkIfCanPlace(world, x - 1, y, z) ||
-				checkIfCanPlace(world, x + 1, y, z) ||
-				checkIfCanPlace(world, x, y, z - 1) ||
-				checkIfCanPlace(world, x, y, z + 1) ||
-				checkIfCanPlace(world, x + 1, y, z + 1) ||
-				checkIfCanPlace(world, x - 1, y, z - 1);
+	private int[] canPlaceOnThatHeight(World world, int x, int y, int z) {
+		int[] coords = new int[3];
+		coords[1] = y;
+		if(checkIfCanPlace(world, x, y, z)) {
+			coords[0] = x; coords[2] = z;
+			return coords;
+		}
+		if(checkIfCanPlace(world, x - 1, y, z)) {
+			coords[0] = x-1; coords[2] = z;
+			return coords;
+		}
+		if(checkIfCanPlace(world, x + 1, y, z)) {
+			coords[0] = x+1; coords[2] = z;
+			return coords;
+		}
+		if(checkIfCanPlace(world, x, y, z - 1)) {
+			coords[0] = x; coords[2] = z-1;
+			return coords;
+		}
+		if(checkIfCanPlace(world, x, y, z + 1)) {
+			coords[0] = x; coords[2] = z+1;
+			return coords;
+		}
+		if(checkIfCanPlace(world, x + 1, y, z + 1)) {
+			coords[0] = x+1; coords[2] = z+1;
+			return coords;
+		}
+		if(checkIfCanPlace(world, x - 1, y, z - 1)) {
+			coords[0] = x-1; coords[2] = z-1;
+			return coords;
+		}
+		return null;
 	}
 
 	private boolean checkIfCanPlace(World world, int x, int y, int z) {

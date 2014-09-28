@@ -29,6 +29,7 @@ import ru.ulmc.extender.container.ContainerLockedChest;
 import ru.ulmc.extender.gui.GuiBones;
 import ru.ulmc.extender.gui.GuiGrinder;
 import ru.ulmc.extender.gui.GuiLockedChest;
+import ru.ulmc.extender.gui.GuiThief;
 import ru.ulmc.extender.tileentity.TileEntityBones;
 import ru.ulmc.extender.tileentity.TileEntityGrinder;
 import ru.ulmc.extender.tileentity.TileEntityLockedChest;
@@ -53,6 +54,11 @@ public class GuiHandler implements IGuiHandler {
 							(TileEntityLockedChest) te);
 				}
 			case GuiGrinder.GUI_ID:
+				if (te instanceof TileEntityGrinder) {
+					return new ContainerGrinder(player.inventory,
+							(TileEntityGrinder) te);
+				}
+			case GuiThief.GUI_ID:
 				if (te instanceof TileEntityGrinder) {
 					return new ContainerGrinder(player.inventory,
 							(TileEntityGrinder) te);
@@ -82,6 +88,11 @@ public class GuiHandler implements IGuiHandler {
 			case GuiGrinder.GUI_ID:
 				if (te instanceof TileEntityGrinder) {
 					return new GuiGrinder(player.inventory,
+							(TileEntityGrinder) te);
+				}
+			case GuiThief.GUI_ID:
+				if (te instanceof TileEntityGrinder) {
+					return new ContainerGrinder(player.inventory,
 							(TileEntityGrinder) te);
 				}
 			default:

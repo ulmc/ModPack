@@ -48,8 +48,6 @@ public class WarmHandler {
 
 	public static final float DAYLIGHT = 0.78F;
 	private static final float percent = 100.0f;
-	private static Map<BiomeGenBase, Float> biomeToCold = new HashMap<BiomeGenBase, Float>();
-	private static Map<BiomeGenBase, Float> biomeToHot = new HashMap<BiomeGenBase, Float>();
 	private static Map<EntityPlayer, Integer> playersTicks = new HashMap<EntityPlayer, Integer>();
 	private static Map<EntityPlayer, Float> playersThermalLevel = new HashMap<EntityPlayer, Float>();
 	public final int BOOTS = 0;
@@ -77,6 +75,10 @@ public class WarmHandler {
 	private float inSnowPenalty;
 	private float coldItemBonus;
 	private float normalization;
+	private float coldMultiplier;
+	private float hotMultiplier;
+	private float neutralValue;
+	private float allowableDeviation;
 
 	private float multiplierPacket;
 	private float damageSize;
@@ -115,29 +117,12 @@ public class WarmHandler {
 		damageSize = Config.getSurvivalFloat("thermal.damageSize");
 		lavaPenalty = Config.getSurvivalFloat("thermal.lavaPenalty");
 		inSnowPenalty = Config.getSurvivalFloat("thermal.inSnowPenalty");
-
+		coldMultiplier = Config.getSurvivalFloat("thermal.multiplier.coldBiome");
+		hotMultiplier = Config.getSurvivalFloat("thermal.multiplier.hotBiome");
+		neutralValue = Config.getSurvivalFloat("thermal.neutral.value");
+		allowableDeviation = Config.getSurvivalFloat("thermal.allowable.deviation");
 
 		sendMessageToPlayer = Config.getSurvivalInt("thermal.debug.sendMessageToPlayer") == 1;
-
-		biomeToCold.put(BiomeGenBase.frozenOcean, Config.getSurvivalFloat("thermal.coldBiome.frozenOcean"));
-		biomeToCold.put(BiomeGenBase.frozenRiver, Config.getSurvivalFloat("thermal.coldBiome.frozenRiver"));
-		biomeToCold.put(BiomeGenBase.icePlains, Config.getSurvivalFloat("thermal.coldBiome.icePlains"));
-		biomeToCold.put(BiomeGenBase.iceMountains, Config.getSurvivalFloat("thermal.coldBiome.iceMountains"));
-		biomeToCold.put(BiomeGenBase.taigaHills, Config.getSurvivalFloat("thermal.coldBiome.taigaHills"));
-		biomeToCold.put(BiomeGenBase.taiga, Config.getSurvivalFloat("thermal.coldBiome.taiga"));
-		biomeToCold.put(BiomeGenBase.extremeHills, Config.getSurvivalFloat("thermal.coldBiome.extremeHills"));
-		biomeToCold.put(BiomeGenBase.extremeHillsPlus, Config.getSurvivalFloat("thermal.coldBiome.extremeHillsPlus"));
-		biomeToCold.put(BiomeGenBase.coldTaigaHills, Config.getSurvivalFloat("thermal.coldBiome.coldTaigaHills"));
-		biomeToCold.put(BiomeGenBase.coldBeach, Config.getSurvivalFloat("thermal.coldBiome.coldBeach"));
-		biomeToCold.put(BiomeGenBase.coldTaiga, Config.getSurvivalFloat("thermal.coldBiome.coldTaiga"));
-		biomeToCold.put(BiomeGenBase.megaTaiga, Config.getSurvivalFloat("thermal.coldBiome.megaTaiga"));
-		biomeToCold.put(BiomeGenBase.megaTaigaHills, Config.getSurvivalFloat("thermal.coldBiome.megaTaigaHills"));
-
-		biomeToHot.put(BiomeGenBase.hell, Config.getSurvivalFloat("thermal.hotBiome.hell"));
-		biomeToHot.put(BiomeGenBase.desert, Config.getSurvivalFloat("thermal.hotBiome.desert"));
-		biomeToHot.put(BiomeGenBase.desertHills, Config.getSurvivalFloat("thermal.hotBiome.desertHills"));
-		biomeToHot.put(BiomeGenBase.jungle, Config.getSurvivalFloat("thermal.hotBiome.jungle"));
-		biomeToHot.put(BiomeGenBase.jungleHills, Config.getSurvivalFloat("thermal.hotBiome.jungleHills"));
 
 		lavaBlocks.add(Blocks.lava);
 		lavaBlocks.add(Blocks.flowing_lava);
@@ -198,13 +183,9 @@ public class WarmHandler {
 		int currentZ = MathHelper.floor_double(player.posZ);
 		int currentY = MathHelper.floor_double(player.posY);
 		BiomeGenBase biome = world.getBiomeGenForCoords(currentX, currentZ);
-		Float coldStrength = biomeToCold.get(biome);
-		Float hotStrength = biomeToHot.get(biome);
+		float temp = biome.getFloatTemperature(currentX, currentZ, currentY);
 		Float warmnessDelta;
-		//UltimateExtender.logger.info("biome:" + biome.biomeName);
-		if ((coldStrength == null || coldStrength.equals(0.0f)) &&
-				(hotStrength == null || hotStrength.equals(0.0f))) {
-
+		if (Math.abs(temp - neutralValue) < allowableDeviation) {
 			if (isLavaNear(world, currentX - 2, currentY - 2, currentZ - 2,
 					currentX + 2, currentY + 2, currentZ + 2)) {
 				warmnessDelta = lavaPenalty;
@@ -217,79 +198,82 @@ public class WarmHandler {
 			} else {
 				returnPlayerToNormal(player);
 			}
-		} else if (coldStrength != null && coldStrength > 0.0f) {
-			boolean noWarmNear = !isBoxWarm(world,
-					currentX - 5, currentY - 4, currentZ - 5,
-					currentX + 5, currentY + 3, currentZ + 5);
-			if (noWarmNear) {
-				if (player.posY < underGroundPosition || haveRoofOrSo(world, currentX, currentY, currentZ)) {
-					coldStrength -= underGroundBonus;
-				} else {
-					if (world.getLightBrightness(currentX, currentY, currentZ) < DAYLIGHT) {
-						coldStrength += nightPenalty;
+		} else {
+			float tempStr = temp > neutralValue ? temp * hotMultiplier : temp * coldMultiplier * ( temp > 0 ? -1 : 1);
+			if (tempStr < 0) {
+				float coldStrength = Math.abs(tempStr);
+				boolean noWarmNear = !isBoxWarm(world,
+						currentX - 5, currentY - 4, currentZ - 5,
+						currentX + 5, currentY + 3, currentZ + 5);
+				if (noWarmNear) {
+					if (player.posY < underGroundPosition || haveRoofOrSo(world, currentX, currentY, currentZ)) {
+						coldStrength -= underGroundBonus;
+					} else {
+						if (world.getLightBrightness(currentX, currentY, currentZ) < DAYLIGHT) {
+							coldStrength += nightPenalty;
+						}
+						if (world.isThundering()) {
+							coldStrength += stormPenalty;
+						} else if (world.isRaining()) {
+							coldStrength += rainPenalty;
+						}
+						if (isInSnow(player, currentX, currentY, currentZ)) {
+							coldStrength += inSnowPenalty;
+						}
 					}
-					if (world.isThundering()) {
-						coldStrength += stormPenalty;
-					} else if (world.isRaining()) {
-						coldStrength += rainPenalty;
+					if (player.getCurrentEquippedItem() != null) {
+						int equippedID = Item.getIdFromItem(player.getCurrentEquippedItem().getItem());
+						if ((equippedID == Item.getIdFromItem(Items.lava_bucket) ||
+								equippedID == Block.getIdFromBlock(Blocks.torch))) {
+							coldStrength -= torchBonus;
+						}
 					}
-					if (isInSnow(player, currentX, currentY, currentZ)) {
-						coldStrength += inSnowPenalty;
+					if (player.isInWater()) {
+						coldStrength += inWaterPenalty;
+						warmnessDelta = -1 * coldStrength * 4;
+					} else {
+						warmnessDelta = getWarmness(player, coldStrength, HAT, true);
+						warmnessDelta += getWarmness(player, coldStrength, BODY, true);
+						warmnessDelta += getWarmness(player, coldStrength, PANTS, true);
+						warmnessDelta += getWarmness(player, coldStrength, BOOTS, true);
+						warmnessDelta = (float) Math.rint(warmnessDelta * percent) / 100;
 					}
-				}
-				if (player.getCurrentEquippedItem() != null) {
-					int equippedID = Item.getIdFromItem(player.getCurrentEquippedItem().getItem());
-					if ((equippedID == Item.getIdFromItem(Items.lava_bucket) ||
-							equippedID == Block.getIdFromBlock(Blocks.torch))) {
-						coldStrength -= torchBonus;
+					if (warmnessDelta < 0) {
+						checkThermalLevel(player, warmnessDelta);
+					} else {
+						returnPlayerToNormal(player);
 					}
-				}
-				if (player.isInWater()) {
-					coldStrength += inWaterPenalty;
-					warmnessDelta = -1 * coldStrength * 4;
-				} else {
-					warmnessDelta = getWarmness(player, coldStrength, HAT, true);
-					warmnessDelta += getWarmness(player, coldStrength, BODY, true);
-					warmnessDelta += getWarmness(player, coldStrength, PANTS, true);
-					warmnessDelta += getWarmness(player, coldStrength, BOOTS, true);
-					warmnessDelta = (float) Math.rint(warmnessDelta * percent) / 100;
-				}
-				if (warmnessDelta < 0) {
-
-					checkThermalLevel(player, warmnessDelta);
-
 				} else {
 					returnPlayerToNormal(player);
 				}
 			} else {
-				returnPlayerToNormal(player);
-			}
-		} else if (hotStrength != null && hotStrength > 0.0f) {
-			if (player.isImmuneToFire()) {
-				return;
-			}
-			if (!biome.equals(BiomeGenBase.hell)) {
-				if (player.posY < underGroundPosition) {
-					hotStrength -= underGroundCoolBonus - nightPenalty;
-				} else {
-					if (world.isThundering()) {
-						hotStrength -= stormPenalty;
-					} else if (world.isRaining()) {
-						hotStrength -= rainPenalty;
-					}
-					if (!world.isDaytime()) {
-						hotStrength -= nightPenalty;
-					} else if (world.getLightBrightness(currentX, currentY, currentZ) > DAYLIGHT) {
-						hotStrength += dayPenalty;
+				float hotStrength = Math.abs(tempStr);
+				if (player.isImmuneToFire()) {
+					return;
+				}
+				if (!biome.equals(BiomeGenBase.hell)) {
+					if (player.posY < underGroundPosition) {
+						hotStrength -= underGroundCoolBonus - nightPenalty;
+					} else {
+						if (world.isThundering()) {
+							hotStrength -= stormPenalty;
+						} else if (world.isRaining()) {
+							hotStrength -= rainPenalty;
+						}
+						if (!world.isDaytime()) {
+							hotStrength -= nightPenalty;
+						} else if (world.getLightBrightness(currentX, currentY, currentZ) > DAYLIGHT) {
+							hotStrength += dayPenalty;
+						}
 					}
 				}
-			}
-			warmnessDelta = calculateHeatPower(hotStrength, player, currentX, currentZ, currentY, false, true); //hell
+				warmnessDelta = calculateHeatPower(hotStrength, player, currentX, currentZ, currentY, false, true); //hell
 
-			if (warmnessDelta > 0) {
-				checkThermalLevel(player, warmnessDelta);
-			} else {
-				returnPlayerToNormal(player);
+				if (warmnessDelta > 0) {
+					checkThermalLevel(player, warmnessDelta);
+				} else {
+					returnPlayerToNormal(player);
+				}
 			}
 		}
 	}
@@ -312,9 +296,9 @@ public class WarmHandler {
 	private void returnPlayerToNormal(EntityPlayerMP player) {
 		if (playersThermalLevel.get(player) != null && playersThermalLevel.get(player) != 0.0f) {
 			boolean isCold = playersThermalLevel.get(player) < 0;
-			float deltaMultiplied = normalization * playersThermalLevel.get(player) * (isCold ? -1 : 1);
+			float deltaMultiplied = normalization * playersThermalLevel.get(player) * (!isCold ? -1 : 1);
 			playersThermalLevel.put(player, playersThermalLevel.get(player) + deltaMultiplied);
-			if (isCold && playersThermalLevel.get(player) > 0 || !isCold && playersThermalLevel.get(player) < 0) {
+			if (isCold && playersThermalLevel.get(player) +0.2 > 0 || !isCold && playersThermalLevel.get(player) -0.2 < 0) {
 				playersThermalLevel.put(player, null);
 				deltaMultiplied = 0;
 			}

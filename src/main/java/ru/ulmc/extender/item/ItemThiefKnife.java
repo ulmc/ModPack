@@ -27,12 +27,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.gui.GuiBones;
+import ru.ulmc.extender.gui.GuiThief;
 
 
 /**
  * Created by 45 on 16.02.14.
  */
 public class ItemThiefKnife extends ItemSword implements Grindable, UItem {
+
+	protected double chanceOfStealFromBackpack = 0.01d;
+	protected double chanceOfStealFromBelt = 0.05d;
+	protected double chanceOfKnockOutArmor = 0.01d;
+	protected double chanceOfKnockOutWeapon = 0.01d;
 
 	public ItemThiefKnife(String unlocalizedName, int durability, ToolMaterial par2EnumToolMaterial) {
 		super(par2EnumToolMaterial);
@@ -72,9 +80,19 @@ public class ItemThiefKnife extends ItemSword implements Grindable, UItem {
 			return false;
 		} else if (entity instanceof EntityPlayer) {
 			EntityPlayer target = (EntityPlayer) entity;
-			//target.inventoryContainer;
+			player.openGui(UltimateExtender.instance, GuiThief.GUI_ID, entity.worldObj, (int)((EntityPlayer) entity).posX,
+					(int)((EntityPlayer) entity).posY, (int)((EntityPlayer) entity).posZ);
 			return true;
 		}
 		return false;
+	}
+
+	protected void tryToStealFromPlayer(EntityPlayer target) {
+		if(Math.random() < chanceOfStealFromBackpack) {
+			target.inventoryContainer.getInventory();
+		}
+		if (Math.random() < chanceOfStealFromBelt) {
+
+		}
 	}
 }

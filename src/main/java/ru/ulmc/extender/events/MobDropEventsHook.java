@@ -67,9 +67,9 @@ public class MobDropEventsHook {
 	@SubscribeEvent
 	public void epicLoot(LivingDropsEvent event) {
 		if (event.entityLiving instanceof EntitySkeleton) {
-			if (random.nextFloat() / (event.specialDropValue * 0.5f) < chanseDropEpicKey) {
+			if (random.nextFloat() / (event.specialDropValue * 0.008f) < chanseDropEpicKey) {
 				dropItemStack(event, ItemManager.getEpicItem(ItemKey.class));
-			} else if (random.nextFloat() / (event.specialDropValue * 0.5f) < chanseDropEpicPicklock) {
+			} else if (random.nextFloat() / (event.specialDropValue * 0.008f) < chanseDropEpicPicklock) {
 				dropItemStack(event, ItemManager.getEpicItem(ItemPicklock.class));
 			}
 		}
@@ -77,8 +77,7 @@ public class MobDropEventsHook {
 	}
 
 	private int getDropCount(LivingDropsEvent event, float baseDrop) {
-		return
-				Math.round(event.lootingLevel + baseDrop + (event.specialDropValue * baseDrop / 100));
+		return Math.round(event.lootingLevel + baseDrop + (event.specialDropValue * baseDrop / 100));
 	}
 
 	private void dropItem(EntityLivingBase living, Item item, int count) {
