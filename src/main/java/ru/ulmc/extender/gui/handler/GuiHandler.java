@@ -23,9 +23,11 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.container.ContainerBones;
 import ru.ulmc.extender.container.ContainerGrinder;
 import ru.ulmc.extender.container.ContainerLockedChest;
+import ru.ulmc.extender.container.ContainerThief;
 import ru.ulmc.extender.gui.GuiBones;
 import ru.ulmc.extender.gui.GuiGrinder;
 import ru.ulmc.extender.gui.GuiLockedChest;
@@ -59,10 +61,7 @@ public class GuiHandler implements IGuiHandler {
 							(TileEntityGrinder) te);
 				}
 			case GuiThief.GUI_ID:
-				if (te instanceof TileEntityGrinder) {
-					return new ContainerGrinder(player.inventory,
-							(TileEntityGrinder) te);
-				}
+				return new ContainerThief(player);
 			default:
 				return null;
 		}
@@ -91,9 +90,11 @@ public class GuiHandler implements IGuiHandler {
 							(TileEntityGrinder) te);
 				}
 			case GuiThief.GUI_ID:
-				if (te instanceof TileEntityGrinder) {
-					return new ContainerGrinder(player.inventory,
-							(TileEntityGrinder) te);
+				try {
+					return new GuiThief(player);
+				} catch (NullPointerException ex) {
+					UltimateExtender.logger.error("Can't find player with name: " + null);
+					return null;
 				}
 			default:
 				return null;

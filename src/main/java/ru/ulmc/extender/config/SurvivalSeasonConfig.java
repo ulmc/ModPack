@@ -18,10 +18,10 @@ public class SurvivalSeasonConfig extends BaseModuleConfig {
 		intMap.put("thermal.gui.thermometer.y", 52);
 		intMap.put("thermal.debug.sendMessageToPlayer", 1);
 
-		doubleMap.put("thermal.multiplier.coldBiome", 1.5d);
+		doubleMap.put("thermal.multiplier.coldBiome", 1.1d);
 		doubleMap.put("thermal.multiplier.hotBiome", 1.1d);
 		doubleMap.put("thermal.multiplier.hell", 1.2d);
-		doubleMap.put("thermal.neutral.value", 0.6d);
+		doubleMap.put("thermal.neutral.value", 0.55d);
 		doubleMap.put("thermal.allowable.deviation", 0.2d);
 
 		doubleMap.put("thermal.underGroundBonus", 0.3d);

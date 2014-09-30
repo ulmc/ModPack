@@ -19,6 +19,7 @@
  */
 package ru.ulmc.extender.container;
 
+import ibxm.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -29,22 +30,24 @@ import ru.ulmc.extender.tileentity.TileEntityBones;
 
 public class ContainerThief extends Container {
 
-	protected InventoryPlayer victim;
-	protected InventoryPlayer thief;
+	protected VictimInventory victimInventory;
+	protected InventoryPlayer thiefInventory;
+	protected EntityPlayer thief;
 	protected int linesNum = 1;
 	protected int inLine = 9;
 	protected int totalItems = 9;
 	protected int playerInventoryOffset = 9;
 
 
-	public ContainerThief(InventoryPlayer thief, InventoryPlayer victim) {
-		this.victim = victim;
+	public ContainerThief(EntityPlayer thief) {
+		victimInventory = new VictimInventory(this);
+		this.thiefInventory = thief.inventory;
 		this.thief = thief;
 		for (int column = 0; column < inLine; column++) {
-			addSlotToContainer(new VictimSlot(victim, inLine + column, 8 + column * 18, 18));
+			addSlotToContainer(new VictimSlot(victimInventory, inLine + column, 8 + column * 18, 19));
 		}
 
-		bindPlayerInventory(thief);
+		bindPlayerInventory(thiefInventory);
 	}
 
 	@Override
@@ -56,12 +59,12 @@ public class ContainerThief extends Container {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
 				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + playerInventoryOffset,
-						8 + j * 18, 68 + i * 18));
+						8 + j * 18, 61 + i * 18));
 			}
 		}
 
 		for (int i = 0; i < 9; i++) {
-			addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 126));
+			addSlotToContainer(new Slot(inventoryPlayer, i, 8 + i * 18, 119));
 		}
 	}
 
@@ -101,7 +104,7 @@ public class ContainerThief extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		victim.closeInventory();
-		thief.closeInventory();
+		victimInventory.closeInventory();
+		thief.inventory.closeInventory();
 	}
 }

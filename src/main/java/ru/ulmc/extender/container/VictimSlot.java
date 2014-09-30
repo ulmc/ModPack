@@ -24,7 +24,7 @@ import net.minecraft.inventory.Slot;
 
 public class VictimSlot extends Slot {
 
-	public VictimSlot(IInventory par1iInventory, int par2, int par3, int par4) {
+	public VictimSlot(VictimInventory par1iInventory, int par2, int par3, int par4) {
 		super(par1iInventory, par2, par3, par4);
 	}
 

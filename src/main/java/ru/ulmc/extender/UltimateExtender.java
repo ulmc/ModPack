@@ -48,6 +48,7 @@ import ru.ulmc.extender.events.WarmHandler;
 import ru.ulmc.extender.gui.SurvivalGui;
 import ru.ulmc.extender.gui.handler.GuiHandler;
 import ru.ulmc.extender.item.ItemManager;
+import ru.ulmc.extender.network.ThiefProcessor;
 import ru.ulmc.extender.network.WarmPacket;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.render.particle.EntityChestContentFX;
@@ -55,11 +56,15 @@ import ru.ulmc.extender.render.particle.EntityLockFX;
 import ru.ulmc.extender.render.particle.EntityTestFX;
 import ru.ulmc.extender.render.particle.UParticle;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
 public class UltimateExtender {
 
 	@Instance
 	public static UltimateExtender instance;
+	public static final ThiefProcessor thiefProcessor = new ThiefProcessor();
 	public static Logger logger;
 	public static SimpleNetworkWrapper networkWrapper;
 	@SidedProxy(modId = Reference.MOD_ID, serverSide = Reference.COMMON_PROXY, clientSide = Reference.CLIENT_PROXY)
