@@ -62,12 +62,12 @@ public class BlockManager {
 	public static BlockBarbedWire blockBarbedWire;
 	public static BlockLockedChest blockLockedChest;
 	public static BlockGrinder blockGrinder;
+    public static BlockBarley blockBarley;
 
-	public static BlockBones blockBones;
+
+    public static BlockBones blockBones;
 	public static BlockCart blockCart;
 	protected static CommonProxy proxy;
-	private static int blockID = 850;
-	private static int metaBlockID = 1656;
 	private static Map<String, Block> blocks = new HashMap<String, Block>();
 
 	public static void init(CommonProxy aProxy) {
@@ -113,6 +113,8 @@ public class BlockManager {
 		cartFillerBlock = createFillerBlock(Material.wood, "fillerBlockCart", Block.soundTypeWood);
 		cartFillerBlock.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		blockCart = createBlockCart("blockCart", cartFillerBlock);
+        blockBarley = new BlockBarley("blockBarley");
+        registerBlock(blockBarley);
 
 		GameRegistry.registerTileEntity(TileEntityChair.class, "ulmcTileEntityChair");
 		GameRegistry.registerTileEntity(TileEntityEliteChair.class, "ulmcTileEntityEliteChair");
@@ -193,5 +195,4 @@ public class BlockManager {
 		return block;
 	}
 
-
-}
+   }

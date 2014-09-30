@@ -31,7 +31,7 @@ import java.util.Random;
 public class BaseBlock extends Block implements UlmcBlock {
 	private String name;
 
-	public BaseBlock(int blockID, Material material, String systemBlockName, float hardness, float resistance,
+	public BaseBlock(Material material, String systemBlockName, float hardness, float resistance,
 	                 SoundType stepSound) {
 		super(material);
 		setBlockTextureName(Reference.RES_NAME.concat(systemBlockName));
