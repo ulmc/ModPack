@@ -43,21 +43,15 @@ import org.apache.logging.log4j.Logger;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.config.Config;
 import ru.ulmc.extender.events.MobDropEventsHook;
-import ru.ulmc.extender.events.PlayerEventsHook;
 import ru.ulmc.extender.events.WarmHandler;
-import ru.ulmc.extender.gui.SurvivalGui;
 import ru.ulmc.extender.gui.handler.GuiHandler;
 import ru.ulmc.extender.item.ItemManager;
-import ru.ulmc.extender.network.ThiefProcessor;
-import ru.ulmc.extender.network.WarmPacket;
+import ru.ulmc.extender.network.*;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.render.particle.EntityChestContentFX;
 import ru.ulmc.extender.render.particle.EntityLockFX;
 import ru.ulmc.extender.render.particle.EntityTestFX;
 import ru.ulmc.extender.render.particle.UParticle;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION)
 public class UltimateExtender {
@@ -144,7 +138,14 @@ public class UltimateExtender {
 		RecipeManager.init(proxy);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		loadConfigValues();
-		networkWrapper.registerMessage(WarmPacket.Handler.class, WarmPacket.class, 0, Side.CLIENT);
+		int desc = 0;
+		networkWrapper.registerMessage(WarmPacket.Handler.class, WarmPacket.class, desc++, Side.CLIENT);
+		networkWrapper.registerMessage(LookForLootPacket.LookForLootHandler.class,
+				LookForLootPacket.class, desc++, Side.SERVER);
+		networkWrapper.registerMessage(ConfirmLootPacket.StartHandler.class,
+				ConfirmLootPacket.class, desc++, Side.CLIENT);
+		networkWrapper.registerMessage(LootPacket.LootHandler.class,
+				LootPacket.class, desc++, Side.CLIENT);
 	}
 
 	@EventHandler

@@ -24,12 +24,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.container.ContainerThief;
+import ru.ulmc.extender.network.ConfirmLootPacket;
+import ru.ulmc.extender.network.LookForLootPacket;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GuiThief extends GuiContainer {
 
@@ -38,8 +43,13 @@ public class GuiThief extends GuiContainer {
 	public static final int BTN_STEAL_Y_OFFSET = 91;
 	protected GuiButton stealStartBtn;
 	protected EntityPlayer player;
+	protected int step = 1;
+	protected boolean isInProgress = false;
+	protected int percent = 0;
 	protected static final ResourceLocation texture = new ResourceLocation(
 			Reference.RES_NAME_C, "textures/gui/thiefGui.png");
+
+	protected Timer timer = new Timer();
 
 
 	public GuiThief(EntityPlayer player) {
@@ -47,17 +57,23 @@ public class GuiThief extends GuiContainer {
 		this.player = player;
 		stealStartBtn = new GuiButton(1, (this.height - BTN_STEAL_Y_OFFSET)/2,
 				(this.width - BTN_STEAL_X_OFFSET) /2, 35, 20, "steal");
+
+		ConfirmLootPacket.StartHandler.callback = new LootingUpdater();
 	}
+
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int param1, int param2) {
-		stealStartBtn.yPosition = (this.height - BTN_STEAL_Y_OFFSET)/2;
-		stealStartBtn.xPosition = (this.width - BTN_STEAL_X_OFFSET) /2;
+		stealStartBtn.yPosition = (this.height - BTN_STEAL_Y_OFFSET) / 2;
+		stealStartBtn.xPosition = (this.width - BTN_STEAL_X_OFFSET) / 2;
 		fontRendererObj.drawString("loot", 8, 6, 4210752);
 		// draws "Inventory" or your regional equivalent
 		fontRendererObj.drawString(
 				StatCollector.translateToLocal("container.inventory"), 8,
 				ySize - 124, 4210752);
+		if (isInProgress) {
+			//drawRect(this.width/2, this.height/2, this.width/2 + percent, this.height/2-10, 0x665588ff);
+		}
 	}
 
 	@Override
@@ -65,13 +81,15 @@ public class GuiThief extends GuiContainer {
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton button) {
 		if(button.id == 1) {
-			player.closeScreen();
+			LookForLootPacket lflp = new LookForLootPacket();
+			lflp.setThiefName(player.getDisplayName());
+			lflp.setStep(step);
+			UltimateExtender.networkWrapper.sendToServer(lflp);
 		}
 	}
 
@@ -79,5 +97,24 @@ public class GuiThief extends GuiContainer {
 	public void initGui() {
 		super.initGui();
 		buttonList.add(stealStartBtn);
+	}
+
+	public class LootingUpdater {
+		public void run(final ConfirmLootPacket clp) {
+			if (clp.isOk()) {
+				isInProgress = true;
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						if (percent <= 100) {
+							percent += 100 / clp.getDelta();
+						} else {
+							isInProgress = false;
+							timer.cancel();
+						}
+					}
+				}, 0, 1000);
+			}
+		}
 	}
 }

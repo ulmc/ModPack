@@ -40,11 +40,6 @@ import java.util.HashMap;
  */
 public class ItemThiefKnife extends ItemSword implements Grindable, UItem {
 
-	protected double chanceOfStealFromBackpack = 0.01d;
-	protected double chanceOfStealFromBelt = 0.05d;
-	protected double chanceOfKnockOutArmor = 0.01d;
-	protected double chanceOfKnockOutWeapon = 0.01d;
-
 	public ItemThiefKnife(String unlocalizedName, int durability, ToolMaterial par2EnumToolMaterial) {
 		super(par2EnumToolMaterial);
 		setUnlocalizedName(unlocalizedName);
@@ -81,24 +76,15 @@ public class ItemThiefKnife extends ItemSword implements Grindable, UItem {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity) {
-		/*if (entity instanceof EntityPlayer) {
+		if (entity instanceof EntityPlayer) {
 			EntityPlayer target = (EntityPlayer) entity;
 			if (!entity.worldObj.isRemote) {
 				UltimateExtender.thiefProcessor.initStealing(player, target);
-			}*/
+			}
 			player.openGui(UltimateExtender.instance, GuiThief.GUI_ID, entity.worldObj, (int)player.posX,
 					(int)player.posY, (int)player.posZ);
 			return true;
-		//}
-		//return false;
-	}
-
-	protected void tryToStealFromPlayer(EntityPlayer target) {
-		if(Math.random() < chanceOfStealFromBackpack) {
-			target.inventoryContainer.getInventory();
 		}
-		if (Math.random() < chanceOfStealFromBelt) {
-
-		}
+		return false;
 	}
 }
