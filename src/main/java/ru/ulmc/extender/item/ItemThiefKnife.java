@@ -25,14 +25,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
-import ru.ulmc.extender.gui.GuiBones;
 import ru.ulmc.extender.gui.GuiThief;
-
-import java.util.HashMap;
 
 
 /**
@@ -79,7 +75,7 @@ public class ItemThiefKnife extends ItemSword implements Grindable, UItem {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer target = (EntityPlayer) entity;
 			if (!entity.worldObj.isRemote) {
-				UltimateExtender.thiefProcessor.initStealing(player, target);
+				UltimateExtender.STEAL_PROCESSOR.initStealing(player, target);
 			}
 			player.openGui(UltimateExtender.instance, GuiThief.GUI_ID, entity.worldObj, (int)player.posX,
 					(int)player.posY, (int)player.posZ);

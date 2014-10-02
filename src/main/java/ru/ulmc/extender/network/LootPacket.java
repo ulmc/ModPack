@@ -14,6 +14,7 @@ public class LootPacket implements IMessage {
 	private boolean isSuccess;
 	private ItemStack loot = null;
 	private int step;
+	private boolean shouldNotify;
 
 	public LootPacket() {
 	}
@@ -23,6 +24,7 @@ public class LootPacket implements IMessage {
 		loot = ByteBufUtils.readItemStack(buf);
 		step = ByteBufUtils.readVarShort(buf);
 		isSuccess = ByteBufUtils.readVarShort(buf) == 1;
+		shouldNotify = ByteBufUtils.readVarShort(buf) == 1;
 	}
 
 	@Override
@@ -30,6 +32,7 @@ public class LootPacket implements IMessage {
 		ByteBufUtils.writeItemStack(buf, loot);
 		ByteBufUtils.writeVarShort(buf, step);
 		ByteBufUtils.writeVarShort(buf, isSuccess ? 1 : 0);
+		ByteBufUtils.writeVarShort(buf, shouldNotify ? 1 : 0);
 	}
 
 	public boolean isSuccess() {
@@ -56,7 +59,15 @@ public class LootPacket implements IMessage {
 		this.step = step;
 	}
 
-	public static class LootHandler implements IMessageHandler<LootPacket, IMessage> {
+	public boolean isShouldNotify() {
+		return shouldNotify;
+	}
+
+	public void setShouldNotify(boolean shouldNotify) {
+		this.shouldNotify = shouldNotify;
+	}
+
+	public static class Handler implements IMessageHandler<LootPacket, IMessage> {
 
 		@Override
 		public IMessage onMessage(LootPacket message, MessageContext ctx) {

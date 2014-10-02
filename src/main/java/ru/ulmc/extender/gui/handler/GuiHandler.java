@@ -61,7 +61,9 @@ public class GuiHandler implements IGuiHandler {
 							(TileEntityGrinder) te);
 				}
 			case GuiThief.GUI_ID:
-				return new ContainerThief(player);
+				ContainerThief cont = new ContainerThief(player);
+				UltimateExtender.STEAL_PROCESSOR.attachContainer(player.getDisplayName(), cont);
+				return cont;
 			default:
 				return null;
 		}

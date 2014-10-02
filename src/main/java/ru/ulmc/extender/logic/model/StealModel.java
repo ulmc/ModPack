@@ -1,14 +1,15 @@
-package ru.ulmc.extender.network.model;
+package ru.ulmc.extender.logic.model;
 
 import net.minecraft.entity.player.EntityPlayer;
+import ru.ulmc.extender.container.ContainerThief;
 
 import java.util.Date;
 
 /**
  * Created by 45 on 01.10.2014.
  */
-public class StealingModel {
-	private static final int TIME_PER_STEP = 10000; //10 sec?
+public class StealModel {
+	private static final int TIME_PER_STEP = 3000; //10 sec?
 	private static final float PER_STEP_TIME_MODIFIER = 0.1f;
 	private String thiefName;
 	private String victimName;
@@ -18,8 +19,9 @@ public class StealingModel {
 	private boolean isFailed;
 	private EntityPlayer victim;
 	private EntityPlayer thief;
+	private ContainerThief container;
 
-	public StealingModel(EntityPlayer thief, EntityPlayer victim) {
+	public StealModel(EntityPlayer thief, EntityPlayer victim) {
 		this.thief = thief;
 		this.victim = victim;
 		this.thiefName = thief.getDisplayName();
@@ -47,6 +49,14 @@ public class StealingModel {
 
 	public void setVictimName(String victimName) {
 		this.victimName = victimName;
+	}
+
+	public ContainerThief getContainer() {
+		return container;
+	}
+
+	public void setContainer(ContainerThief container) {
+		this.container = container;
 	}
 
 	public int getStep() {

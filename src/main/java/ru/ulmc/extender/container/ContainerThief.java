@@ -50,6 +50,14 @@ public class ContainerThief extends Container {
 		bindPlayerInventory(thiefInventory);
 	}
 
+	public VictimInventory getVictimInventory() {
+		return victimInventory;
+	}
+
+	public void setVictimInventory(VictimInventory victimInventory) {
+		this.victimInventory = victimInventory;
+	}
+
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return thief.equals(player);

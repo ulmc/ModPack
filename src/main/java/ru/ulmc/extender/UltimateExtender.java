@@ -46,6 +46,7 @@ import ru.ulmc.extender.events.MobDropEventsHook;
 import ru.ulmc.extender.events.WarmHandler;
 import ru.ulmc.extender.gui.handler.GuiHandler;
 import ru.ulmc.extender.item.ItemManager;
+import ru.ulmc.extender.logic.StealProcessor;
 import ru.ulmc.extender.network.*;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.render.particle.EntityChestContentFX;
@@ -58,7 +59,7 @@ public class UltimateExtender {
 
 	@Instance
 	public static UltimateExtender instance;
-	public static final ThiefProcessor thiefProcessor = new ThiefProcessor();
+	public static final StealProcessor STEAL_PROCESSOR = new StealProcessor();
 	public static Logger logger;
 	public static SimpleNetworkWrapper networkWrapper;
 	@SidedProxy(modId = Reference.MOD_ID, serverSide = Reference.COMMON_PROXY, clientSide = Reference.CLIENT_PROXY)
@@ -137,15 +138,7 @@ public class UltimateExtender {
 		ItemManager.init(proxy);
 		RecipeManager.init(proxy);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-		loadConfigValues();
-		int desc = 0;
-		networkWrapper.registerMessage(WarmPacket.Handler.class, WarmPacket.class, desc++, Side.CLIENT);
-		networkWrapper.registerMessage(LookForLootPacket.LookForLootHandler.class,
-				LookForLootPacket.class, desc++, Side.SERVER);
-		networkWrapper.registerMessage(ConfirmLootPacket.StartHandler.class,
-				ConfirmLootPacket.class, desc++, Side.CLIENT);
-		networkWrapper.registerMessage(LootPacket.LootHandler.class,
-				LootPacket.class, desc++, Side.CLIENT);
+		initNetwork();
 	}
 
 	@EventHandler
@@ -169,7 +162,15 @@ public class UltimateExtender {
 		player.addChatMessage(new ChatComponentText(str));
 	}
 
-	private void loadConfigValues() {
 
+	private void initNetwork() {
+		int desc = 0;
+		networkWrapper.registerMessage(WarmPacket.Handler.class, WarmPacket.class, desc++, Side.CLIENT);
+		networkWrapper.registerMessage(IntentStealPacket.Handler.class,
+				IntentStealPacket.class, desc++, Side.SERVER);
+		networkWrapper.registerMessage(ConfirmStealPacket.Handler.class,
+				ConfirmStealPacket.class, desc++, Side.CLIENT);
+		networkWrapper.registerMessage(LootPacket.Handler.class,
+				LootPacket.class, desc++, Side.CLIENT);
 	}
 }
