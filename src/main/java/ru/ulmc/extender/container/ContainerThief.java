@@ -112,4 +112,6 @@ public class ContainerThief extends Container {
 		lootInventory.closeInventory();
 		thief.inventory.closeInventory();
 	}
+
+
 }

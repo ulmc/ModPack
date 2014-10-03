@@ -19,7 +19,10 @@
  */
 package ru.ulmc.extender.logic;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -46,8 +49,10 @@ public class StealProcessor {
 	public static final int ROW_BOTTOM = 2;
 	public static final int ROW_BELT = 1;
 
-	private static Map<String, StealModel> thiefMap = new HashMap<String, StealModel>();
-
+	//server-side;
+	private Map<String, StealModel> thiefMap = new HashMap<String, StealModel>();
+	//client-side
+	private ContainerThief clientContainer;
 
 	public void initStealing(EntityPlayer thief, EntityPlayer victim) {
 		int aStr = victim.getTotalArmorValue(); aStr = aStr != 0 ? aStr : 1;
@@ -140,6 +145,17 @@ public class StealProcessor {
 		return lootPacket;
 	}
 
+	public void handleLootPacket(LootPacket message) {
+		if(message.isSuccess()) {
+			if (clientContainer != null) {
+				clientContainer.getSlot(message.getStep()).putStack(message.getLoot()); // как-то так
+			} else {
+				UltimateExtender.logger.error("Why is clientContainer NULL at handleLootPacket? That's crappy");
+			}
+
+		}
+	}
+
 	private int[] findLoot(int row, ItemStack[] inv, Random rand) {
 		int start = (row - 1) * 9; int end = row * 9;
 		int[] foundStacksIds = new int[5];
@@ -164,5 +180,9 @@ public class StealProcessor {
 			return findLoot(row+1, inv, rand);
 		}
 		return foundStacksIds;
+	}
+
+	public void setClientContainer(ContainerThief clientContainer) {
+		this.clientContainer = clientContainer;
 	}
 }

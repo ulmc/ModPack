@@ -58,6 +58,7 @@ public class GuiThief extends GuiContainer {
 				(this.width - BTN_STEAL_X_OFFSET) /2, 35, 20, "steal");
 
 		ConfirmStealPacket.Handler.callback = new LootingUpdater();
+		UltimateExtender.STEAL_PROCESSOR.setClientContainer((ContainerThief)this.inventorySlots);
 	}
 
 	@Override
