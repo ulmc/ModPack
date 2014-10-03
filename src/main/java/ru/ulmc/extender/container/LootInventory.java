@@ -8,12 +8,12 @@ import net.minecraft.item.ItemStack;
 /**
  * Created by 45 on 30.09.2014.
  */
-public class VictimInventory implements IInventory {
+public class LootInventory implements IInventory {
 	private static final int INV_SIZE = 9;
 	private ItemStack[] inventory = new ItemStack[INV_SIZE];
 	private Container eventHandler;
 
-	public VictimInventory(Container eventHandler) {
+	public LootInventory(Container eventHandler) {
 		this.eventHandler = eventHandler;
 	}
 

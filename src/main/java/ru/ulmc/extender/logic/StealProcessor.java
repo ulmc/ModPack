@@ -1,14 +1,30 @@
+/**
+ * Copyright (C) 2014 ulmc.ru (Alex K.)
+ *
+ * This file part of ulmc.ru ModPack
+ *
+ * ulmc.ru ModPack is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ulmc.ru ModPack is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see [http://www.gnu.org/licenses/].
+ *
+ */
 package ru.ulmc.extender.logic;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.container.ContainerThief;
-import ru.ulmc.extender.exception.StealingException;
 import ru.ulmc.extender.logic.model.StealModel;
 import ru.ulmc.extender.network.ConfirmStealPacket;
 import ru.ulmc.extender.network.IntentStealPacket;
@@ -117,7 +133,7 @@ public class StealProcessor {
 		//lootSlot.putStack(realLoot);
 		Slot targetSlot = sm.getContainer().getSlot(sm.getStep());
 		targetSlot.putStack(realLoot);
-		sm.getContainer().getVictimInventory().closeInventory();
+		sm.getContainer().getLootInventory().closeInventory();
 		sm.getContainer().detectAndSendChanges();
 		sm.setStep(sm.getStep() + 1);
 		UltimateExtender.logger.info("Stealing: " + realLoot.getItem().getUnlocalizedName() + " " + realLoot.stackSize);

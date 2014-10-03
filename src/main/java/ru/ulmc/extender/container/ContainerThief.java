@@ -19,18 +19,15 @@
  */
 package ru.ulmc.extender.container;
 
-import ibxm.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import ru.ulmc.extender.UltimateExtender;
-import ru.ulmc.extender.tileentity.TileEntityBones;
 
 public class ContainerThief extends Container {
 
-	protected VictimInventory victimInventory;
+	protected LootInventory lootInventory;
 	protected InventoryPlayer thiefInventory;
 	protected EntityPlayer thief;
 	protected int linesNum = 1;
@@ -40,22 +37,22 @@ public class ContainerThief extends Container {
 
 
 	public ContainerThief(EntityPlayer thief) {
-		victimInventory = new VictimInventory(this);
+		lootInventory = new LootInventory(this);
 		this.thiefInventory = thief.inventory;
 		this.thief = thief;
 		for (int column = 0; column < inLine; column++) {
-			addSlotToContainer(new VictimSlot(victimInventory, inLine + column, 8 + column * 18, 19));
+			addSlotToContainer(new VictimSlot(lootInventory, inLine + column, 8 + column * 18, 19));
 		}
 
 		bindPlayerInventory(thiefInventory);
 	}
 
-	public VictimInventory getVictimInventory() {
-		return victimInventory;
+	public LootInventory getLootInventory() {
+		return lootInventory;
 	}
 
-	public void setVictimInventory(VictimInventory victimInventory) {
-		this.victimInventory = victimInventory;
+	public void setLootInventory(LootInventory lootInventory) {
+		this.lootInventory = lootInventory;
 	}
 
 	@Override
@@ -112,7 +109,7 @@ public class ContainerThief extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		victimInventory.closeInventory();
+		lootInventory.closeInventory();
 		thief.inventory.closeInventory();
 	}
 }
