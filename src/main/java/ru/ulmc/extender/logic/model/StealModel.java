@@ -45,7 +45,7 @@ public class StealModel {
 		this.victim = victim;
 		this.thiefName = thief.getDisplayName();
 		this.victimName = victim.getDisplayName();
-		this.step = 1;
+		this.step = 0;
 	}
 
 	public int setupToken() {

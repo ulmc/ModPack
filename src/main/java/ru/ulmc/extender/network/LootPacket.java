@@ -26,33 +26,43 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.gui.GuiThief;
 
 /**
  * Created by 45 on 01.10.2014.
  */
 public class LootPacket implements IMessage {
-	private boolean isSuccess;
-	private ItemStack loot = null;
-	private int step;
-	private boolean shouldNotify;
+	//private ItemStack loot = null;
+	private int step = 1;
+	private int delta = 1;
+	private boolean isSuccess = false;
+	private boolean shouldNotify = false;
+	private boolean isSnoop = false;
+	private boolean isEmptyLoot = false;
 
 	public LootPacket() {
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		loot = ByteBufUtils.readItemStack(buf);
+		//loot = ByteBufUtils.readItemStack(buf);
 		step = ByteBufUtils.readVarShort(buf);
+		delta = ByteBufUtils.readVarInt(buf, 4);
 		isSuccess = ByteBufUtils.readVarShort(buf) == 1;
 		shouldNotify = ByteBufUtils.readVarShort(buf) == 1;
+		isSnoop = ByteBufUtils.readVarShort(buf) == 1;
+		isEmptyLoot = ByteBufUtils.readVarShort(buf) == 1;
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeItemStack(buf, loot);
+		//ByteBufUtils.writeItemStack(buf, loot);
 		ByteBufUtils.writeVarShort(buf, step);
+		ByteBufUtils.writeVarInt(buf, delta, 4);
 		ByteBufUtils.writeVarShort(buf, isSuccess ? 1 : 0);
 		ByteBufUtils.writeVarShort(buf, shouldNotify ? 1 : 0);
+		ByteBufUtils.writeVarShort(buf, isSnoop ? 1 : 0);
+		ByteBufUtils.writeVarShort(buf, isEmptyLoot ? 1 : 0);
 	}
 
 	public boolean isSuccess() {
@@ -62,13 +72,22 @@ public class LootPacket implements IMessage {
 	public void setSuccess(boolean isSuccess) {
 		this.isSuccess = isSuccess;
 	}
-
+/*
 	public ItemStack getLoot() {
 		return loot;
 	}
 
 	public void setLoot(ItemStack loot) {
 		this.loot = loot;
+	}
+*/
+
+	public boolean isEmptyLoot() {
+		return isEmptyLoot;
+	}
+
+	public void setEmptyLoot(boolean isEmptyLoot) {
+		this.isEmptyLoot = isEmptyLoot;
 	}
 
 	public int getStep() {
@@ -77,6 +96,22 @@ public class LootPacket implements IMessage {
 
 	public void setStep(int step) {
 		this.step = step;
+	}
+
+	public int getDelta() {
+		return delta;
+	}
+
+	public void setDelta(int delta) {
+		this.delta = delta;
+	}
+
+	public boolean isSnoop() {
+		return isSnoop;
+	}
+
+	public void setSnoop(boolean isSnoop) {
+		this.isSnoop = isSnoop;
 	}
 
 	public boolean isShouldNotify() {
@@ -88,10 +123,14 @@ public class LootPacket implements IMessage {
 	}
 
 	public static class Handler implements IMessageHandler<LootPacket, IMessage> {
-
+		public static GuiThief.LootingUpdater callback;
 		@Override
 		public IMessage onMessage(LootPacket message, MessageContext ctx) {
-			UltimateExtender.STEAL_PROCESSOR.handleLootPacket(message);
+			if (message.isSnoop()) {
+				callback.run(message);
+			} else {
+				UltimateExtender.STEAL_PROCESSOR.handleLootPacket(message);
+			}
 			return null;
 		}
 	}

@@ -20,11 +20,26 @@
 package ru.ulmc.extender.container;
 
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
-public class VictimSlot extends Slot {
+public class LootSlot extends Slot {
 
-	public VictimSlot(LootInventory par1iInventory, int par2, int par3, int par4) {
+	private boolean isEmpty = false;
+
+	public LootSlot(LootInventory par1iInventory, int par2, int par3, int par4) {
 		super(par1iInventory, par2, par3, par4);
 	}
 
+	@Override
+	public boolean isItemValid(ItemStack p_75214_1_) {
+		return false;
+	}
+
+	public boolean isEmpty() {
+		return isEmpty;
+	}
+
+	public void setEmpty(boolean isEmpty) {
+		this.isEmpty = isEmpty;
+	}
 }

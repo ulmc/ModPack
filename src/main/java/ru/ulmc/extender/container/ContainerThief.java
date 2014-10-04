@@ -23,7 +23,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.Iterator;
 
 public class ContainerThief extends Container {
 
@@ -41,7 +44,7 @@ public class ContainerThief extends Container {
 		this.thiefInventory = thief.inventory;
 		this.thief = thief;
 		for (int column = 0; column < inLine; column++) {
-			addSlotToContainer(new VictimSlot(lootInventory, inLine + column, 8 + column * 18, 19));
+			addSlotToContainer(new LootSlot(lootInventory, column, 8 + column * 18, 19));
 		}
 
 		bindPlayerInventory(thiefInventory);
@@ -75,8 +78,12 @@ public class ContainerThief extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+		if (slot > 8) {
+			return null;
+		}
 		ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
+
 
 		// null checks and checks if the item can be stacked (maxStackSize > 1)
 		if (slotObject != null && slotObject.getHasStack()) {
@@ -109,9 +116,17 @@ public class ContainerThief extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
+		if (!player.getEntityWorld().isRemote)
+		{
+			for (int i = 0; i < lootInventory.getSizeInventory(); i++) {
+				ItemStack itemstack = this.lootInventory.getStackInSlotOnClosing(i);
+				if (itemstack != null)
+				{
+					player.dropPlayerItemWithRandomChoice(itemstack, false);
+				}
+			}
+		}
 		lootInventory.closeInventory();
 		thief.inventory.closeInventory();
 	}
-
-
 }

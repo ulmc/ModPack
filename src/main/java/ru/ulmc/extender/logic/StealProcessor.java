@@ -19,17 +19,16 @@
  */
 package ru.ulmc.extender.logic;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.container.ContainerThief;
+import ru.ulmc.extender.container.LootInventory;
+import ru.ulmc.extender.container.LootSlot;
+import ru.ulmc.extender.gui.GuiThief;
 import ru.ulmc.extender.logic.model.StealModel;
-import ru.ulmc.extender.network.ConfirmStealPacket;
 import ru.ulmc.extender.network.IntentStealPacket;
 import ru.ulmc.extender.network.LootPacket;
 
@@ -44,15 +43,16 @@ import java.util.Random;
  */
 public class StealProcessor {
 	
-	public static final int ROW_TOP = 4;
-	public static final int ROW_MID = 3;
-	public static final int ROW_BOTTOM = 2;
-	public static final int ROW_BELT = 1;
+	public static final int ROW_TOP = 1;
+	public static final int ROW_MID = 2;
+	public static final int ROW_BOTTOM = 3;
+	public static final int ROW_BELT = 4;
 
 	//server-side;
 	private Map<String, StealModel> thiefMap = new HashMap<String, StealModel>();
 	//client-side
 	private ContainerThief clientContainer;
+	private GuiThief gui;
 
 	public void initStealing(EntityPlayer thief, EntityPlayer victim) {
 		int aStr = victim.getTotalArmorValue(); aStr = aStr != 0 ? aStr : 1;
@@ -65,19 +65,20 @@ public class StealProcessor {
 		sm.setContainer(container);
 	}
 
-	public ConfirmStealPacket lookingForLoot(IntentStealPacket message) {
+	public LootPacket lookingForLoot(IntentStealPacket message) {
 		UltimateExtender.logger.info("Trying to lookingForLoot: " + message.getThiefName() + " " + message.getStep() + " " + message.isAskingForLoot());
-		ConfirmStealPacket clp = new ConfirmStealPacket();
+		LootPacket clp = new LootPacket();
+		clp.setSnoop(true);
 		StealModel sm = thiefMap.get(message.getThiefName());
 		if (sm == null || sm.getStep() != message.getStep()) {
-			clp.setOk(false);
+			clp.setSuccess(false);
 			clp.setDelta(9000000);
 			UltimateExtender.logger.warn("Logic violation or unknown error (lookingForLoot). ThiefName: " +
 					message.getThiefName()+" steps(S:C) " + (sm != null ? sm.getStep() : "null" )+ ":" + message.getStep());
 		} else {
 			int delta = sm.setupToken();
 			clp.setDelta(delta);
-			clp.setOk(true);
+			clp.setSuccess(true);
 		}
 		return clp;
 	}
@@ -87,13 +88,15 @@ public class StealProcessor {
 		StealModel sm = thiefMap.get(message.getThiefName());
 		LootPacket lootPacket = new LootPacket();
 		lootPacket.setSuccess(false);
+		lootPacket.setSnoop(false);
 		Date now = new Date();
 		if (sm == null || sm.getStep() != message.getStep() || !sm.getApprovedTime().before(now)) {
 			UltimateExtender.logger.warn("Logic violation or unknown error(getLoot). ThiefName: " +
 					message.getThiefName() + " now: " + now + " waiting on: " + sm.getApprovedTime() +
 					" steps(S:C) " + sm.getStep() + ":" + message.getStep() );
+			return lootPacket;
 		}
-		if (sm.getThief().getDistanceSqToEntity(sm.getVictim()) >= 5 || sm.getVictim() == null) {
+		if (sm.getThief().getDistanceSqToEntity(sm.getVictim()) >= 16.0D || sm.getVictim() == null) {
 			UltimateExtender.logger.info("Distance");
 			return lootPacket;
 		}
@@ -106,53 +109,61 @@ public class StealProcessor {
 			return lootPacket;
 		}
 		boolean cut = rand.nextFloat() < 0.1F; // подрезка
-		boolean belt = !cut || rand.nextFloat() < 0.1F * (5 - sm.getStep()); // пояс
-		int row = cut ? ROW_BOTTOM : ( belt ? ROW_BELT : (sm.getStep() <= 3 ? ROW_TOP :( sm.getStep() <= 6 ? ROW_MID : ROW_BOTTOM)));
+		boolean belt = !cut && rand.nextFloat() < 0.1F * (5 - sm.getStep()); // пояс
+		int row = cut ? ROW_BOTTOM : ( belt ? ROW_BELT : (sm.getStep() <= 2 ? ROW_TOP :( sm.getStep() <= 5 ? ROW_MID : ROW_BOTTOM)));
+		UltimateExtender.logger.info("isCut|belt|row: " + cut + " " + belt + " " + row);
 		int[] foundStacks = findLoot(row, sm.getVictim().inventory.mainInventory, rand);
 		int stackId = foundStacks[MathHelper.getRandomIntegerInRange(rand, 0, 4)];
 		Slot slot = sm.getVictim().inventoryContainer.getSlot(stackId + 9); // 4 armor + 4 craft + 1 result
 		ItemStack loot = slot.getStack();
 		ItemStack realLoot;
 		if(loot == null) {
-			lootPacket.setLoot(null);
 			lootPacket.setSuccess(true);
+			lootPacket.setEmptyLoot(true);
+			lootPacket.setStep(sm.getStep()+1);
 			UltimateExtender.logger.info("got empty stack");
 			return lootPacket;
 		}
-		/*if(loot.isStackable()) {
-			realLoot = loot.splitStack(MathHelper.getRandomIntegerInRange(rand, 1, loot.stackSize));
-			slot.putStack(null);
+		if(loot.isStackable()) {
+			int startQuantity = loot.getMaxStackSize() < 32? loot.stackSize/2 : loot.stackSize/3;
+			startQuantity = startQuantity > 0 ? startQuantity : 1;
+			realLoot = loot.splitStack(MathHelper.getRandomIntegerInRange(rand, startQuantity, loot.stackSize));
 			slot.putStack(loot); // что-то не так с разделением не идет на клиент.
 		} else {
 			realLoot = loot.copy();
 			slot.putStack(null);
-		}*/
-		realLoot = loot.copy();
-		slot.putStack(null);
-		sm.getVictim().inventory.markDirty();
-		sm.getVictim().inventory.closeInventory();
+		}
 		sm.getVictim().inventoryContainer.detectAndSendChanges();
-		lootPacket.setLoot(realLoot);
-		lootPacket.setSuccess(true);
-		//Slot lootSlot = sm.getContainer().getSlot(sm.getStep());
-		//lootSlot.putStack(realLoot);
 		Slot targetSlot = sm.getContainer().getSlot(sm.getStep());
 		targetSlot.putStack(realLoot);
-		sm.getContainer().getLootInventory().closeInventory();
 		sm.getContainer().detectAndSendChanges();
 		sm.setStep(sm.getStep() + 1);
+		lootPacket.setSuccess(true);
+		lootPacket.setStep(sm.getStep());
 		UltimateExtender.logger.info("Stealing: " + realLoot.getItem().getUnlocalizedName() + " " + realLoot.stackSize);
 		return lootPacket;
 	}
 
-	public void handleLootPacket(LootPacket message) {
-		if(message.isSuccess()) {
-			if (clientContainer != null) {
-				clientContainer.getSlot(message.getStep()).putStack(message.getLoot()); // как-то так
+	public void handleLootPacket(LootPacket msg) {
+		if(msg.isSuccess()) {
+			if (gui != null) {
+				/*clientContainer.getSlot(msg.getStep()).putStack(msg.getLoot()); // как-то так
+				LootInventory li = clientContainer.getLootInventory();
+				li.setInventorySlotContents(msg.getStep(), msg.getLoot());
+				((LootSlot)clientContainer.getSlot(msg.getStep())).setEmpty(msg.getLoot() == null);
+				ItemStack is = li.getStackInSlot(msg.getStep());
+				clientContainer.detectAndSendChanges();
+				gui.updateScreen();*/
+				gui.setStep(msg.getStep());
+				if(msg.isEmptyLoot()) {
+					gui.setFailedID(msg.getStep());
+				}
 			} else {
 				UltimateExtender.logger.error("Why is clientContainer NULL at handleLootPacket? That's crappy");
 			}
-
+		} else {
+			//clientContainer.onContainerClosed(gui.getPlayer());
+			gui.setTotallyFailed(true);
 		}
 	}
 
@@ -184,5 +195,9 @@ public class StealProcessor {
 
 	public void setClientContainer(ContainerThief clientContainer) {
 		this.clientContainer = clientContainer;
+	}
+
+	public void setGui(GuiThief gui) {
+		this.gui = gui;
 	}
 }

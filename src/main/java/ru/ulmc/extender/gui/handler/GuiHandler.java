@@ -93,7 +93,9 @@ public class GuiHandler implements IGuiHandler {
 				}
 			case GuiThief.GUI_ID:
 				try {
-					return new GuiThief(player);
+					GuiThief gui = new GuiThief(player);
+					UltimateExtender.instance.STEAL_PROCESSOR.setGui(gui);
+					return gui;
 				} catch (NullPointerException ex) {
 					UltimateExtender.logger.error("Can't find player with name: " + null);
 					return null;

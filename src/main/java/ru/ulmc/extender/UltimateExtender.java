@@ -168,8 +168,6 @@ public class UltimateExtender {
 		networkWrapper.registerMessage(WarmPacket.Handler.class, WarmPacket.class, desc++, Side.CLIENT);
 		networkWrapper.registerMessage(IntentStealPacket.Handler.class,
 				IntentStealPacket.class, desc++, Side.SERVER);
-		networkWrapper.registerMessage(ConfirmStealPacket.Handler.class,
-				ConfirmStealPacket.class, desc++, Side.CLIENT);
 		networkWrapper.registerMessage(LootPacket.Handler.class,
 				LootPacket.class, desc++, Side.CLIENT);
 	}
