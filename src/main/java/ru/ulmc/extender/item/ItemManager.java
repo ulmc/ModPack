@@ -146,6 +146,7 @@ public class ItemManager {
 			int furWearRenderID = proxy.getArmorPrefix("fur");
 			int apparelWearRenderID = proxy.getArmorPrefix("apparel");
 			int hiddenWearRenderID = proxy.getArmorPrefix("hidden");
+            int trashWearRenderID = proxy.getArmorPrefix("trash");
 
 			createArmor(EnumThermalMaterial.COTTON, cottonWearRenderID, 0, "cottonHat", false, true, true, false);
 			createArmor(EnumThermalMaterial.COTTON, cottonWearRenderID, 1, "cottonJacket", false, true, true, false);
@@ -163,6 +164,11 @@ public class ItemManager {
 			createArmor(EnumThermalMaterial.APPAREL, apparelWearRenderID, 3, "apparelBoots", false, true, true, true);
 
 			createArmor(EnumThermalMaterial.HIDDEN, hiddenWearRenderID, 0, "mask", false, true, true, false);
+
+            createArmor(EnumThermalMaterial.TRASH, trashWearRenderID, 0, "trashHat", false, true, true, false);
+            createArmor(EnumThermalMaterial.TRASH, trashWearRenderID, 1, "trashVest", false, true, true, false);
+            createArmor(EnumThermalMaterial.TRASH, trashWearRenderID, 2, "trashPants", true, true, true, false);
+            createArmor(EnumThermalMaterial.TRASH, trashWearRenderID, 3, "trashBoots", false, true, true, false);
             createPlants();
 		}
 		maskId = Item.getIdFromItem(items.get("mask"));

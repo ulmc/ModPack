@@ -21,13 +21,14 @@ package ru.ulmc.extender.item;
 
 public enum EnumThermalMaterial {
 	// 1 - имя, 2 - ID, 3 - множитель прочности, 4 - массив защиты(шлем, броник,
-	// штаны, обувь), 5 - энчантность в уровнях, 6 - теплота.
+	// штаны, обувь), 5 - энчантность в уровнях, 6 - теплота, 7 - охлаждение.
 	COTTON("COTTON", 10, 10, new int[]{0, 2, 1, 1}, 5, 0.3f, 0.7f, 0),
 	APPAREL("APPAREL", 11, 20, new int[]{2, 3, 1, 1}, 9, 0.4f, 0.7f, 0.2f),
 	FUR("FUR", 12, 20, new int[]{1, 3, 2, 2}, 10, 1.5f, -0.5f, 0),
 	IRONFUR("IRONFUR", 13, 15, new int[]{2, 6, 5, 2}, 9, 1.4f, -0.4f, 0),
 	DIAMONDFUR("DIAMONDFUR", 14, 33, new int[]{3, 8, 6, 3}, 10, 1.4f, -0.4f, 0),
-	HIDDEN("HIDDEN", 15, 10, new int[]{0, 1, 1, 0}, 5, 0.2f, 0.2f, 0);
+	HIDDEN("HIDDEN", 15, 10, new int[]{0, 1, 1, 0}, 5, 0.2f, 0.2f, 0),
+    TRASH("TRASH", 16, 2, new int[]{0, 0, 0, 0}, 5, 0.2f, 0.2f, 0);
 	private static final EnumThermalMaterial allArmorMaterials[] = new EnumThermalMaterial[]{COTTON, FUR, IRONFUR, DIAMONDFUR};
 	private int maxDamageFactor;
 	private int damageReductionAmountArray[];
