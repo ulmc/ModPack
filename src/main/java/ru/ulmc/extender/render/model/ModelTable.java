@@ -25,27 +25,24 @@ import net.minecraft.entity.Entity;
 
 public class ModelTable extends ModelBase implements SimpleUlmcModel {
 	// fields
-	ModelRenderer footStep1;
-	ModelRenderer surface;
-	ModelRenderer onLeg;
-	ModelRenderer leg;
-	ModelRenderer onStep;
-	ModelRenderer footStep2;
-	ModelRenderer footStep3;
-	ModelRenderer footStep4;
+	private ModelRenderer surface;
+	private ModelRenderer onLeg;
+	private ModelRenderer leg;
+	private ModelRenderer onStep;
+	private ModelRenderer footStep1;
+	private ModelRenderer footStep2;
+	private ModelRenderer footStep3;
+	private ModelRenderer footStep4;
 
 	public ModelTable() {
 		textureWidth = 64;
 		textureHeight = 64;
 
-		footStep1.mirror = true;
 		footStep1 = new ModelRenderer(this, 0, 19);
 		footStep1.addBox(-1F, 0F, -1F, 2, 8, 2);
 		footStep1.setRotationPoint(0F, 23F, 1F);
 		footStep1.setTextureSize(64, 64);
-		footStep1.mirror = true;
 		setRotation(footStep1, -1.361357F, 0F, 0F);
-		footStep1.mirror = false;
 		surface = new ModelRenderer(this, 0, 0);
 		surface.addBox(-8F, 0F, -8F, 16, 2, 16);
 		surface.setRotationPoint(0F, 8F, 0F);

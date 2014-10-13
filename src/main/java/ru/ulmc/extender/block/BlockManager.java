@@ -61,6 +61,7 @@ public class BlockManager {
 	public static BlockChair[] chairBlocksOak = new BlockChair[16];
 	public static BlockChair[] chairBlocksJungle = new BlockChair[16];
 	public static BlockChair[] chairBlocksSpruce = new BlockChair[16];
+	public static BlockChair[] chairBlocksAcacia = new BlockChair[16];
 
 
     public static BlockBones blockBones;
@@ -86,6 +87,10 @@ public class BlockManager {
 		chairBlocksSpruce[0] = createBlockChair("blockSpruceChair_Original");
 		for(int i = 1; i < 16; i++) {
 			chairBlocksSpruce[i] = createBlockChair("blockSpruceChair_" + i);
+		}
+		chairBlocksAcacia[0] = createBlockChair("blockAcaciaChair_Original");
+		for(int i = 1; i < 16; i++) {
+			chairBlocksAcacia[i] = createBlockChair("blockAcaciaChair_" + i);
 		}
 
 		blockGoldenThrone = createBlockEliteChair("blockGoldenThrone");

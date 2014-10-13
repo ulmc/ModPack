@@ -49,7 +49,6 @@ public class ClientProxy extends CommonProxy {
 		RenderChairs render = new RenderChairs();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChair.class, render);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEliteChair.class, render);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFlag.class, new RenderFlags());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new RenderTables());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBones.class, new RenderBones());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLockedChest.class, new RenderLockedChest());
