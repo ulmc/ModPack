@@ -23,6 +23,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import ru.ulmc.extender.proxy.CommonProxy;
+import ru.ulmc.extender.render.RenderBarrel;
 import ru.ulmc.extender.render.RenderChairs;
 import ru.ulmc.extender.render.RenderFlags;
 import ru.ulmc.extender.render.RenderTables;
@@ -33,26 +34,19 @@ import java.util.Map;
 
 public class BlockManager {
 
-	public static BlockChair blockWoodChair;
-	public static BlockChair blockWhiteCottonChair;
-	public static BlockChair blockBlueCottonChair;
-	public static BlockChair blockRedCottonChair;
-	public static BlockChair blockBlackCottonChair;
-	public static BlockChair blockLeatherChair;
-	public static BlockChair blockIronChair;
-	public static BlockEliteChair blockBlackwoodChair;
-	public static BlockEliteChair blockRedwoodChair;
-	public static BlockEliteChair blockGoldChair;
-	public static BlockEliteChair blockDiamondedChair;
+	public static BlockEliteChair blockGoldenThrone;
 
-	public static BlockTable blockWoodTable;
-	public static BlockTable blockIronTable;
-	public static BlockTable blockStoneTable;
-	public static BlockTable blockBlackwoodTable;
-	public static BlockTable blockRedwoodTable;
+	public static BlockTable blockSpruceWoodTable;
+	public static BlockTable blockBirchWoodTable;
+	public static BlockTable blockOakWoodTable;
+	public static BlockTable blockJungleWoodTable;
+	public static BlockTable blockAcaciaWoodTable;
+
 	public static BlockTable blockCabinetBlackwoodTable;
 	public static BlockTable blockCabinetRedwoodTable;
 	public static BlockTable blockDinnerWoodTable;
+
+	public static BlockBarrel blockBarrel;
 
 	public static BlockFlag blockFlag;
 	public static BlockFlag blockMedivalFlag;
@@ -63,6 +57,10 @@ public class BlockManager {
 	public static BlockLockedChest blockLockedChest;
 	public static BlockGrinder blockGrinder;
     public static BlockBarley blockBarley;
+	public static BlockChair[] chairBlocksBirch = new BlockChair[16];
+	public static BlockChair[] chairBlocksOak = new BlockChair[16];
+	public static BlockChair[] chairBlocksJungle = new BlockChair[16];
+	public static BlockChair[] chairBlocksSpruce = new BlockChair[16];
 
 
     public static BlockBones blockBones;
@@ -73,24 +71,32 @@ public class BlockManager {
 	public static void init(CommonProxy aProxy) {
 		proxy = aProxy;
 
-		blockWoodChair = createBlockChair(0.5F, 3.0F, "blockWoodChair");
-		blockWhiteCottonChair = createBlockChair(0.5F, 3.0F, "blockWhiteCottonChair");
-		blockBlueCottonChair = createBlockChair(0.5F, 3.0F, "blockBlueCottonChair");
-		blockRedCottonChair = createBlockChair(0.5F, 3.0F, "blockRedCottonChair");
-		blockBlackCottonChair = createBlockChair(0.5F, 3.0F, "blockBlackCottonChair");
-		blockLeatherChair = createBlockChair(0.5F, 5.0F, "blockLeatherChair");
-		blockIronChair = createBlockChair(1.5F, 8.0F, "blockIronChair");
+		chairBlocksBirch[0] = createBlockChair("blockBirchChair_Original");
+		for(int i = 1; i < 16; i++) {
+			chairBlocksBirch[i] = createBlockChair("blockBirchChair_" + i);
+		}
+		chairBlocksOak[0] = createBlockChair("blockOakChair_Original");
+		for(int i = 1; i < 16; i++) {
+			chairBlocksOak[i] = createBlockChair("blockOakChair_" + i);
+		}
+		chairBlocksJungle[0] = createBlockChair("blockJungleChair_Original");
+		for(int i = 1; i < 16; i++) {
+			chairBlocksJungle[i] = createBlockChair("blockJungleChair_" + i);
+		}
+		chairBlocksSpruce[0] = createBlockChair("blockSpruceChair_Original");
+		for(int i = 1; i < 16; i++) {
+			chairBlocksSpruce[i] = createBlockChair("blockSpruceChair_" + i);
+		}
 
-		blockBlackwoodChair = createBlockEliteChair(1.0F, 5.0F, "blockBlackwoodChair");
-		blockRedwoodChair = createBlockEliteChair(1.0F, 5.0F, "blockRedwoodChair");
-		blockGoldChair = createBlockEliteChair(1.0F, 5.0F, "blockGoldChair");
-		blockDiamondedChair = createBlockEliteChair(1.5F, 10.0F, "blockDiamondedChair");
+		blockGoldenThrone = createBlockEliteChair("blockGoldenThrone");
 
-		blockWoodTable = createBlockTable(0.5F, 5.0F, "blockWoodTable", TileEntityTable.MODEL_TABLE);
-		blockIronTable = createBlockTable(1.5F, 10.0F, "blockIronTable", TileEntityTable.MODEL_TABLE);
-		blockStoneTable = createBlockTable(2.0F, 10.0F, "blockStoneTable", TileEntityTable.MODEL_TABLE);
-		blockBlackwoodTable = createBlockTable(1.0F, 6.0F, "blockBlackwoodTable", TileEntityTable.MODEL_TABLE);
-		blockRedwoodTable = createBlockTable(1.0F, 6.0F, "blockRedwoodTable", TileEntityTable.MODEL_TABLE);
+		blockBarrel = createBlockBarrel("blockSpruceBarrel");
+
+		blockSpruceWoodTable = createBlockTable(0.5F, 5.0F, "blockSpruceBarTable", TileEntityTable.MODEL_TABLE);
+		blockBirchWoodTable = createBlockTable(0.5F, 5.0F, "blockBirchBarTable", TileEntityTable.MODEL_TABLE);
+		blockOakWoodTable = createBlockTable(0.5F, 5.0F, "blockOakBarTable", TileEntityTable.MODEL_TABLE);
+		blockJungleWoodTable = createBlockTable(0.5F, 5.0F, "blockJungleBarTable", TileEntityTable.MODEL_TABLE);
+		blockAcaciaWoodTable = createBlockTable(0.5F, 5.0F, "blockAcaciaBarTable", TileEntityTable.MODEL_TABLE);
 
 		blockCabinetBlackwoodTable = createBlockTable(1.0F, 6.0F, "blockCabinetBlackwoodTable", TileEntityTable.MODEL_CABINET);
 		blockCabinetRedwoodTable = createBlockTable(1.0F, 6.0F, "blockCabinetRedwoodTable", TileEntityTable.MODEL_CABINET);
@@ -131,8 +137,8 @@ public class BlockManager {
 		return (FillerBlock) registerBlock(new FillerBlock(material, systemName, sound));
 	}
 
-	private static BlockChair createBlockChair(float hardness, float explosionResistance, String name) {
-		BlockChair block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, hardness, explosionResistance, name));
+	private static BlockChair createBlockChair(String name) {
+		BlockChair block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, name));
 		try {
 			RenderChairs.registerResource(block.getUnlocalizedName());
 		} catch (Throwable e) {
@@ -140,8 +146,17 @@ public class BlockManager {
 		return block;
 	}
 
-	private static BlockEliteChair createBlockEliteChair(float hardness, float explosionResistance, String name) {
-		BlockEliteChair block = (BlockEliteChair) registerBlock(new BlockEliteChair(TileEntityEliteChair.class, hardness, explosionResistance, name));
+	private static BlockBarrel createBlockBarrel(String name) {
+		BlockBarrel block = (BlockBarrel) registerBlock(new BlockBarrel(TileEntityBarrel.class, name));
+		try {
+			RenderBarrel.registerResource(block.getUnlocalizedName());
+		} catch (Throwable e) {
+		}
+		return block;
+	}
+
+	private static BlockEliteChair createBlockEliteChair(String name) {
+		BlockEliteChair block = (BlockEliteChair) registerBlock(new BlockEliteChair(TileEntityEliteChair.class, name));
 		try {
 			RenderChairs.registerResource(block.getUnlocalizedName());
 		} catch (Throwable e) {

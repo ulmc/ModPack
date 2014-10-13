@@ -200,10 +200,11 @@
   </component>
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/ModPack.iml" filepath="$PROJECT_DIR$/ModPack.iml" />
       <module fileurl="file://$PROJECT_DIR$/forge.iml" filepath="$PROJECT_DIR$/forge.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.7 (1)" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="SvnBranchConfigurationManager">
@@ -211,6 +212,24 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="" />
+  </component>
+  <component name="libraryTable">
+    <library name="Gradle: C__Development_ModDev_ModPack__gradle_caches_minecraft_net_minecraftforge_forge_1_7_10_10_13_0_1180_start">
+      <CLASSES>
+        <root url="file://$PROJECT_DIR$/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.0.1180/start" />
+        <root url="file://$PROJECT_DIR$/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.0.1180/start" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="Gradle: unresolved_dependency____forgeBin_1_7_10_10_13_0_1180">
+      <CLASSES>
+        <root url="file://$PROJECT_DIR$/unresolved dependency -  forgeBin 1.7.10-10.13.0.1180" />
+        <root url="file://$PROJECT_DIR$/unresolved dependency -  forgeBin 1.7.10-10.13.0.1180" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
   </component>
 </project>
 

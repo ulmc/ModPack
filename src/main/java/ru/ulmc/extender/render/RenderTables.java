@@ -36,7 +36,7 @@ import ru.ulmc.extender.tileentity.TileEntityTable;
 import java.util.HashMap;
 import java.util.Map;
 
-@SideOnly(Side.CLIENT)
+/*@SideOnly(Side.CLIENT)*/
 public class RenderTables extends TileEntitySpecialRenderer {
 	private static ModelTable modelTable = new ModelTable();
 	private static ModelTableCabinet modelCabinetTable = new ModelTableCabinet();
@@ -44,13 +44,12 @@ public class RenderTables extends TileEntitySpecialRenderer {
 	private static Map<String, ResourceLocation> resources = new HashMap<String, ResourceLocation>();
 
 	public static void registerResource(String name) {
-		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/" + name + ".png");
+		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/furniture/" + name + ".png");
 		resources.put(name, resource);
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileEntity, double var2,
-	                               double var4, double var6, float var8) {
+	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8) {
 		TileEntityTable tableTE = (TileEntityTable) tileEntity;
 
 		SimpleUlmcModel model = null;

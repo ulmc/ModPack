@@ -60,6 +60,13 @@ public class Config {
 			return 0f;
 	}
 
+	public static boolean getSurvivalBool(String key) {
+		if(ssConfig.booleanMap.get(key) != null)
+			return ssConfig.booleanMap.get(key);
+		else
+			return false;
+	}
+
 	private static void initThievesCraft() {
 		tcConfig.setEnabled(getBoolean(tcConfig.getModuleName(), ThievesCraftConfig.FIELD_ENABLED, true));
 	}
@@ -73,6 +80,8 @@ public class Config {
 			getDouble(ssConfig.getModuleName(), key, ssConfig.doubleMap.get(key));
 		}
 	}
+
+
 
 	private static void initStrings() {
 		Map<String, String> map = stringsConfig.getMap();

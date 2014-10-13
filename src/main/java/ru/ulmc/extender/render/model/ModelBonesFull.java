@@ -24,74 +24,90 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelBonesFull extends ModelBase implements SimpleUlmcModel {
-	ModelRenderer sword;
-	ModelRenderer swordHandle;
-	ModelRenderer bone;
-	ModelRenderer chest;
-	ModelRenderer bone4;
-	ModelRenderer bone6;
-	ModelRenderer bone9;
-	ModelRenderer helmet;
-	ModelRenderer skull;
+	private ModelRenderer head;
+	private ModelRenderer hand1;
+	private ModelRenderer hand2;
+	private ModelRenderer chest;
+	private ModelRenderer spin;
+	private ModelRenderer leg1;
+	private ModelRenderer blade;
+	private ModelRenderer cross;
+	private ModelRenderer middle;
+	private ModelRenderer leg2;
+	private ModelRenderer coif;
 
 	public ModelBonesFull() {
-		textureWidth = 41;
-		textureHeight = 45;
+		textureWidth = 64;
+		textureHeight = 32;
 
-		sword = new ModelRenderer(this, 32, 0);
-		sword.addBox(0F, 0F, 0F, 1, 7, 1);
-		sword.setRotationPoint(-4F, 18F, -2F);
-		sword.setTextureSize(41, 45);
-		sword.mirror = true;
-		setRotation(sword, 0F, 0F, -0.3346075F);
-		swordHandle = new ModelRenderer(this, 29, 8);
-		swordHandle.addBox(0F, 0F, 0F, 5, 1, 1);
-		swordHandle.setRotationPoint(-5F, 21F, -2F);
-		swordHandle.setTextureSize(41, 45);
-		swordHandle.mirror = true;
-		setRotation(swordHandle, 0F, 0F, -0.3346075F);
-		bone = new ModelRenderer(this, 0, 13);
-		bone.addBox(-4F, 0F, 0F, 8, 2, 2);
-		bone.setRotationPoint(4F, 23F, -4F);
-		bone.setTextureSize(41, 45);
-		bone.mirror = true;
-		setRotation(bone, 0F, -1.041001F, -0.2974289F);
-		chest = new ModelRenderer(this, 0, 16);
-		chest.addBox(-4F, -8F, -2F, 7, 9, 3);
-		chest.setRotationPoint(0.8666667F, 23F, 2.666667F);
-		chest.setTextureSize(41, 45);
+		head = new ModelRenderer(this, 0, 0);
+		head.addBox(-4F, -4F, -3.4F, 8, 8, 8);
+		head.setRotationPoint(-1.7F, 12F, 2F);
+		head.setTextureSize(64, 32);
+		head.mirror = true;
+		setRotation(head, 0.0743572F, -0.3346075F, 0F);
+		hand1 = new ModelRenderer(this, 0, 16);
+		hand1.addBox(-1F, -1F, -1F, 2, 8, 2);
+		hand1.setRotationPoint(-5F, 17.5F, 1.5F);
+		hand1.setTextureSize(64, 32);
+		hand1.mirror = true;
+		setRotation(hand1, 0F, -0.6320364F, 0.1115358F);
+		hand2 = new ModelRenderer(this, 0, 16);
+		hand2.mirror = true;
+		hand2.addBox(-1F, -1.9F, -1F, 2, 8, 2);
+		hand2.setRotationPoint(2.6F, 22.4F, 3F);
+		hand2.setTextureSize(64, 32);
+		hand2.mirror = true;
+		setRotation(hand2, -2.93711F, 1.691627F, 0F);
+		hand2.mirror = false;
+		chest = new ModelRenderer(this, 32, 0);
+		chest.addBox(-2.5F, 2F, -1F, 5, 10, 4);
+		chest.setRotationPoint(-1.7F, 12F, 2F);
+		chest.setTextureSize(64, 32);
 		chest.mirror = true;
-		setRotation(chest, -0.3717861F, 0.4461433F, 0F);
-		bone4 = new ModelRenderer(this, 0, 13);
-		bone4.addBox(-5F, -1F, 0F, 9, 2, 2);
-		bone4.setRotationPoint(-4.6F, 19.8F, 4.333333F);
-		bone4.setTextureSize(41, 45);
-		bone4.mirror = true;
-		setRotation(bone4, -0.3531968F, 0.1673038F, -1.449966F);
-		bone6 = new ModelRenderer(this, 0, 13);
-		bone6.addBox(-5F, 0F, 0F, 10, 2, 2);
-		bone6.setRotationPoint(-6.2F, 23F, -2.6F);
-		bone6.setTextureSize(41, 45);
-		bone6.mirror = true;
-		setRotation(bone6, 0F, 1.375609F, 0.2056184F);
-		bone9 = new ModelRenderer(this, 0, 13);
-		bone9.addBox(-4F, -1F, -1F, 8, 2, 2);
-		bone9.setRotationPoint(6F, 20F, 3F);
-		bone9.setTextureSize(41, 45);
-		bone9.mirror = true;
-		setRotation(bone9, 0F, -0.0743572F, 1.394198F);
-		helmet = new ModelRenderer(this, 0, 28);
-		helmet.addBox(-3F, -3F, -3F, 8, 3, 8);
-		helmet.setRotationPoint(-0.5F, 12F, 3.5F);
-		helmet.setTextureSize(41, 45);
-		helmet.mirror = true;
-		setRotation(helmet, 0.3717861F, 0.7435722F, 0.0743572F);
-		skull = new ModelRenderer(this, 0, 0);
-		skull.addBox(-3F, -3F, -3F, 6, 5, 6);
-		skull.setRotationPoint(1F, 13F, 4F);
-		skull.setTextureSize(41, 45);
-		skull.mirror = true;
-		setRotation(skull, 0.3717861F, 0.7435722F, 0.0743572F);
+		setRotation(chest, -0.1115358F, -0.3316126F, 0F);
+		spin = new ModelRenderer(this, 17, 15);
+		spin.addBox(-1F, 2F, 2.6F, 2, 10, 1);
+		spin.setRotationPoint(-1.7F, 12F, 2F);
+		spin.setTextureSize(64, 32);
+		spin.mirror = true;
+		setRotation(spin, -0.1115358F, -0.3316126F, 0F);
+		blade = new ModelRenderer(this, 56, 15);
+		blade.addBox(-0.5F, -2.5F, -0.5F, 1, 7, 1);
+		blade.setRotationPoint(1F, 20F, -4F);
+		blade.setTextureSize(64, 32);
+		blade.mirror = true;
+		setRotation(blade, -0.3346075F, 1.673038F, -0.1487144F);
+		cross = new ModelRenderer(this, 52, 9);
+		cross.addBox(-0.5F, 0.5F, -2.5F, 1, 1, 5);
+		cross.setRotationPoint(1F, 20F, -4F);
+		cross.setTextureSize(64, 32);
+		cross.mirror = true;
+		setRotation(cross, -0.3346075F, 1.673038F, -0.1487144F);
+		middle = new ModelRenderer(this, 55, 5);
+		middle.addBox(-0.4F, -0.1F, -1.9F, 1, 2, 2);
+		middle.setRotationPoint(1F, 20F, -4F);
+		middle.setTextureSize(64, 32);
+		middle.mirror = true;
+		setRotation(middle, 0.4625123F, 1.623156F, -0.1396263F);
+		coif = new ModelRenderer(this, 25, 14);
+		coif.addBox(-4.5F, -4.5F, -4.2F, 9, 9, 9);
+		coif.setRotationPoint(-1.7F, 12F, 2F);
+		coif.setTextureSize(64, 32);
+		coif.mirror = true;
+		setRotation(coif, 0.0743572F, -0.3346075F, 0F);
+		leg1 = new ModelRenderer(this, 0, 16);
+		leg1.addBox(0F, 0F, 0F, 2, 8, 2);
+		leg1.setRotationPoint(4F, 23F, 1F);
+		leg1.setTextureSize(64, 32);
+		leg1.mirror = true;
+		setRotation(leg1, -1.59868F, 0.2788396F, 0.1487144F);
+		leg2 = new ModelRenderer(this, 0, 16);
+		leg2.addBox(0F, 0F, 0F, 2, 8, 2);
+		leg2.setRotationPoint(-7F, 21F, -2F);
+		leg2.setTextureSize(64, 32);
+		leg2.mirror = true;
+		setRotation(leg2, -1.447694F, -0.8562441F, 0.2321598F);
 	}
 
 	@Override
@@ -99,15 +115,7 @@ public class ModelBonesFull extends ModelBase implements SimpleUlmcModel {
 	                   float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-		sword.render(f5);
-		swordHandle.render(f5);
-		bone.render(f5);
-		chest.render(f5);
-		bone4.render(f5);
-		bone6.render(f5);
-		bone9.render(f5);
-		helmet.render(f5);
-		skull.render(f5);
+		render(f5);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -118,14 +126,16 @@ public class ModelBonesFull extends ModelBase implements SimpleUlmcModel {
 
 	@Override
 	public void render(float f5) {
-		sword.render(f5);
-		swordHandle.render(f5);
-		bone.render(f5);
+		head.render(f5);
+		hand1.render(f5);
+		hand2.render(f5);
 		chest.render(f5);
-		bone4.render(f5);
-		bone6.render(f5);
-		bone9.render(f5);
-		helmet.render(f5);
-		skull.render(f5);
+		spin.render(f5);
+		leg1.render(f5);
+		blade.render(f5);
+		cross.render(f5);
+		middle.render(f5);
+		leg2.render(f5);
+		coif.render(f5);
 	}
 }

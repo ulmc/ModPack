@@ -47,6 +47,7 @@ public class StealProcessor {
 	public static final int ROW_MID = 2;
 	public static final int ROW_BOTTOM = 3;
 	public static final int ROW_BELT = 4;
+	public static final int INVENTORY_DELTA = 9;
 
 	//server-side;
 	private Map<String, StealModel> thiefMap = new HashMap<String, StealModel>();
@@ -114,7 +115,7 @@ public class StealProcessor {
 		UltimateExtender.logger.info("isCut|belt|row: " + cut + " " + belt + " " + row);
 		int[] foundStacks = findLoot(row, sm.getVictim().inventory.mainInventory, rand);
 		int stackId = foundStacks[MathHelper.getRandomIntegerInRange(rand, 0, 4)];
-		Slot slot = sm.getVictim().inventoryContainer.getSlot(stackId + 9); // 4 armor + 4 craft + 1 result
+		Slot slot = sm.getVictim().inventoryContainer.getSlot(stackId + INVENTORY_DELTA); // 4 armor + 4 craft + 1 result
 		ItemStack loot = slot.getStack();
 		ItemStack realLoot;
 		if(loot == null) {
@@ -154,10 +155,10 @@ public class StealProcessor {
 				ItemStack is = li.getStackInSlot(msg.getStep());
 				clientContainer.detectAndSendChanges();
 				gui.updateScreen();*/
-				gui.setStep(msg.getStep());
 				if(msg.isEmptyLoot()) {
-					gui.setFailedID(msg.getStep());
+					gui.setFailedID(msg.getStep() - 1); // текущий же
 				}
+				gui.setStep(msg.getStep());
 			} else {
 				UltimateExtender.logger.error("Why is clientContainer NULL at handleLootPacket? That's crappy");
 			}
@@ -172,6 +173,7 @@ public class StealProcessor {
 		int[] foundStacksIds = new int[5];
 		int foundId = 0;
 		boolean allNulls = true;
+		UltimateExtender.logger.info("{} {} {}",start,end,row);
 		for (int i = start; i < end; i++) {
 			if(foundId >= foundStacksIds.length-1) {
 				if(allNulls && row < 4) {
@@ -187,7 +189,7 @@ public class StealProcessor {
 				}
 			}
 		}
-		if (foundId != foundStacksIds.length-1 && allNulls && row < 4) {
+		if (foundId != foundStacksIds.length-1 && allNulls && row < 3) {
 			return findLoot(row+1, inv, rand);
 		}
 		return foundStacksIds;

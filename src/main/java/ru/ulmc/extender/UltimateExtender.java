@@ -69,9 +69,11 @@ public class UltimateExtender {
 
 	private static void registerEventHooks() {
 		MinecraftForge.EVENT_BUS.register(new MobDropEventsHook());
-		WarmHandler warmHandler = new WarmHandler();
-		MinecraftForge.EVENT_BUS.register(warmHandler);
-		FMLCommonHandler.instance().bus().register(warmHandler);
+		if(Config.getSurvivalBool("thermal.event.enabled")) {
+			WarmHandler warmHandler = new WarmHandler();
+			MinecraftForge.EVENT_BUS.register(warmHandler);
+			FMLCommonHandler.instance().bus().register(warmHandler);
+		}
 	}
 
 	public static void markSomeBlockForUpdate(World world, int x, int y, int z) {

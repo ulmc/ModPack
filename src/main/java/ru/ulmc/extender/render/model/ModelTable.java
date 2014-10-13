@@ -25,53 +25,69 @@ import net.minecraft.entity.Entity;
 
 public class ModelTable extends ModelBase implements SimpleUlmcModel {
 	// fields
-	ModelRenderer Shape1;
-	ModelRenderer Shape2;
-	ModelRenderer Shape4;
-	ModelRenderer Shape5;
-	ModelRenderer Shape6;
-	ModelRenderer Shape3;
+	ModelRenderer footStep1;
+	ModelRenderer surface;
+	ModelRenderer onLeg;
+	ModelRenderer leg;
+	ModelRenderer onStep;
+	ModelRenderer footStep2;
+	ModelRenderer footStep3;
+	ModelRenderer footStep4;
 
 	public ModelTable() {
 		textureWidth = 64;
-		textureHeight = 32;
+		textureHeight = 64;
 
-		Shape1 = new ModelRenderer(this, 0, 0);
-		Shape1.addBox(0F, 0F, 0F, 2, 11, 2);
-		Shape1.setRotationPoint(-1F, 11F, -1F);
-		Shape1.setTextureSize(64, 32);
-		Shape1.mirror = true;
-		setRotation(Shape1, 0F, 0F, 0F);
-		Shape2 = new ModelRenderer(this, 42, 0);
-		Shape2.addBox(-2F, 0F, -2F, 4, 1, 4);
-		Shape2.setRotationPoint(0F, 22F, 0F);
-		Shape2.setTextureSize(64, 32);
-		Shape2.mirror = true;
-		setRotation(Shape2, 0F, 0F, 0F);
-		Shape4 = new ModelRenderer(this, 8, 4);
-		Shape4.addBox(-4F, 0F, -4F, 8, 1, 8);
-		Shape4.setRotationPoint(0F, 23F, 0F);
-		Shape4.setTextureSize(64, 32);
-		Shape4.mirror = true;
-		setRotation(Shape4, 0F, 0.7853982F, 0F);
-		Shape5 = new ModelRenderer(this, 0, 13);
-		Shape5.addBox(-7F, 0F, -7F, 16, 1, 16);
-		Shape5.setRotationPoint(-1F, 8F, -1F);
-		Shape5.setTextureSize(64, 32);
-		Shape5.mirror = true;
-		setRotation(Shape5, 0F, 0F, 0F);
-		Shape6 = new ModelRenderer(this, 42, 0);
-		Shape6.addBox(-2F, 0F, -2F, 4, 1, 4);
-		Shape6.setRotationPoint(0F, 9F, 0F);
-		Shape6.setTextureSize(64, 32);
-		Shape6.mirror = true;
-		setRotation(Shape6, 0F, 0.7853982F, 0F);
-		Shape3 = new ModelRenderer(this, 17, 14);
-		Shape3.addBox(-1.5F, 0F, -1.5F, 3, 1, 3);
-		Shape3.setRotationPoint(0F, 10F, 0F);
-		Shape3.setTextureSize(64, 32);
-		Shape3.mirror = true;
-		setRotation(Shape3, 0F, 0.7853982F, 0F);
+		footStep1.mirror = true;
+		footStep1 = new ModelRenderer(this, 0, 19);
+		footStep1.addBox(-1F, 0F, -1F, 2, 8, 2);
+		footStep1.setRotationPoint(0F, 23F, 1F);
+		footStep1.setTextureSize(64, 64);
+		footStep1.mirror = true;
+		setRotation(footStep1, -1.361357F, 0F, 0F);
+		footStep1.mirror = false;
+		surface = new ModelRenderer(this, 0, 0);
+		surface.addBox(-8F, 0F, -8F, 16, 2, 16);
+		surface.setRotationPoint(0F, 8F, 0F);
+		surface.setTextureSize(64, 64);
+		surface.mirror = true;
+		setRotation(surface, 0F, 0F, 0F);
+		onLeg = new ModelRenderer(this, 21, 28);
+		onLeg.addBox(-3F, 0F, -3F, 6, 1, 6);
+		onLeg.setRotationPoint(0F, 10F, 0F);
+		onLeg.setTextureSize(64, 64);
+		onLeg.mirror = true;
+		setRotation(onLeg, 0F, 0F, 0F);
+		leg = new ModelRenderer(this, 0, 19);
+		leg.addBox(-1F, 0F, -1F, 2, 12, 2);
+		leg.setRotationPoint(0F, 11F, 0F);
+		leg.setTextureSize(64, 64);
+		leg.mirror = true;
+		setRotation(leg, 0F, 0F, 0F);
+		onStep = new ModelRenderer(this, 23, 36);
+		onStep.addBox(-2F, 0F, -2F, 4, 1, 4);
+		onStep.setRotationPoint(0F, 22F, 0F);
+		onStep.setTextureSize(64, 64);
+		onStep.mirror = true;
+		setRotation(onStep, 0F, 0F, 0F);
+		footStep2 = new ModelRenderer(this, 0, 19);
+		footStep2.mirror = true;
+		footStep2.addBox(-1F, -1F, -1F, 2, 8, 2);
+		footStep2.setRotationPoint(0F, 23F, 0F);
+		footStep2.setTextureSize(64, 64);
+		setRotation(footStep2, -1.361357F, 3.141593F, 0F);
+		footStep3 = new ModelRenderer(this, 0, 19);
+		footStep3.addBox(-1F, -1F, -1F, 2, 8, 2);
+		footStep3.setRotationPoint(0F, 23F, 0F);
+		footStep3.setTextureSize(64, 64);
+		footStep3.mirror = true;
+		setRotation(footStep3, 1.361357F, -1.570796F, 0F);
+		footStep4 = new ModelRenderer(this, 0, 19);
+		footStep4.addBox(-1F, -1F, -1F, 2, 8, 2);
+		footStep4.setRotationPoint(0F, 23F, 0F);
+		footStep4.setTextureSize(64, 64);
+		footStep4.mirror = true;
+		setRotation(footStep4, 1.361357F, 1.570796F, 0F);
 	}
 
 	@Override
@@ -79,22 +95,19 @@ public class ModelTable extends ModelBase implements SimpleUlmcModel {
 	                   float f4, float f5) {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-		Shape1.render(f5);
-		Shape2.render(f5);
-		Shape4.render(f5);
-		Shape5.render(f5);
-		Shape6.render(f5);
-		Shape3.render(f5);
+		render(f5);
 	}
 
 	@Override
 	public void render(float f5) {
-		Shape1.render(f5);
-		Shape2.render(f5);
-		Shape4.render(f5);
-		Shape5.render(f5);
-		Shape6.render(f5);
-		Shape3.render(f5);
+		surface.render(f5);
+		onLeg.render(f5);
+		leg.render(f5);
+		onStep.render(f5);
+		footStep1.render(f5);
+		footStep2.render(f5);
+		footStep3.render(f5);
+		footStep4.render(f5);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

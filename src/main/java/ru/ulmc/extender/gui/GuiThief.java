@@ -59,7 +59,7 @@ public class GuiThief extends GuiContainer {
 		super(new ContainerThief(player));
 		this.player = player;
 		stealStartBtn = new GuiButton(1, (this.height - BTN_STEAL_Y_OFFSET)/2,
-				(this.width - BTN_STEAL_X_OFFSET) /2, 80, 20, "steal");
+				(this.width - BTN_STEAL_X_OFFSET) /2, 82, 20, "steal");
 
 		LootPacket.Handler.callback = new LootingUpdater();
 		UltimateExtender.STEAL_PROCESSOR.setClientContainer((ContainerThief)this.inventorySlots);
@@ -88,8 +88,8 @@ public class GuiThief extends GuiContainer {
 
 		for(int i = 0; i < failedIds.length; i++) {
 			if(failedIds[i] != -1) {
-				int x = inventorySlots.getSlot(step).xDisplayPosition;
-				int y = inventorySlots.getSlot(step).yDisplayPosition;
+				int x = inventorySlots.getSlot(failedIds[i]).xDisplayPosition;
+				int y = inventorySlots.getSlot(failedIds[i]).yDisplayPosition;
 				drawRect(x, y, (x + SLOT_SIZE_PX), y + SLOT_SIZE_PX, 0x89e32b2b);
 			} else {
 				break;

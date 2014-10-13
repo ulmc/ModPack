@@ -28,20 +28,23 @@ import java.util.Map;
 public class SurvivalSeasonConfig extends BaseModuleConfig {
 	public final Map<String, Integer> intMap = new HashMap<String, Integer>();
 	public final Map<String, Double> doubleMap = new HashMap<String, Double>();
+	public final Map<String, Boolean> booleanMap = new HashMap<String, Boolean>();
 
 	public SurvivalSeasonConfig() {
 		this.moduleName = "SurvivalSeason";
+		booleanMap.put("thermal.event.enabled", true);
+		booleanMap.put("client.debug", true);
 		intMap.put("thermal.updateStep", 30);
 		intMap.put("thermal.undergroundPosition", 52);
 		intMap.put("thermal.gui.thermometer.x", 70);
 		intMap.put("thermal.gui.thermometer.y", 52);
 		intMap.put("thermal.debug.sendMessageToPlayer", 1);
 
-		doubleMap.put("thermal.multiplier.coldBiome", 1.1d);
-		doubleMap.put("thermal.multiplier.hotBiome", 1.1d);
+		doubleMap.put("thermal.multiplier.coldBiome", 0.8d);
+		doubleMap.put("thermal.multiplier.hotBiome", 0.5d);
 		doubleMap.put("thermal.multiplier.hell", 1.2d);
-		doubleMap.put("thermal.neutral.value", 0.55d);
-		doubleMap.put("thermal.allowable.deviation", 0.2d);
+		doubleMap.put("thermal.neutral.value", 0.60d);
+		doubleMap.put("thermal.neutral.deviation", 0.2d);
 
 		doubleMap.put("thermal.underGroundBonus", 0.3d);
 		doubleMap.put("thermal.underGroundCoolBonus", 0.4d);

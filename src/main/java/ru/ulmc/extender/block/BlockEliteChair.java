@@ -26,8 +26,10 @@ import ru.ulmc.extender.tileentity.TileEntityEliteChair;
 public class BlockEliteChair extends BlockChair {
 	private Class anEntityClass;
 
-	public BlockEliteChair(Class class1, float aHardness, float aResistance, String aBlockName) {
-		super(class1, aHardness, aResistance, aBlockName);
+	public BlockEliteChair(Class class1, String aBlockName) {
+		super(class1, aBlockName);
+		setHardness(1.5F);
+		setResistance(3.5F);
 		anEntityClass = class1;
 	}
 

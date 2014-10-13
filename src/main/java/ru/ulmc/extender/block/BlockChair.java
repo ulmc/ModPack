@@ -28,16 +28,15 @@ import ru.ulmc.extender.Reference;
 public class BlockChair extends BasicStandingBlock {
 
 	@SuppressWarnings("rawtypes")
-	public BlockChair(Class entity, float aHardness, float aResistance,
-	                  String aBlockName) {
+	public BlockChair(Class entity, String aBlockName) {
 		super(Material.wood, entity, aBlockName);
 		anEntityClass = entity;
-		setHardness(aHardness);
-		setResistance(aResistance);
+		setHardness(0.5F);
+		setResistance(3.0F);
 		setStepSound(Block.soundTypeWood);
 		setCreativeTab(CreativeTabs.tabDecorations);
 		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
-		setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 0.7F, 0.9F);
+		setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 0.6F, 0.9F);
 	}
 
 	@Override

@@ -89,9 +89,6 @@ public class WarmHandler {
 	private List<Block> hotBlocks = new ArrayList<Block>();
 	private List<Block> coldBlocks = new ArrayList<Block>();
 
-	private String handlerLabel = "ulmc SurviveSeason SheduledHandler";
-
-
 	public WarmHandler() {
 		super();
 		tickStepBasic = Config.getSurvivalInt("thermal.updateStep");
@@ -152,7 +149,11 @@ public class WarmHandler {
 
 	@SubscribeEvent
 	public void clearMap(PlayerEvent.PlayerRespawnEvent event) {
+		if (!(event.player instanceof EntityPlayerMP)) {
+			return;
+		}
 		playersTicks.remove(event.player);
+		UltimateExtender.networkWrapper.sendTo(new WarmPacket(-1000, -1000, false), (EntityPlayerMP)event.player);
 		//playersThermalLevel.remove(event.player); будем сохранять температу игрока... чтобы не спасались логаутами
 	}
 
@@ -184,7 +185,7 @@ public class WarmHandler {
 		int currentY = MathHelper.floor_double(player.posY);
 		BiomeGenBase biome = world.getBiomeGenForCoords(currentX, currentZ);
 		float temp = biome.getFloatTemperature(currentX, currentZ, currentY);
-		Float warmnessDelta;
+		Float warmnessDelta = null;
 		if (Math.abs(temp - neutralValue) < allowableDeviation) {
 			if (isLavaNear(world, currentX - 2, currentY - 2, currentZ - 2,
 					currentX + 2, currentY + 2, currentZ + 2)) {

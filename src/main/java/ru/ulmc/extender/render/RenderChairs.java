@@ -47,7 +47,7 @@ public class RenderChairs extends TileEntitySpecialRenderer {
 	}
 
 	public static void registerResource(String name) {
-		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/" + name + ".png");
+		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/chairs/" + name + ".png");
 		resources.put(name, resource);
 	}
 

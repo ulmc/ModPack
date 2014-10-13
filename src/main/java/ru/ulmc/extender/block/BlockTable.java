@@ -26,7 +26,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.tileentity.TileEntityTable;
 
@@ -52,6 +54,11 @@ public class BlockTable extends BasicStandingBlock {
 	@Override
 	public TileEntity createNewTileEntity(World var1, int i) {
 		return new TileEntityTable();
+	}
+
+	@Override
+	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+		return side.equals(ForgeDirection.UP) ? true : false;
 	}
 
 	@Override
