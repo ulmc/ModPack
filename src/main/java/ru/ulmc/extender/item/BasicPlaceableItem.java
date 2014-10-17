@@ -29,6 +29,6 @@ public class BasicPlaceableItem extends ItemReed {
 		super(block);
 		setUnlocalizedName(unlocalizedName);
 		setTextureName(Reference.RES_NAME + unlocalizedName);
-		setCreativeTab(CreativeTabs.tabBlock);
+		//setCreativeTab(CreativeTabs.tabBlock);
 	}
 }

@@ -19,16 +19,22 @@
  */
 package ru.ulmc.extender.render;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.render.model.ModelCartBody;
 import ru.ulmc.extender.render.model.ModelWheel;
 import ru.ulmc.extender.tileentity.TileEntityCart;
 
-public class RenderCart extends TileEntitySpecialRenderer {
+public class RenderCart extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler {
 	private ModelWheel leftWheel = new ModelWheel(-3.0f);
 	private ModelWheel rightWheel = new ModelWheel(18.0f);
 	private ModelCartBody modelBody = new ModelCartBody();
@@ -70,6 +76,37 @@ public class RenderCart extends TileEntitySpecialRenderer {
 	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8) {
 		TileEntityCart bonesTE = (TileEntityCart) tileEntity;
 		renderModel(bonesTE, var2, var4, var6, var8);
+	}
+
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+		bindTexture(resource);
+		//GL11.glPushMatrix();
+		GL11.glScalef(0.75F, 0.75F, 0.75F);
+		GL11.glTranslatef(-0.5F, 0.8F, 0.2F);
+		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+		//GL11.gl
+		//modelSingle.render(0.0625F);
+		modelBody.render(0.0625F);
+		leftWheel.render(0.0625F);
+		rightWheel.render(0.0625F);
+		//GL11.glPopMatrix();
+	}
+
+	@Override
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		return true;
+	}
+
+	@Override
+	public boolean shouldRender3DInInventory(int modelId) {
+		return true;
+	}
+
+	@Override
+	public int getRenderId() {
+		return BlockManager.blockCart.getRenderType();
 	}
 
 }

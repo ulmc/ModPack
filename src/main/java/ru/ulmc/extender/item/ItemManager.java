@@ -23,7 +23,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import ru.ulmc.extender.UltimateExtender;
-import ru.ulmc.extender.block.BlockBarley;
 import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.config.Config;
 import ru.ulmc.extender.item.ItemLockProtector.ProtectorType;
@@ -119,8 +118,21 @@ public class ItemManager {
 			createLockProtector(2, "capsuleTNT", ProtectorType.TNTLOCK);
 
 			createThiefKnife(100, "thiefKnifeDiamond", Item.ToolMaterial.EMERALD);
-
 		}
+
+		createColoredFurnitureItem("acaciaBench", BlockManager.benchBlocksAcacia);
+		createColoredFurnitureItem("birchBench", BlockManager.benchBlocksBirch);
+		createColoredFurnitureItem("jungleBench", BlockManager.benchBlocksJungle);
+		createColoredFurnitureItem("oakBench", BlockManager.benchBlocksOak);
+		createColoredFurnitureItem("spruceBench", BlockManager.benchBlocksSpruce);
+		createColoredFurnitureItem("oldOakBench", BlockManager.benchBlocksOldOak);
+
+		createColoredFurnitureItem("acaciaChair", BlockManager.chairBlocksAcaciaColor);
+		createColoredFurnitureItem("birchChair", BlockManager.chairBlocksBirchColor);
+		createColoredFurnitureItem("jungleChair", BlockManager.chairBlocksJungleColor);
+		createColoredFurnitureItem("oakChair", BlockManager.chairBlocksOakColor);
+		createColoredFurnitureItem("spruceChair", BlockManager.chairBlocksSpruceColor);
+		createColoredFurnitureItem("oldOakChair", BlockManager.chairBlocksOldOakColor);
 
 		createCraftItem("boulder");
 		createCraftItem("cakeRaw");
@@ -186,6 +198,11 @@ public class ItemManager {
 
 	protected static void createPlaceableItem(Block block, String itemName) {
 		BasicPlaceableItem item = new BasicPlaceableItem(itemName, block);
+		commonRegistrationActions(item, itemName);
+	}
+
+	protected static void createColoredFurnitureItem(String itemName, Block block) {
+		ItemColoredFurniture item = new ItemColoredFurniture(block);
 		commonRegistrationActions(item, itemName);
 	}
 

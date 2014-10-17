@@ -25,11 +25,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.events.MobDropEventsHook;
 import ru.ulmc.extender.events.PlayerEventsHook;
 import ru.ulmc.extender.events.WarmHandler;
+
+import java.rmi.registry.Registry;
 
 public class CommonProxy implements IGuiHandler {
 	public void preInit() {
@@ -59,12 +63,14 @@ public class CommonProxy implements IGuiHandler {
 		GameRegistry.registerBlock(aBlock, aBlock.getUnlocalizedName());
 	}
 
-	public void createItem(Item anItem) {
-		GameRegistry.registerItem(anItem, anItem.getUnlocalizedName());
+	public void prepareBlock(Block aBlock, Class<? extends ItemBlock> itemBlock) {
+		GameRegistry.registerBlock(aBlock, itemBlock, aBlock.getUnlocalizedName());
 	}
 
-	public void CreateItem(Item anItem, int index, String name, String[] metanames, String[] ruNames, String[] enNames, String differentTexturePath) {
-
+	public void createItem(Item anItem) {
+		if(anItem instanceof ItemBlock)
+			return;
+		GameRegistry.registerItem(anItem, anItem.getUnlocalizedName(), Reference.MOD_ID);
 	}
 
 	public int getArmorPrefix(String name) {

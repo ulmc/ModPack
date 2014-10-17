@@ -19,22 +19,40 @@
  */
 package ru.ulmc.extender.block;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.tileentity.TileEntityChair;
+
+import java.util.List;
 
 public class BlockChair extends BasicStandingBlock {
+	private boolean isColored = false;
+	protected IIcon icon;
+	public static final int renderId = RenderingRegistry.getNextAvailableRenderId();
 
 	@SuppressWarnings("rawtypes")
-	public BlockChair(Class entity, String aBlockName) {
+	public BlockChair(Class entity, String aBlockName, boolean isColored) {
 		super(Material.wood, entity, aBlockName);
+		this.isColored = isColored;
 		anEntityClass = entity;
 		setHardness(0.5F);
 		setResistance(3.0F);
 		setStepSound(Block.soundTypeWood);
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(UltimateExtender.furnitureTab);
 		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
 		setBlockBounds(0.1F, 0.0F, 0.1F, 0.9F, 0.6F, 0.9F);
 	}
@@ -45,6 +63,55 @@ public class BlockChair extends BasicStandingBlock {
 			return (TileEntity) anEntityClass.newInstance();
 		} catch (Exception exception) {
 			throw new RuntimeException(exception);
+		}
+	}
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return icon;
+	}
+
+	@Override
+	public void registerBlockIcons(IIconRegister icon) {
+		this.icon = icon.registerIcon(Reference.RES_NAME + "icons/proto/" +
+				this.getUnlocalizedName().replace("tile.block","").replace("Chair","").replace("_Original",""));
+	}
+
+	public int damageDropped(int meta) {
+		return meta;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(Item item, CreativeTabs tabs, List list) {
+		if(isColored) {
+			for (int i = 0; i < 16; i++)
+				list.add(new ItemStack(item, 1, i));
+		}
+	}
+
+	@Override
+	public int getRenderType() {
+		return renderId;
+	}
+
+	@Override
+	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
+	                            ItemStack par6ItemStack) {
+		par1World.setBlockMetadataWithNotify(par2, par3, par4, par6ItemStack.getItemDamage(), 2);
+		TileEntity te = par1World.getTileEntity(par2, par3, par4);
+		if(te instanceof TileEntityChair) {
+			int p = MathHelper.floor_double((par5EntityLivingBase.rotationYaw * 4F) / 360F + 0.5D) & 3;
+
+			int aByte = 3;
+			if (p == 0) {
+				aByte = 0;
+			} else if (p == 3) {
+				aByte = 1;
+			} else if (p == 2) {
+				aByte = 2;
+			} else if (p == 1) {
+				aByte = 3;
+			}
+			((TileEntityChair)te).setRotation(aByte);
 		}
 	}
 }

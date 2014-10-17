@@ -21,9 +21,10 @@ package ru.ulmc.extender.tileentity;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import ru.ulmc.extender.UltimateExtender;
 
-public class TileEntityChair extends TileEntity {
-	private int cType;
+public class TileEntityChair extends ExtendedTileEntity {
+	private int rotation;
 
 	/**
 	 * Writes a tile entity to NBT.
@@ -31,7 +32,7 @@ public class TileEntityChair extends TileEntity {
 	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("t", this.cType);
+		par1NBTTagCompound.setInteger("rotate", this.rotation);
 	}
 
 	/**
@@ -40,15 +41,15 @@ public class TileEntityChair extends TileEntity {
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
-		this.cType = par1NBTTagCompound.getInteger("t");
-	}/*
-	public void setType(int i)
-    {
-        this.cType = i;
-        this.onInventoryChanged();
-    }
-    public int getType()
-    {
-        return this.cType;
-    }*/
+		this.rotation = par1NBTTagCompound.getInteger("rotate");
+	}
+
+	public int getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
+		UltimateExtender.markSomeBlockForUpdate(this.getWorldObj(), this.xCoord, this.yCoord, this.zCoord);
+	}
 }

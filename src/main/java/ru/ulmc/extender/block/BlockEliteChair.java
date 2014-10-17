@@ -27,7 +27,7 @@ public class BlockEliteChair extends BlockChair {
 	private Class anEntityClass;
 
 	public BlockEliteChair(Class class1, String aBlockName) {
-		super(class1, aBlockName);
+		super(class1, aBlockName, false);
 		setHardness(1.5F);
 		setResistance(3.5F);
 		anEntityClass = class1;

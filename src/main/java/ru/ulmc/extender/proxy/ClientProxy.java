@@ -25,6 +25,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import ru.ulmc.extender.config.Config;
@@ -46,15 +47,30 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerTileEntitySpecialRenderer() {
-		RenderChairs render = new RenderChairs();
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChair.class, render);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEliteChair.class, render);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new RenderTables());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBones.class, new RenderBones());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLockedChest.class, new RenderLockedChest());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCart.class, new RenderCart());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderBarrel());
-
+		RenderChairs chairs = new RenderChairs();
+		RenderBench bench = new RenderBench();
+		RenderTables renderTables = new RenderTables();
+		RenderBones bones = new RenderBones();
+		RenderLockedChest lockedChest = new RenderLockedChest();
+		RenderCart cart = new RenderCart();
+		RenderBarrel barrel = new RenderBarrel();
+		RenderConnectedTable connectedTable = new RenderConnectedTable();
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChair.class, chairs);
+		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEliteChair.class, chairs);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, renderTables);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBones.class, bones);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLockedChest.class, lockedChest);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCart.class, cart);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, barrel);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBench.class, bench);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConnectedTable.class, connectedTable);
+		//InventoryRender inventoryRender = new InventoryRender();
+	//	inventoryRender.add("bench", bench);
+		RenderingRegistry.registerBlockHandler(bench);
+		RenderingRegistry.registerBlockHandler(chairs);
+		RenderingRegistry.registerBlockHandler(bones);
+		RenderingRegistry.registerBlockHandler(cart);
+		RenderingRegistry.registerBlockHandler(barrel);
 		//RenderingRegistry.registerEntityRenderingHandler(EntityFallingBlock.class, new RenderBonesEntity());
 
 	}
@@ -66,12 +82,19 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void createItem(Item anItem) {
+		if(anItem instanceof ItemBlock)
+			return;
 		GameRegistry.registerItem(anItem, anItem.getUnlocalizedName());
 	}
 
 	@Override
 	public void prepareBlock(Block aBlock) {
 		GameRegistry.registerBlock(aBlock, aBlock.getUnlocalizedName());
+	}
+
+	@Override
+	public void prepareBlock(Block aBlock, Class<? extends ItemBlock> itemBlock) {
+		GameRegistry.registerBlock(aBlock, itemBlock, aBlock.getUnlocalizedName());
 	}
 
 	@Override

@@ -19,6 +19,7 @@
  */
 package ru.ulmc.extender.block;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -26,8 +27,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 
 public class BlockBarrel extends BasicStandingBlock {
+	public static final int renderId = RenderingRegistry.getNextAvailableRenderId();
 
 	@SuppressWarnings("rawtypes")
 	public BlockBarrel(Class entity, String aBlockName) {
@@ -36,7 +39,7 @@ public class BlockBarrel extends BasicStandingBlock {
 		setHardness(1.0F);
 		setResistance(3.0F);
 		setStepSound(Block.soundTypeWood);
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(UltimateExtender.furnitureTab);
 		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
 		setBlockBounds(0.05F, 0.0F, 0.05F, 0.95F, 1.0F, 0.95F);
 	}
@@ -44,6 +47,11 @@ public class BlockBarrel extends BasicStandingBlock {
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		return side.equals(ForgeDirection.UP) ? true : false;
+	}
+
+	@Override
+	public int getRenderType() {
+		return renderId;
 	}
 
 	@Override

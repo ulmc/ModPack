@@ -19,6 +19,7 @@
  */
 package ru.ulmc.extender.block;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -34,6 +35,7 @@ import ru.ulmc.extender.tileentity.TileEntityCart;
 import ru.ulmc.extender.tileentity.TileEntityFiller;
 
 public class BlockCart extends BasicStandingBlock {
+	public static final int renderId = RenderingRegistry.getNextAvailableRenderId();
 
 	protected Block fillerBlock;
 	protected float[][] bounds = {{0.0f, 0.0f, 0.0f, 2.0f, 1.0f, 2.0f},
@@ -45,7 +47,7 @@ public class BlockCart extends BasicStandingBlock {
 	public BlockCart(String aBlockName, Block fillerBlock) {
 		super(Material.wood, TileEntityCart.class, aBlockName);
 		this.fillerBlock = fillerBlock;
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(UltimateExtender.furnitureTab);
 	}
 
 	@Override
@@ -183,7 +185,7 @@ public class BlockCart extends BasicStandingBlock {
 
 	@Override
 	public int getRenderType() {
-		return -1;
+		return renderId;
 	}
 
 	@Override

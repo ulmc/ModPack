@@ -19,25 +19,28 @@
  */
 package ru.ulmc.extender.render;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.block.BlockManager;
 import ru.ulmc.extender.render.model.ModelBarrel;
-import ru.ulmc.extender.render.model.ModelChair;
-import ru.ulmc.extender.render.model.ModelEliteChair;
 
 @SideOnly(Side.CLIENT)
-public class RenderBarrel extends TileEntitySpecialRenderer {
+public class RenderBarrel extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler {
 	private static ResourceLocation resource;
-	private ModelBarrel modelChair;
+	private ModelBarrel model;
 
 	public RenderBarrel() {
-		modelChair = new ModelBarrel();
+		model = new ModelBarrel();
 	}
 
 	public static void registerResource(String name) {
@@ -82,7 +85,35 @@ public class RenderBarrel extends TileEntitySpecialRenderer {
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(deg, 0.0F, 1.0F, 0.0F);
-		modelChair.render(0.0625F);
+		model.render(0.0625F);
 		GL11.glPopMatrix();
+	}
+
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+		bindTexture(resource);
+		//GL11.glPushMatrix();
+		GL11.glScalef(1.0F, 1.0F, 1.0F);
+		GL11.glTranslatef(0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+		//GL11.gl
+		model.render(0.0625F);
+		//GL11.glPopMatrix();
+	}
+
+	@Override
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		return true;
+	}
+
+	@Override
+	public boolean shouldRender3DInInventory(int modelId) {
+		return true;
+	}
+
+	@Override
+	public int getRenderId() {
+		return BlockManager.blockBarrel.getRenderType();
 	}
 }

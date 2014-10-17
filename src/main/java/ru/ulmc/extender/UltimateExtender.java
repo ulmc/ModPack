@@ -35,7 +35,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -66,6 +69,13 @@ public class UltimateExtender {
 	public static CommonProxy proxy;
 	private static StringBuilder stringBuilder = new StringBuilder();
 	private TimerManager timerManager = new TimerManager();
+	public static CreativeTabs furnitureTab = new CreativeTabs("tabUlmcFurniture") {
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Item getTabIconItem() {
+			return Items.item_frame;
+		}
+	};
 
 	private static void registerEventHooks() {
 		MinecraftForge.EVENT_BUS.register(new MobDropEventsHook());

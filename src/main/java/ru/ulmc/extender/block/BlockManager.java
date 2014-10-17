@@ -22,11 +22,10 @@ package ru.ulmc.extender.block;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemBlock;
+import ru.ulmc.extender.item.ItemColoredFurniture;
 import ru.ulmc.extender.proxy.CommonProxy;
-import ru.ulmc.extender.render.RenderBarrel;
-import ru.ulmc.extender.render.RenderChairs;
-import ru.ulmc.extender.render.RenderFlags;
-import ru.ulmc.extender.render.RenderTables;
+import ru.ulmc.extender.render.*;
 import ru.ulmc.extender.tileentity.*;
 
 import java.util.HashMap;
@@ -56,15 +55,31 @@ public class BlockManager {
 	public static BlockBarbedWire blockBarbedWire;
 	public static BlockLockedChest blockLockedChest;
 	public static BlockGrinder blockGrinder;
-    public static BlockBarley blockBarley;
-	public static BlockChair[] chairBlocksBirch = new BlockChair[16];
-	public static BlockChair[] chairBlocksOak = new BlockChair[16];
-	public static BlockChair[] chairBlocksJungle = new BlockChair[16];
-	public static BlockChair[] chairBlocksSpruce = new BlockChair[16];
-	public static BlockChair[] chairBlocksAcacia = new BlockChair[16];
+	public static BlockBarley blockBarley;
+
+	public static BlockChair chairBlocksBirchOrigin;
+	public static BlockChair chairBlocksOakOrigin;
+	public static BlockChair chairBlocksJungleOrigin;
+	public static BlockChair chairBlocksSpruceOrigin;
+	public static BlockChair chairBlocksAcaciaOrigin;
+	public static BlockChair chairBlocksOldOakOrigin;
+
+	public static BlockChair chairBlocksBirchColor;
+	public static BlockChair chairBlocksOakColor;
+	public static BlockChair chairBlocksJungleColor;
+	public static BlockChair chairBlocksSpruceColor;
+	public static BlockChair chairBlocksAcaciaColor;
+	public static BlockChair chairBlocksOldOakColor;
+
+	public static BlockBench benchBlocksBirch;
+	public static BlockBench benchBlocksOak;
+	public static BlockBench benchBlocksOldOak;
+	public static BlockBench benchBlocksJungle;
+	public static BlockBench benchBlocksSpruce;
+	public static BlockBench benchBlocksAcacia;
 
 
-    public static BlockBones blockBones;
+	public static BlockBones blockBones;
 	public static BlockCart blockCart;
 	protected static CommonProxy proxy;
 	private static Map<String, Block> blocks = new HashMap<String, Block>();
@@ -72,26 +87,18 @@ public class BlockManager {
 	public static void init(CommonProxy aProxy) {
 		proxy = aProxy;
 
-		chairBlocksBirch[0] = createBlockChair("blockBirchChair_Original");
-		for(int i = 1; i < 16; i++) {
-			chairBlocksBirch[i] = createBlockChair("blockBirchChair_" + i);
-		}
-		chairBlocksOak[0] = createBlockChair("blockOakChair_Original");
-		for(int i = 1; i < 16; i++) {
-			chairBlocksOak[i] = createBlockChair("blockOakChair_" + i);
-		}
-		chairBlocksJungle[0] = createBlockChair("blockJungleChair_Original");
-		for(int i = 1; i < 16; i++) {
-			chairBlocksJungle[i] = createBlockChair("blockJungleChair_" + i);
-		}
-		chairBlocksSpruce[0] = createBlockChair("blockSpruceChair_Original");
-		for(int i = 1; i < 16; i++) {
-			chairBlocksSpruce[i] = createBlockChair("blockSpruceChair_" + i);
-		}
-		chairBlocksAcacia[0] = createBlockChair("blockAcaciaChair_Original");
-		for(int i = 1; i < 16; i++) {
-			chairBlocksAcacia[i] = createBlockChair("blockAcaciaChair_" + i);
-		}
+		chairBlocksBirchOrigin = createBlockChair("blockBirchChair_Original", false);
+		chairBlocksBirchColor = createBlockChair("blockBirchChair", true);
+		chairBlocksOakOrigin = createBlockChair("blockOakChair_Original", false);
+		chairBlocksOakColor = createBlockChair("blockOakChair", true);
+		chairBlocksJungleOrigin = createBlockChair("blockJungleChair_Original", false);
+		chairBlocksJungleColor = createBlockChair("blockJungleChair", true);
+		chairBlocksSpruceOrigin = createBlockChair("blockSpruceChair_Original", false);
+		chairBlocksSpruceColor = createBlockChair("blockSpruceChair", true);
+		chairBlocksAcaciaOrigin = createBlockChair("blockAcaciaChair_Original", false);
+		chairBlocksAcaciaColor = createBlockChair("blockAcaciaChair", true);
+		chairBlocksOldOakOrigin = createBlockChair("blockOldOakChair_Original", false);
+		chairBlocksOldOakColor = createBlockChair("blockOldOakChair", true);
 
 		blockGoldenThrone = createBlockEliteChair("blockGoldenThrone");
 
@@ -124,8 +131,19 @@ public class BlockManager {
 		cartFillerBlock = createFillerBlock(Material.wood, "fillerBlockCart", Block.soundTypeWood);
 		cartFillerBlock.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 		blockCart = createBlockCart("blockCart", cartFillerBlock);
-        blockBarley = new BlockBarley("blockBarley");
-        registerBlock(blockBarley);
+
+		benchBlocksSpruce = createBlockBench(Material.wood, "blockSpruceBench");
+		benchBlocksBirch = createBlockBench(Material.wood, "blockBirchBench");
+		benchBlocksJungle = createBlockBench(Material.wood, "blockJungleBench");
+		benchBlocksOak = createBlockBench(Material.wood, "blockOakBench");
+		benchBlocksOldOak = createBlockBench(Material.wood, "blockOldOakBench");
+		benchBlocksAcacia = createBlockBench(Material.wood, "blockAcaciaBench");
+
+		//todo: !!!
+		createBlockConnectedTable(Material.wood, "blockWoodenTable");
+
+		blockBarley = new BlockBarley("blockBarley");
+		registerBlock(blockBarley);
 
 		GameRegistry.registerTileEntity(TileEntityChair.class, "ulmcTileEntityChair");
 		GameRegistry.registerTileEntity(TileEntityEliteChair.class, "ulmcTileEntityEliteChair");
@@ -136,14 +154,21 @@ public class BlockManager {
 		GameRegistry.registerTileEntity(TileEntityLockedChest.class, "ulmcTileEntityLockedChest");
 		GameRegistry.registerTileEntity(TileEntityGrinder.class, "ulmcTileEntityGrinder");
 		GameRegistry.registerTileEntity(TileEntityCart.class, "ulmcTileEntityCart");
+		GameRegistry.registerTileEntity(TileEntityBench.class, "ulmcTileEntityBench");
+		GameRegistry.registerTileEntity(TileEntityConnectedTable.class, "ulmcTileEntityConnectedTable");
 	}
 
 	private static FillerBlock createFillerBlock(Material material, String systemName, Block.SoundType sound) {
 		return (FillerBlock) registerBlock(new FillerBlock(material, systemName, sound));
 	}
 
-	private static BlockChair createBlockChair(String name) {
-		BlockChair block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, name));
+	private static BlockChair createBlockChair(String name, boolean isColored) {
+		BlockChair block;
+		//if(isColored) {
+			block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, name, isColored), ItemColoredFurniture.class);
+		//} else {
+		//	block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, name, isColored));
+	//	}
 		try {
 			RenderChairs.registerResource(block.getUnlocalizedName());
 		} catch (Throwable e) {
@@ -155,6 +180,24 @@ public class BlockManager {
 		BlockBarrel block = (BlockBarrel) registerBlock(new BlockBarrel(TileEntityBarrel.class, name));
 		try {
 			RenderBarrel.registerResource(block.getUnlocalizedName());
+		} catch (Throwable e) {
+		}
+		return block;
+	}
+
+	private static BlockBench createBlockBench(Material mat, String name) {
+		BlockBench block = (BlockBench) registerBlock(new BlockBench(mat, name), ItemColoredFurniture.class);
+		try {
+			RenderBench.registerResource(block.getUnlocalizedName());
+		} catch (Throwable e) {
+		}
+		return block;
+	}
+
+	private static BlockConnectedTable createBlockConnectedTable(Material mat, String name) {
+		BlockConnectedTable block = (BlockConnectedTable) registerBlock(new BlockConnectedTable(mat, name));
+		try {
+			RenderConnectedTable.registerResource(block.getUnlocalizedName());
 		} catch (Throwable e) {
 		}
 		return block;
@@ -214,5 +257,10 @@ public class BlockManager {
 		blocks.put(block.getSystemName(), (Block) block);
 		return block;
 	}
+	private static UlmcBlock registerBlock(UlmcBlock block, Class<? extends ItemBlock> clazz) {
+		proxy.prepareBlock((Block) block, clazz);
+		blocks.put(block.getSystemName(), (Block) block);
+		return block;
+	}
 
-   }
+}

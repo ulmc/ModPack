@@ -19,8 +19,10 @@
  */
 package ru.ulmc.extender.block;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -36,6 +38,7 @@ import ru.ulmc.extender.tileentity.TileEntityBones;
 import java.util.Random;
 
 public class BlockBones extends BasicFallingBlock {
+	public static final int renderId = RenderingRegistry.getNextAvailableRenderId();
 
 	private final Random random = new Random();
 
@@ -43,6 +46,7 @@ public class BlockBones extends BasicFallingBlock {
 		super(Material.ground, name);
 		setHardness(1.0F);
 		setResistance(2.0F);
+		setCreativeTab(CreativeTabs.tabDecorations);
 	}
 
 	@Override
@@ -79,7 +83,7 @@ public class BlockBones extends BasicFallingBlock {
 
 	@Override
 	public int getRenderType() {
-		return -1;
+		return renderId;
 	}
 
 	@Override

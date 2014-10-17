@@ -30,6 +30,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.ulmc.extender.Reference;
+import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.TileEntityTable;
 
 public class BlockTable extends BasicStandingBlock {
@@ -41,7 +42,7 @@ public class BlockTable extends BasicStandingBlock {
 		setHardness(aHardness);
 		setResistance(aResistance);
 		setStepSound(Block.soundTypeWood);
-		setCreativeTab(CreativeTabs.tabDecorations);
+		setCreativeTab(UltimateExtender.furnitureTab);
 		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
 		this.tableModel = tableModel;
 	}
