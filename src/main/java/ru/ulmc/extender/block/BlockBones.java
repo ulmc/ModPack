@@ -23,12 +23,14 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ru.ulmc.extender.UltimateExtender;
@@ -182,5 +184,13 @@ public class BlockBones extends BasicFallingBlock {
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityBones();
+	}
+
+	@Override
+	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
+	                            ItemStack par6ItemStack) {
+		int p = MathHelper.floor_double((par5EntityLivingBase.rotationYaw * 8F) / 360F + 0.5f) & 7;
+
+		par1World.setBlockMetadataWithNotify(par2, par3, par4, p, 2);
 	}
 }
