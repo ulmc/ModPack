@@ -45,7 +45,6 @@ public class BlockEliteChair extends BlockChair {
 	@Override
 	public TileEntity createNewTileEntity(World var1, int meta) {
 		TileEntityEliteChair tileEntityEliteChair = new TileEntityEliteChair();
-		/*tileEntityEliteChair.setType(itemDrop.getType());*/
 		return tileEntityEliteChair;
 	}
 }

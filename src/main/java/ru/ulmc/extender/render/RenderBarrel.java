@@ -59,18 +59,7 @@ public class RenderBarrel extends TileEntitySpecialRenderer implements ISimpleBl
 	}
 
 	public void render(TileEntity tileEntity, double d, double d1, double d2, float f) {
-		int i = tileEntity.getBlockMetadata();
-
-		float deg = 0f;
-		if (i == 3) {
-			deg = 90f;
-		} else if (i == 2) {
-			deg = 180f;
-		} else if (i == 1) {
-			deg = 270f;
-		} else if (i == 0) {
-			deg = 0f;
-		}
+		float deg = tileEntity.getBlockMetadata() * 90F;
 
 		GL11.glPushMatrix();
 

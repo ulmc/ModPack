@@ -100,18 +100,7 @@ public class BlockChair extends BasicStandingBlock {
 		TileEntity te = par1World.getTileEntity(par2, par3, par4);
 		if(te instanceof TileEntityChair) {
 			int p = MathHelper.floor_double((par5EntityLivingBase.rotationYaw * 4F) / 360F + 0.5D) & 3;
-
-			int aByte = 3;
-			if (p == 0) {
-				aByte = 0;
-			} else if (p == 3) {
-				aByte = 1;
-			} else if (p == 2) {
-				aByte = 2;
-			} else if (p == 1) {
-				aByte = 3;
-			}
-			((TileEntityChair)te).setRotation(aByte);
+			((TileEntityChair)te).setRotation(p);
 		}
 	}
 }

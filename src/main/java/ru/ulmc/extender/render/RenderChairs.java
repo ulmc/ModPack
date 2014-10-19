@@ -76,16 +76,7 @@ public class RenderChairs extends TileEntitySpecialRenderer implements ISimpleBl
 	                         double d2, float f) {
 		int i = ((TileEntityChair)tileEntity).getRotation();
 
-		float deg = 0f;
-		if (i == 3) {
-			deg = 90f;
-		} else if (i == 2) {
-			deg = 180f;
-		} else if (i == 1) {
-			deg = 270f;
-		} else if (i == 0) {
-			deg = 0f;
-		}
+		float deg = i * 90F;
 
 		GL11.glPushMatrix();
 

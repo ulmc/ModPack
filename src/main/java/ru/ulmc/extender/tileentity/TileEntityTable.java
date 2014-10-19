@@ -23,15 +23,13 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityTable extends ExtendedTileEntity {
 
-	public static final int MODEL_TABLE = 1;
-	public static final int MODEL_CABINET = 2;
-	public static final int MODEL_DINNER = 3;
-
-	protected int model;
+	protected int rotation;
+	protected int model = -1;
 
 	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
+		par1NBTTagCompound.setInteger("rotation", this.rotation);
 		par1NBTTagCompound.setInteger("model", this.model);
 //		UltimateExtender.logger.info("writeToNBT: " + this.model);
 	}
@@ -39,8 +37,17 @@ public class TileEntityTable extends ExtendedTileEntity {
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
+		this.rotation = par1NBTTagCompound.getInteger("rotation");
 		this.model = par1NBTTagCompound.getInteger("model");
 //		UltimateExtender.logger.info("readFromNBT: " + this.model);
+	}
+
+	public int getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
 	}
 
 	public int getModel() {
@@ -50,5 +57,4 @@ public class TileEntityTable extends ExtendedTileEntity {
 	public void setModel(int model) {
 		this.model = model;
 	}
-
 }

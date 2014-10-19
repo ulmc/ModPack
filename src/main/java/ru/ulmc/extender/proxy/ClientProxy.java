@@ -71,6 +71,10 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(bones);
 		RenderingRegistry.registerBlockHandler(cart);
 		RenderingRegistry.registerBlockHandler(barrel);
+
+		RenderingRegistry.registerBlockHandler(renderTables.barTableInventoryRender);
+		RenderingRegistry.registerBlockHandler(renderTables.cabinetTableInventoryRender);
+		RenderingRegistry.registerBlockHandler(renderTables.dinnerTableInventoryRender);
 		//RenderingRegistry.registerEntityRenderingHandler(EntityFallingBlock.class, new RenderBonesEntity());
 
 	}

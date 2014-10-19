@@ -152,17 +152,6 @@ public class BasicStandingBlock extends BlockContainer implements UlmcBlock {
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
 	                            ItemStack par6ItemStack) {
 		int p = MathHelper.floor_double((par5EntityLivingBase.rotationYaw * 4F) / 360F + 0.5D) & 3;
-
-		int aByte = 3;
-		if (p == 0) {
-			aByte = 0;
-		} else if (p == 3) {
-			aByte = 1;
-		} else if (p == 2) {
-			aByte = 2;
-		} else if (p == 1) {
-			aByte = 3;
-		}
-		par1World.setBlockMetadataWithNotify(par2, par3, par4, aByte, 2);
+		par1World.setBlockMetadataWithNotify(par2, par3, par4, p, 2);
 	}
 }

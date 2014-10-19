@@ -76,6 +76,7 @@ public class RenderBones extends TileEntitySpecialRenderer implements ISimpleBlo
 		}
 
 	}
+
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
 		bindTexture(resource);

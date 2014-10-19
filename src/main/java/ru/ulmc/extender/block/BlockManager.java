@@ -24,6 +24,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
 import ru.ulmc.extender.item.ItemColoredFurniture;
+import ru.ulmc.extender.item.ItemWooden;
 import ru.ulmc.extender.proxy.CommonProxy;
 import ru.ulmc.extender.render.*;
 import ru.ulmc.extender.tileentity.*;
@@ -35,21 +36,13 @@ public class BlockManager {
 
 	public static BlockEliteChair blockGoldenThrone;
 
-	public static BlockTable blockSpruceWoodTable;
-	public static BlockTable blockBirchWoodTable;
-	public static BlockTable blockOakWoodTable;
-	public static BlockTable blockJungleWoodTable;
-	public static BlockTable blockAcaciaWoodTable;
+	public static BlockTable blockBarTable;
 
-	public static BlockTable blockCabinetBlackwoodTable;
-	public static BlockTable blockCabinetRedwoodTable;
-	public static BlockTable blockDinnerWoodTable;
+	public static BlockTable blockCabinetTable;
+	public static BlockTable blockDinnerTable;
 
 	public static BlockBarrel blockBarrel;
 
-	public static BlockFlag blockFlag;
-	public static BlockFlag blockMedivalFlag;
-	public static BlockFlag blockTechnoFlag;
 	public static FillerBlock flagFillerBlock;
 	public static FillerBlock cartFillerBlock;
 	public static BlockBarbedWire blockBarbedWire;
@@ -104,16 +97,9 @@ public class BlockManager {
 
 		blockBarrel = createBlockBarrel("blockSpruceBarrel");
 
-		blockSpruceWoodTable = createBlockTable(0.5F, 5.0F, "blockSpruceBarTable", TileEntityTable.MODEL_TABLE);
-		blockBirchWoodTable = createBlockTable(0.5F, 5.0F, "blockBirchBarTable", TileEntityTable.MODEL_TABLE);
-		blockOakWoodTable = createBlockTable(0.5F, 5.0F, "blockOakBarTable", TileEntityTable.MODEL_TABLE);
-		blockJungleWoodTable = createBlockTable(0.5F, 5.0F, "blockJungleBarTable", TileEntityTable.MODEL_TABLE);
-		blockAcaciaWoodTable = createBlockTable(0.5F, 5.0F, "blockAcaciaBarTable", TileEntityTable.MODEL_TABLE);
-
-		blockCabinetBlackwoodTable = createBlockTable(1.0F, 6.0F, "blockCabinetBlackwoodTable", TileEntityTable.MODEL_CABINET);
-		blockCabinetRedwoodTable = createBlockTable(1.0F, 6.0F, "blockCabinetRedwoodTable", TileEntityTable.MODEL_CABINET);
-
-		blockDinnerWoodTable = createBlockTable(0.5F, 2.0F, "blockDinnerWoodTable", TileEntityTable.MODEL_DINNER);
+		blockBarTable = createBlockTable(0.5F,   2.0F, "blockBarTable",  BlockTable.MODEL_BAR);
+		blockCabinetTable = createBlockTable(1.0F, 2.5F, "blockCabinetTable", BlockTable.MODEL_CABINET);
+		blockDinnerTable = createBlockTable(0.5F, 2.0F, "blockDinnerTable", BlockTable.MODEL_DINNER);
 
 		flagFillerBlock = createFillerBlock(Material.cloth, "fillerBlockFlag", Block.soundTypeCloth);
 		//flagFillerBlock.setBlockBounds(0.1F, 0.0F, 0.1F, 0.1F, 1.0F, 0.1F);
@@ -140,7 +126,7 @@ public class BlockManager {
 		benchBlocksAcacia = createBlockBench(Material.wood, "blockAcaciaBench");
 
 		//todo: !!!
-		createBlockConnectedTable(Material.wood, "blockWoodenTable");
+		//createBlockConnectedTable(Material.wood, "blockWoodenTable");
 
 		blockBarley = new BlockBarley("blockBarley");
 		registerBlock(blockBarley);
@@ -156,6 +142,7 @@ public class BlockManager {
 		GameRegistry.registerTileEntity(TileEntityCart.class, "ulmcTileEntityCart");
 		GameRegistry.registerTileEntity(TileEntityBench.class, "ulmcTileEntityBench");
 		GameRegistry.registerTileEntity(TileEntityConnectedTable.class, "ulmcTileEntityConnectedTable");
+		GameRegistry.registerTileEntity(TileEntityBarrel.class, "ulmcTileEntityBarrel");
 	}
 
 	private static FillerBlock createFillerBlock(Material material, String systemName, Block.SoundType sound) {
@@ -163,12 +150,7 @@ public class BlockManager {
 	}
 
 	private static BlockChair createBlockChair(String name, boolean isColored) {
-		BlockChair block;
-		//if(isColored) {
-			block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, name, isColored), ItemColoredFurniture.class);
-		//} else {
-		//	block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, name, isColored));
-	//	}
+		BlockChair block = (BlockChair) registerBlock(new BlockChair(TileEntityChair.class, name, isColored), ItemColoredFurniture.class);
 		try {
 			RenderChairs.registerResource(block.getUnlocalizedName());
 		} catch (Throwable e) {
@@ -213,7 +195,7 @@ public class BlockManager {
 	}
 
 	private static BlockTable createBlockTable(float hardness, float explosionResistance, String name, int model) {
-		BlockTable block = (BlockTable) registerBlock(new BlockTable(hardness, explosionResistance, name, model));
+		BlockTable block = (BlockTable) registerBlock(new BlockTable(hardness, explosionResistance, name, model), ItemWooden.class);
 		try {
 			RenderTables.registerResource(block.getUnlocalizedName());
 		} catch (Throwable e) {

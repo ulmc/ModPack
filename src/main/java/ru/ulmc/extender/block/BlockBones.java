@@ -61,7 +61,7 @@ public class BlockBones extends BasicFallingBlock {
 					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5F, 1.0F);
 					break;
 				case 1:
-					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.9F, 1.0F);
+					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 					break;
 				case 2:
 					this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
@@ -140,10 +140,8 @@ public class BlockBones extends BasicFallingBlock {
 						world.setBlockToAir(x, y, z);
 					}
 				}
-
 				world.removeTileEntity(x, originY, z);
 				world.setBlockToAir(x, originY, z);
-
 			}
 		}
 	}

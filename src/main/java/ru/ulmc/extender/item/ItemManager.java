@@ -134,6 +134,10 @@ public class ItemManager {
 		createColoredFurnitureItem("spruceChair", BlockManager.chairBlocksSpruceColor);
 		createColoredFurnitureItem("oldOakChair", BlockManager.chairBlocksOldOakColor);
 
+		createWoodenItem("barTable", BlockManager.blockBarTable);
+		createWoodenItem("dinnerTable", BlockManager.blockDinnerTable);
+		createWoodenItem("cabinetTable", BlockManager.blockCabinetTable);
+
 		createCraftItem("boulder");
 		createCraftItem("cakeRaw");
 		createCraftItem("cookieRaw");
@@ -201,13 +205,18 @@ public class ItemManager {
 		commonRegistrationActions(item, itemName);
 	}
 
+	protected static void createCraftItem(String itemName) {
+		BasicCraftItem item = new BasicCraftItem(itemName);
+		commonRegistrationActions(item, itemName);
+	}
+
 	protected static void createColoredFurnitureItem(String itemName, Block block) {
 		ItemColoredFurniture item = new ItemColoredFurniture(block);
 		commonRegistrationActions(item, itemName);
 	}
 
-	protected static void createCraftItem(String itemName) {
-		BasicCraftItem item = new BasicCraftItem(itemName);
+	protected static void createWoodenItem(String itemName, Block block) {
+		ItemWooden item = new ItemWooden(block);
 		commonRegistrationActions(item, itemName);
 	}
 

@@ -19,16 +19,22 @@
  */
 package ru.ulmc.extender.render;
 
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
+import ru.ulmc.extender.block.BlockTable;
 import ru.ulmc.extender.render.model.ModelTable;
-import ru.ulmc.extender.render.model.ModelTableCabinet;
+import ru.ulmc.extender.render.model.connected.cabinet.ModelTableCabinet;
 import ru.ulmc.extender.render.model.ModelTableDinner;
 import ru.ulmc.extender.render.model.SimpleUlmcModel;
 import ru.ulmc.extender.tileentity.TileEntityTable;
@@ -42,62 +48,47 @@ public class RenderTables extends TileEntitySpecialRenderer {
 	private static ModelTableCabinet modelCabinetTable = new ModelTableCabinet();
 	private static ModelTableDinner modelTableDinner = new ModelTableDinner();
 	private static Map<String, ResourceLocation> resources = new HashMap<String, ResourceLocation>();
+	private CabinetTableRender cabinetRender = new CabinetTableRender(this);
+
+	public static Map<String, ResourceLocation> getResources() {
+		return resources;
+	}
 
 	public static void registerResource(String name) {
-		ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/furniture/" + name + ".png");
-		resources.put(name, resource);
+		for( int i = 0; i < BlockTable.subBlocks.length; i++) {
+			String fullname = name + BlockTable.subBlocks[i];
+			ResourceLocation resource = new ResourceLocation(Reference.RES_NAME_C,
+					"textures/models/furniture/" + fullname + ".png");
+			resources.put(fullname, resource);
+		}
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileEntity, double var2,
-	                               double var4, double var6, float var8) {
+	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8) {
 		TileEntityTable tableTE = (TileEntityTable) tileEntity;
 
-		SimpleUlmcModel model = null;
-		switch (tableTE.getModel()) {
-			case TileEntityTable.MODEL_TABLE: {
-				model = modelTable;
-				break;
-			}
-			case TileEntityTable.MODEL_CABINET: {
-				model = modelCabinetTable;
-				break;
-			}
-			case TileEntityTable.MODEL_DINNER: {
-				model = modelTableDinner;
-				break;
-			}
-			default: {
-				break;
-			}
+		if(tableTE.getModel() == BlockTable.MODEL_BAR ) {
+			doRender(tableTE, var2, var4, var6, var8, modelTable);
+		} else if(tableTE.getModel() == BlockTable.MODEL_CABINET) {
+			cabinetRender.renderTileEntityAt(tileEntity, var2, var4, var6, var8);
+		} else if(tableTE.getModel() == BlockTable.MODEL_DINNER) {
+			doRender(tableTE, var2, var4, var6, var8, modelTableDinner);
 		}
 
-		if (model != null) {
-			doRender(tableTE, var2, var4, var6, var8, model);
-		}
 	}
 
-	public void doRender(TileEntityTable tileEntity, double d, double d1,
-	                     double d2, float f, SimpleUlmcModel model) {
+	public void bindTexture(ResourceLocation loc, boolean nothingHere) {
+		bindTexture(loc);
+	}
 
-		int i = tileEntity.getBlockMetadata();
-		float deg = 0f;
-		if (i == 3) {
-			deg = 90f;
-		} else if (i == 2) {
-			deg = 180f;
-		} else if (i == 1) {
-			deg = 270f;
-		} else if (i == 0) {
-			deg = 0f;
-		}
+	public void doRender(TileEntityTable tileEntity, double d, double d1,double d2, float f, SimpleUlmcModel model) {
 
+		float deg = tileEntity.getRotation() * 90F;
+		String fullname = tileEntity.blockType.getUnlocalizedName() + BlockTable.subBlocks[tileEntity.getBlockMetadata()%BlockTable.subBlocks.length];
 		GL11.glPushMatrix();
 
 		try {
-			if (resources.containsKey(tileEntity.blockType.getUnlocalizedName())) {
-				bindTexture(resources.get(tileEntity.blockType.getUnlocalizedName()));
-			}
+			bindTexture(resources.get(fullname));
 		} catch (Exception e) {
 			UltimateExtender.logger.error(e.getMessage());
 			e.printStackTrace();
@@ -109,4 +100,86 @@ public class RenderTables extends TileEntitySpecialRenderer {
 		model.render(0.0625F);
 		GL11.glPopMatrix();
 	}
+
+	public final ISimpleBlockRenderingHandler barTableInventoryRender = new ISimpleBlockRenderingHandler() {
+		@Override
+		public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+			String fullname = block.getUnlocalizedName().concat(BlockTable.subBlocks[metadata%BlockTable.subBlocks.length]);
+			bindTexture(resources.get(fullname));
+			GL11.glScalef(1.0F, 1.0F, 1.0F);
+			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+			modelTable.render(0.0625F);
+		}
+
+		@Override
+		public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+			return true;
+		}
+
+		@Override
+		public boolean shouldRender3DInInventory(int modelId) {
+			return true;
+		}
+
+		@Override
+		public int getRenderId() {
+			return BlockTable.MODEL_BAR_REG;
+		}
+	};
+
+	public final ISimpleBlockRenderingHandler cabinetTableInventoryRender = new ISimpleBlockRenderingHandler() {
+		@Override
+		public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+			String fullname = block.getUnlocalizedName().concat(BlockTable.subBlocks[metadata%BlockTable.subBlocks.length]);
+			bindTexture(resources.get(fullname));
+			GL11.glScalef(1.0F, 1.0F, 1.0F);
+			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+			modelCabinetTable.render(0.0625F);
+		}
+
+		@Override
+		public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+			return true;
+		}
+
+		@Override
+		public boolean shouldRender3DInInventory(int modelId) {
+			return true;
+		}
+
+		@Override
+		public int getRenderId() {
+			return BlockTable.MODEL_CABINET_REG;
+		}
+	};
+
+	public final ISimpleBlockRenderingHandler dinnerTableInventoryRender = new ISimpleBlockRenderingHandler() {
+		@Override
+		public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+			String fullname = block.getUnlocalizedName().concat(BlockTable.subBlocks[metadata%BlockTable.subBlocks.length]);
+			bindTexture(resources.get(fullname));
+			GL11.glScalef(1.0F, 1.0F, 1.0F);
+			GL11.glTranslatef(0.0F, 1.0F, 0.0F);
+			GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+			modelTableDinner.render(0.0625F);
+		}
+
+		@Override
+		public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+			return true;
+		}
+
+		@Override
+		public boolean shouldRender3DInInventory(int modelId) {
+			return true;
+		}
+
+		@Override
+		public int getRenderId() {
+			return BlockTable.MODEL_DINNER_REG;
+		}
+	};
+
 }
