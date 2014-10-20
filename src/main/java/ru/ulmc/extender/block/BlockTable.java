@@ -129,10 +129,10 @@ public class BlockTable extends BasicConnectedBlock {
 	                            EntityLivingBase entityLiving, ItemStack par6ItemStack) {
 		if (!world.isRemote) {
 			int p = MathHelper.floor_double((entityLiving.rotationYaw * 4.0F) / 360.0F + 0.5F) & 3;
-			TileEntityTable flagTE = (TileEntityTable) world.getTileEntity(x, y, z);
-			flagTE.blockType = this;
-			flagTE.setRotation(p);
-			flagTE.setModel(blockModel);
+			TileEntityTable te = (TileEntityTable) world.getTileEntity(x, y, z);
+			te.blockType = this;
+			te.setRotation(p);
+			te.setModel(blockModel);
 			world.setBlockMetadataWithNotify(x, y, z, par6ItemStack.getItemDamage(), 2);
 		}
 	}

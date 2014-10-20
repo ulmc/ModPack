@@ -117,6 +117,7 @@ public abstract class ConnectedRender extends TileEntitySpecialRenderer {
 					if (modelTriple != null) {
 						GL11.glRotatef(-90F, 0.0F, 1.0F, 0.0F);
 						modelTriple.render(0.0625F);
+						return;
 					}
 				} else if (!flagZ2) {
 					if (modelTriple != null) {
