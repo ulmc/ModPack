@@ -75,6 +75,7 @@ public class ItemManager {
 		createCraftItem("cementMix");
 		createCraftItem("porkBelly");
 		createCraftItem("ironStripe");
+        createCraftItem("woolfell");
 
 		createFoodItem("jerkedBeef", 6, 0.6f, false);
 		createFoodItem("jerkedPork", 6, 0.6f, false);
@@ -166,6 +167,8 @@ public class ItemManager {
 			int apparelWearRenderID = proxy.getArmorPrefix("apparel");
 			int hiddenWearRenderID = proxy.getArmorPrefix("hidden");
             int trashWearRenderID = proxy.getArmorPrefix("trash");
+            int ironFurWearRenderID = proxy.getArmorPrefix("ironFur");
+            int diamondFurWearRenderID = proxy.getArmorPrefix("diamondFur");
 
 			createArmor(EnumThermalMaterial.COTTON, cottonWearRenderID, 0, "cottonHat", false, true, true, false);
 			createArmor(EnumThermalMaterial.COTTON, cottonWearRenderID, 1, "cottonJacket", false, true, true, false);
@@ -189,6 +192,16 @@ public class ItemManager {
             createArmor(EnumThermalMaterial.TRASH, trashWearRenderID, 2, "trashPants", true, true, true, false);
             createArmor(EnumThermalMaterial.TRASH, trashWearRenderID, 3, "trashBoots", false, true, true, false);
             createPlants();
+
+            createArmor(EnumThermalMaterial.IRONFUR, ironFurWearRenderID, 0, "ironFurHat", false, true, true, false);
+            createArmor(EnumThermalMaterial.IRONFUR, ironFurWearRenderID, 1, "ironFurCoat", false, true, true, false);
+            createArmor(EnumThermalMaterial.IRONFUR, ironFurWearRenderID, 2, "ironFurPants", true, true, true, false);
+            createArmor(EnumThermalMaterial.IRONFUR, ironFurWearRenderID, 3, "ironFurBoots", false, true, true, false);
+
+            createArmor(EnumThermalMaterial.DIAMONDFUR, diamondFurWearRenderID, 0, "diamondFurHat", false, true, true, false);
+            createArmor(EnumThermalMaterial.DIAMONDFUR, diamondFurWearRenderID, 1, "diamondFurCoat", false, true, true, false);
+            createArmor(EnumThermalMaterial.DIAMONDFUR, diamondFurWearRenderID, 2, "diamondFurPants", true, true, true, false);
+            createArmor(EnumThermalMaterial.DIAMONDFUR, diamondFurWearRenderID, 3, "diamondFurBoots", false, true, true, false);
 		}
 		maskId = Item.getIdFromItem(items.get("mask"));
 	}

@@ -29,7 +29,7 @@ public enum EnumThermalMaterial {
 	DIAMONDFUR("DIAMONDFUR", 14, 33, new int[]{3, 8, 6, 3}, 10, 1.4f, -0.4f, 0),
 	HIDDEN("HIDDEN", 15, 10, new int[]{0, 1, 1, 0}, 5, 0.2f, 0.2f, 0),
     TRASH("TRASH", 16, 2, new int[]{0, 0, 0, 0}, 5, 0.2f, 0.2f, 0);
-	private static final EnumThermalMaterial allArmorMaterials[] = new EnumThermalMaterial[]{COTTON, FUR, IRONFUR, DIAMONDFUR};
+
 	private int maxDamageFactor;
 	private int damageReductionAmountArray[];
 	private int enchantability;

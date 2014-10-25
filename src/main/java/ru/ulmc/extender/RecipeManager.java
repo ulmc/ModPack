@@ -100,6 +100,23 @@ public class RecipeManager {
 		Item coarseGrindstone = ItemManager.getItem("coarseGrindstone");
 		Item enhancedGrindstone = ItemManager.getItem("enhancedGrindstone");
 		Item diamondGrindstone = ItemManager.getItem("diamondGrindstone");
+        Item woolfell = ItemManager.getItem("woolfell");
+
+        //броня
+        Item diamondFurHat = ItemManager.getItem("diamondFurHat");
+        Item diamondFurCoat = ItemManager.getItem("diamondFurCoat");
+        Item diamondFurPants = ItemManager.getItem("diamondFurPants");
+        Item diamondFurBoots = ItemManager.getItem("diamondFurBoots");
+
+        Item ironFurHat = ItemManager.getItem("ironFurHat");
+        Item ironFurCoat = ItemManager.getItem("ironFurCoat");
+        Item ironFurPants = ItemManager.getItem("ironFurPants");
+        Item ironFurBoots = ItemManager.getItem("ironFurBoots");
+
+        Item furHat = ItemManager.getItem("furHat");
+        Item furCoat = ItemManager.getItem("furCoat");
+        Item warmPants = ItemManager.getItem("warmPants");
+        Item furBoots = ItemManager.getItem("furBoots");
 
 		addRecipe(woodenGrindstoneBlank, 1,
 				" x ",
@@ -157,7 +174,7 @@ public class RecipeManager {
 		addShapeless(jerkedBeef, 1, salt, Items.beef);
 		addShapeless(salt, 4, saltCrystal);
 
-		addSmelting(obsidianAlloyIngot, 1, 1, obsidianAlloyBlank);
+        addSmelting(obsidianAlloyIngot, 1, 1, obsidianAlloyBlank);
 		addSmelting(lambFried, 1, 1, lambRawMeat);
 		addSmelting(salt, 8, 0.1F, Items.water_bucket);
 
@@ -181,6 +198,41 @@ public class RecipeManager {
 
 		addShapeless(medivalSymbol, 1, fabricStrap, spool, new ItemStack(Items.dye, 1, 11));
 		addShapeless(technoSymbol, 1, fabricStrap, spool, new ItemStack(Items.dye, 1, 1));
+
+        addShapeless(diamondFurHat, 1, woolfell, woolfell, woolfell, Items.diamond_helmet, spool);
+        addShapeless(diamondFurCoat, 1, woolfell, woolfell, woolfell, woolfell, woolfell, woolfell, Items.diamond_chestplate, spool);
+        addShapeless(diamondFurPants, 1, woolfell, woolfell, woolfell, woolfell, woolfell, Items.diamond_leggings, spool);
+        addShapeless(diamondFurBoots, 1, woolfell, woolfell, Items.diamond_boots, spool);
+
+        addShapeless(ironFurHat, 1, woolfell, woolfell, woolfell, Items.iron_helmet, spool);
+        addShapeless(ironFurCoat, 1, woolfell, woolfell, woolfell, woolfell, woolfell, woolfell, Items.iron_chestplate, spool);
+        addShapeless(ironFurPants, 1, woolfell, woolfell, woolfell, woolfell, woolfell, Items.iron_leggings, spool);
+        addShapeless(ironFurBoots, 1, woolfell, woolfell, Items.iron_boots, spool);
+
+        addRecipe(furHat, 1,
+                "xxx",
+                "x x",
+                "   ",
+                'x', woolfell);
+
+        addRecipe(furCoat, 1,
+                "x x",
+                "xxx",
+                "xxx",
+                'x', woolfell);
+
+        addRecipe(warmPants, 1,
+                "xxx",
+                "x x",
+                "x x",
+                'x', woolfell);
+
+        addRecipe(furBoots, 1,
+                "   ",
+                "x x",
+                "x x",
+                'x', woolfell);
+
 
 		if (Config.tcConfig.isEnabled()) {
 			Item capsuleEmpty = ItemManager.getItem("capsuleEmpty");
