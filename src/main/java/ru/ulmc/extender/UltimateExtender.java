@@ -41,6 +41,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Logger;
 import ru.ulmc.extender.block.BlockManager;
@@ -151,6 +152,7 @@ public class UltimateExtender {
 		RecipeManager.init(proxy);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		initNetwork();
+		ForgeModContainer.fullBoundingBoxLadders = true;
 	}
 
 	@EventHandler

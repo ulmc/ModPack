@@ -56,6 +56,7 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	private IIcon grinderBottom;
 	private String name;
 	private Random random = new Random();
+	protected IIcon icon;
 
 	public static final int renderId = RenderingRegistry.getNextAvailableRenderId();
 
@@ -72,6 +73,16 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	@Override
 	public String getSystemName() {
 		return name;
+	}
+
+	@Override
+	public void registerBlockIcons(IIconRegister icon) {
+		this.icon = icon.registerIcon(Reference.RES_NAME + "icons/proto/Oak");
+	}
+
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return icon;
 	}
 
 	@Override

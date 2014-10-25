@@ -71,6 +71,7 @@ public class BlockManager {
 	public static BlockBench benchBlocksSpruce;
 	public static BlockBench benchBlocksAcacia;
 
+	public static BlockBuildingBlock buildingBlock;
 
 	public static BlockBones blockBones;
 	public static BlockCart blockCart;
@@ -131,6 +132,8 @@ public class BlockManager {
 		blockBarley = new BlockBarley("blockBarley");
 		registerBlock(blockBarley);
 
+		buildingBlock = createBuildingBlock("buildingBlock");
+
 		GameRegistry.registerTileEntity(TileEntityChair.class, "ulmcTileEntityChair");
 		GameRegistry.registerTileEntity(TileEntityEliteChair.class, "ulmcTileEntityEliteChair");
 		GameRegistry.registerTileEntity(TileEntityFlag.class, "ulmcTileEntityFlag");
@@ -143,6 +146,7 @@ public class BlockManager {
 		GameRegistry.registerTileEntity(TileEntityBench.class, "ulmcTileEntityBench");
 		GameRegistry.registerTileEntity(TileEntityConnectedTable.class, "ulmcTileEntityConnectedTable");
 		GameRegistry.registerTileEntity(TileEntityBarrel.class, "ulmcTileEntityBarrel");
+		GameRegistry.registerTileEntity(BuildingBlockTileEntity.class, "ulmcBuildingBlockTileEntity");
 	}
 
 	private static FillerBlock createFillerBlock(Material material, String systemName, Block.SoundType sound) {
@@ -228,6 +232,10 @@ public class BlockManager {
 
 	private static BlockGrinder createBlockGrinder(String name) {
 		return (BlockGrinder) registerBlock(new BlockGrinder(name));
+	}
+
+	private static BlockBuildingBlock createBuildingBlock(String name) {
+		return (BlockBuildingBlock) registerBlock(new BlockBuildingBlock(name));
 	}
 
 	private static BlockCart createBlockCart(String name, Block filler) {

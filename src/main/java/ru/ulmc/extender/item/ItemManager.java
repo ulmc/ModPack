@@ -94,6 +94,8 @@ public class ItemManager {
 		createGrindStone(140, 0.6F, 0.5F, "enhancedGrindstone", ItemGrind.ID_ENHANCED);
 		createGrindStone(250, 0.8F, 0.8F, "diamondGrindstone", ItemGrind.ID_DIAMOND);
 
+
+
 		if (Config.tcConfig.isEnabled()) {
 			createKey(1, 10, "ironKey");
 			createKey(3, 6, "goldenKey");

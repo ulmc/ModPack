@@ -39,7 +39,7 @@ import java.util.Random;
 public class BasicStandingBlock extends BlockContainer implements UlmcBlock {
 
 	protected Class anEntityClass;
-	private String name;
+	protected String name;
 
 	public BasicStandingBlock(Material material, Class class1, String aBlockName) {
 		super(material);
@@ -74,13 +74,12 @@ public class BasicStandingBlock extends BlockContainer implements UlmcBlock {
 		try {
 			return (TileEntity) anEntityClass.newInstance();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
 
-	private boolean canPlaceStandingBlockOn(World par1World, int par2, int par3, int par4) {
+	protected boolean canPlaceStandingBlockOn(World par1World, int par2, int par3, int par4) {
 		if (World.doesBlockHaveSolidTopSurface(par1World, par2, par3, par4)) {
 			return true;
 		} else {
@@ -93,7 +92,7 @@ public class BasicStandingBlock extends BlockContainer implements UlmcBlock {
 		return canPlaceStandingBlockOn(par1World, par2, par3 - 1, par4);
 	}
 
-	private boolean dropBlockIfCantStay(World par1World, int par2, int par3, int par4) {
+	protected boolean dropBlockIfCantStay(World par1World, int par2, int par3, int par4) {
 		if (!this.canPlaceBlockAt(par1World, par2, par3, par4)) {
 			if (this.equals(par1World.getBlock(par2, par3, par4))) {
 				this.dropBlockAsItem(par1World, par2, par3, par4, par1World.getBlockMetadata(par2, par3, par4), 0);
