@@ -32,19 +32,18 @@ import org.lwjgl.opengl.GL11;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.block.BlockManager;
+import ru.ulmc.extender.item.ItemGrind;
 import ru.ulmc.extender.render.model.ModelBarrel;
+import ru.ulmc.extender.render.model.ModelGrinder;
+import ru.ulmc.extender.tileentity.TileEntityGrinder;
 
 @SideOnly(Side.CLIENT)
-public class RenderBarrel extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler {
+public class RenderGrinder extends TileEntitySpecialRenderer implements ISimpleBlockRenderingHandler {
 	private static ResourceLocation resource;
-	private ModelBarrel model;
+	private ModelGrinder model = new ModelGrinder();
 
-	public RenderBarrel() {
-		model = new ModelBarrel();
-	}
-
-	public static void registerResource(String name) {
-		resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/furniture/" + name + ".png");
+	public RenderGrinder() {
+		resource = new ResourceLocation(Reference.RES_NAME_C, "textures/models/furniture/tile.blockGrinder.png");
 	}
 
 	public void renderModel(TileEntity tileEntity, double d, double d1,
@@ -59,8 +58,20 @@ public class RenderBarrel extends TileEntitySpecialRenderer implements ISimpleBl
 	}
 
 	public void render(TileEntity tileEntity, double d, double d1, double d2, float f) {
-		float deg = tileEntity.getBlockMetadata() * 90F;
-
+		float deg = tileEntity.getBlockMetadata() * 90F +90F;
+		int type = -1;
+		/*float degHandle = 0F;
+		float degDisc = 0F;
+		int impulse = 0;*/
+		if(tileEntity instanceof TileEntityGrinder) {
+			type = ((TileEntityGrinder) tileEntity).getGrinderType();
+			//impulse = ((TileEntityGrinder) tileEntity).getImpulse();
+		}
+	/*	if(impulse > 0) {
+			degHandle = 2.5F;
+			degDisc = 5F;
+		}
+*/
 		GL11.glPushMatrix();
 
 		try {
@@ -74,25 +85,21 @@ public class RenderBarrel extends TileEntitySpecialRenderer implements ISimpleBl
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(deg, 0.0F, 1.0F, 0.0F);
-		model.render(0.0625F);
+		model.render(0.0625F, type/*, degHandle, degDisc*/);
 		GL11.glPopMatrix();
 	}
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
-		try {
-			bindTexture(resource);
-		} catch (Exception e) {
-			UltimateExtender.logger.error(e.getMessage());
-			e.printStackTrace();
-		}
+		bindTexture(resource);
+
 		//GL11.glPushMatrix();
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		GL11.glTranslatef(0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
 		//GL11.gl
-		model.render(0.0625F);
+		model.render(0.0625F, ItemGrind.ID_COARSE);
 		//GL11.glPopMatrix();
 	}
 
@@ -108,6 +115,6 @@ public class RenderBarrel extends TileEntitySpecialRenderer implements ISimpleBl
 
 	@Override
 	public int getRenderId() {
-		return BlockManager.blockBarrel.getRenderType();
+		return BlockManager.blockGrinder.getRenderType();
 	}
 }

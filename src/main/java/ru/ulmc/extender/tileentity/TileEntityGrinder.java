@@ -21,6 +21,7 @@ package ru.ulmc.extender.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -30,14 +31,39 @@ import ru.ulmc.extender.container.ContainerGrinder;
 import ru.ulmc.extender.item.Grindable;
 import ru.ulmc.extender.item.ItemGrind;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class TileEntityGrinder extends ExtendedTileEntity implements IInventory {
 	private ItemStack[] inv = new ItemStack[3];
+	private int impulse = 0;
+	private Timer timer = new Timer();
 
 	public TileEntityGrinder() {
 
 	}
 
+	public int getImpulse() {
+		return impulse;
+	}
+
+	public void setImpulse(int impulse) {
+		this.impulse = impulse;
+	}
+
 	public boolean grindItem(EntityPlayer player) {
+		/*impulse = 100;
+
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				impulse--;
+				updateContainingBlockInfo();
+				if (impulse == 0) {
+					cancel();
+				}
+			}
+		}, 0,  1000);*/
 		ItemStack grinder = getGrinder();
 		ItemStack hold = player.inventory.getCurrentItem();
 
@@ -53,6 +79,18 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 
 		}
 		return false;
+	}
+
+	public int getGrinderType() {
+		ItemStack grind = getGrinder();
+		if(grind == null || grind.getItem() == null || grind.stackSize == 0) {
+			return -1;
+		}
+		Item item = grind.getItem();
+		if(item instanceof ItemGrind) {
+			return ((ItemGrind) item).getType();
+		}
+		return -2;
 	}
 
 	private ItemStack getExample() {
@@ -136,6 +174,7 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 				inv[slot] = ItemStack.loadItemStackFromNBT(tag);
 			}
 		}
+		impulse = tagCompound.getInteger("impulse");
 	}
 
 	@Override
@@ -152,6 +191,7 @@ public class TileEntityGrinder extends ExtendedTileEntity implements IInventory 
 			}
 		}
 		tagCompound.setTag("Inventory", itemList);
+		tagCompound.setInteger("impulse", impulse);
 	}
 
 	@Override

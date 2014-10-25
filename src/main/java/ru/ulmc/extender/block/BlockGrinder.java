@@ -19,6 +19,7 @@
  */
 package ru.ulmc.extender.block;
 
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
@@ -31,6 +32,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import ru.ulmc.extender.Reference;
 import ru.ulmc.extender.UltimateExtender;
@@ -55,6 +57,8 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	private String name;
 	private Random random = new Random();
 
+	public static final int renderId = RenderingRegistry.getNextAvailableRenderId();
+
 	public BlockGrinder(String name) {
 		super(Material.iron);
 		setHardness(1.0F);
@@ -71,35 +75,28 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-
-	/**
-	 * From the specified side and block metadata retrieves the blocks texture. Args: side, metadata
-	 */
-	public IIcon getIcon(int par1, int par2) {
-		if (par1 == par2) {
-			return grinderTop;
-		} else {
-			if (par1 == 0 || par1 == 1) {
-				return grinderSide;
-			} else {
-				return grinderRight;
-			}
-		}
+	public int getRenderType() {
+		return renderId;
 	}
 
-
-	/**
-	 * When this method is called, your block should register all the icons it needs with the given IconRegister. This
-	 * is the only chance you get to register icons.
-	 */
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister par1IconRegister) {
-		grinderLeft = par1IconRegister.registerIcon(Reference.RES_NAME + "grinderLeft");
-		grinderTop = par1IconRegister.registerIcon(Reference.RES_NAME + "grinderTop");
-		grinderSide = par1IconRegister.registerIcon(Reference.RES_NAME + "grinderSide");
-		grinderRight = par1IconRegister.registerIcon(Reference.RES_NAME + "grinderRight");
+	public boolean isBlockSolid(IBlockAccess p_149747_1_, int p_149747_2_, int p_149747_3_, int p_149747_4_, int p_149747_5_) {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube(IBlockAccess world, int x, int y, int z) {
+		return false;
 	}
 
 	/**
@@ -108,20 +105,9 @@ public class BlockGrinder extends BlockContainer implements UlmcBlock {
 	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLivingBase,
 	                            ItemStack par6ItemStack) {
-		byte b0 = 0;
+
 		int l = MathHelper.floor_double(par5EntityLivingBase.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-
-		if (l == 0) {
-			b0 = 2;
-		} else if (l == 1) {
-			b0 = 5;
-		} else if (l == 2) {
-			b0 = 3;
-		} else if (l == 3) {
-			b0 = 4;
-		}
-
-		par1World.setBlockMetadataWithNotify(par2, par3, par4, b0, 2);
+		par1World.setBlockMetadataWithNotify(par2, par3, par4, l, 2);
 	}
 
 	/*

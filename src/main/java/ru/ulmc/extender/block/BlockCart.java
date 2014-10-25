@@ -155,6 +155,16 @@ public class BlockCart extends BasicStandingBlock {
 	}
 
 	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
 	public boolean isNormalCube(IBlockAccess world, int x, int y, int z) {
 		return false;
 	}
@@ -186,15 +196,5 @@ public class BlockCart extends BasicStandingBlock {
 	@Override
 	public int getRenderType() {
 		return renderId;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
 	}
 }

@@ -88,11 +88,11 @@ public class ItemManager {
 
 		createCraftItem("ironBlank");
 
-		createGrindStone(1, 0.0F, 0.0F, "woodenGrindstoneBlank");
-		createGrindStone(2, 0.0F, 0.0F, "ironGrindstoneBlank");
-		createGrindStone(60, 0.5F, 0.3F, "coarseGrindstone");
-		createGrindStone(140, 0.6F, 0.5F, "enhancedGrindstone");
-		createGrindStone(250, 0.8F, 0.8F, "diamondGrindstone");
+		createGrindStone(1, 0.0F, 0.0F, "woodenGrindstoneBlank", ItemGrind.ID_WOODEN);
+		createGrindStone(2, 0.0F, 0.0F, "ironGrindstoneBlank", ItemGrind.ID_IRON);
+		createGrindStone(60, 0.5F, 0.3F, "coarseGrindstone", ItemGrind.ID_COARSE);
+		createGrindStone(140, 0.6F, 0.5F, "enhancedGrindstone", ItemGrind.ID_ENHANCED);
+		createGrindStone(250, 0.8F, 0.8F, "diamondGrindstone", ItemGrind.ID_DIAMOND);
 
 		if (Config.tcConfig.isEnabled()) {
 			createKey(1, 10, "ironKey");
@@ -138,7 +138,7 @@ public class ItemManager {
 		createWoodenItem("dinnerTable", BlockManager.blockDinnerTable);
 		createWoodenItem("cabinetTable", BlockManager.blockCabinetTable);
 
-		createCraftItem("boulder");
+		/*createCraftItem("boulder");
 		createCraftItem("cakeRaw");
 		createCraftItem("cookieRaw");
 		createCraftItem("pumpkinPieRaw");
@@ -154,8 +154,9 @@ public class ItemManager {
 		createCraftItem("potash");
 		createCraftItem("pebbles");
 		createCraftItem("resin");
+		createCraftItem("ash");*/
+
 		createCraftItem("rottenWeat");
-		createCraftItem("ash");
 
 		if (Config.ssConfig.isEnabled()) {
 			int cottonWearRenderID = proxy.getArmorPrefix("cotton");
@@ -252,9 +253,8 @@ public class ItemManager {
 		commonRegistrationActions(item, itemName);
 	}
 
-	protected static void createGrindStone(int durability, float bChance, float bPower, String itemName) {
-		ItemGrind item = new ItemGrind(itemName, durability, bChance,
-				bPower);
+	protected static void createGrindStone(int durability, float bChance, float bPower, String itemName, int type) {
+		ItemGrind item = new ItemGrind(itemName, durability, bChance, bPower, type);
 		commonRegistrationActions(item, itemName);
 	}
 

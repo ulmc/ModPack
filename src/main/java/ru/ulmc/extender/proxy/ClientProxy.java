@@ -55,6 +55,7 @@ public class ClientProxy extends CommonProxy {
 		RenderCart cart = new RenderCart();
 		RenderBarrel barrel = new RenderBarrel();
 		RenderConnectedTable connectedTable = new RenderConnectedTable();
+		RenderGrinder grinder = new RenderGrinder();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChair.class, chairs);
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityEliteChair.class, chairs);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, renderTables);
@@ -64,6 +65,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, barrel);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBench.class, bench);
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityConnectedTable.class, connectedTable);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrinder.class, grinder);
 		//InventoryRender inventoryRender = new InventoryRender();
 	//	inventoryRender.add("bench", bench);
 		RenderingRegistry.registerBlockHandler(bench);
@@ -71,6 +73,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(bones);
 		RenderingRegistry.registerBlockHandler(cart);
 		RenderingRegistry.registerBlockHandler(barrel);
+		RenderingRegistry.registerBlockHandler(grinder);
 
 		RenderingRegistry.registerBlockHandler(renderTables.barTableInventoryRender);
 		RenderingRegistry.registerBlockHandler(renderTables.cabinetTableInventoryRender);

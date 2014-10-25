@@ -31,7 +31,15 @@ public class ItemGrind extends Item {
 	private float chanceToBuff = 0.0F;
 	private float bufflevel = 0.0F;
 
-	public ItemGrind(String unlocalizedName, int durability, float chanceToBuff, float bufflevel) {
+	private int type = -1;
+
+	public static final int ID_WOODEN = 1;
+	public static final int ID_IRON = 2;
+	public static final int ID_COARSE = 3;
+	public static final int ID_ENHANCED = 4;
+	public static final int ID_DIAMOND = 5;
+
+	public ItemGrind(String unlocalizedName, int durability, float chanceToBuff, float bufflevel, int type) {
 		super();
 		setUnlocalizedName(unlocalizedName);
 		setTextureName(Reference.RES_NAME + unlocalizedName);
@@ -44,6 +52,11 @@ public class ItemGrind extends Item {
 		this.setMaxDamage(durability);
 		this.chanceToBuff = chanceToBuff;
 		this.bufflevel = bufflevel;
+		this.type = type;
+	}
+
+	public int getType() {
+		return type;
 	}
 
 	@Override
