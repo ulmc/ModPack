@@ -118,6 +118,11 @@ public class RecipeManager {
         Item warmPants = ItemManager.getItem("warmPants");
         Item furBoots = ItemManager.getItem("furBoots");
 
+        Item bonesHat = ItemManager.getItem("bonesHat");
+        Item bonesCoat = ItemManager.getItem("bonesCoat");
+        Item bonesPants = ItemManager.getItem("bonesPants");
+        Item bonesBoots = ItemManager.getItem("bonesBoots");
+
 		addRecipe(woodenGrindstoneBlank, 1,
 				" x ",
 				"xyx",
@@ -171,7 +176,6 @@ public class RecipeManager {
 		addShapeless(jerkedPork, 1, salt, Items.porkchop);
 		addShapeless(jerkedLamb, 1, salt, lambRawMeat);
 		addShapeless(salo, 1, salt, porkBelly);
-		addShapeless(jerkedBeef, 1, salt, Items.beef);
 		addShapeless(salt, 4, saltCrystal);
 
         addSmelting(obsidianAlloyIngot, 1, 1, obsidianAlloyBlank);
@@ -208,6 +212,11 @@ public class RecipeManager {
         addShapeless(ironFurCoat, 1, woolfell, woolfell, woolfell, woolfell, woolfell, woolfell, Items.iron_chestplate, spool);
         addShapeless(ironFurPants, 1, woolfell, woolfell, woolfell, woolfell, woolfell, Items.iron_leggings, spool);
         addShapeless(ironFurBoots, 1, woolfell, woolfell, Items.iron_boots, spool);
+
+        addShapeless(bonesHat, 1, Items.bone, Items.bone, Items.bone, Items.leather_helmet, spool);
+        addShapeless(bonesCoat, 1, Items.bone, Items.bone, Items.bone, Items.bone, Items.bone, Items.bone, Items.leather_chestplate, spool);
+        addShapeless(bonesPants, 1, Items.bone, Items.bone, Items.bone, Items.bone, Items.bone, Items.leather_leggings, spool);
+        addShapeless(bonesBoots, 1, Items.bone, Items.bone, Items.leather_boots, spool);
 
         addRecipe(furHat, 1,
                 "xxx",

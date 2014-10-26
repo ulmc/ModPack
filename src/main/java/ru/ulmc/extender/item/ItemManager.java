@@ -161,6 +161,8 @@ public class ItemManager {
 
 		createCraftItem("rottenWeat");
 
+        createBadFood();
+
 		if (Config.ssConfig.isEnabled()) {
 			int cottonWearRenderID = proxy.getArmorPrefix("cotton");
 			int furWearRenderID = proxy.getArmorPrefix("fur");
@@ -169,6 +171,7 @@ public class ItemManager {
             int trashWearRenderID = proxy.getArmorPrefix("trash");
             int ironFurWearRenderID = proxy.getArmorPrefix("ironFur");
             int diamondFurWearRenderID = proxy.getArmorPrefix("diamondFur");
+            int bonesWearRenderID = proxy.getArmorPrefix("bones");
 
 			createArmor(EnumThermalMaterial.COTTON, cottonWearRenderID, 0, "cottonHat", false, true, true, false);
 			createArmor(EnumThermalMaterial.COTTON, cottonWearRenderID, 1, "cottonJacket", false, true, true, false);
@@ -202,6 +205,11 @@ public class ItemManager {
             createArmor(EnumThermalMaterial.DIAMONDFUR, diamondFurWearRenderID, 1, "diamondFurCoat", false, true, true, false);
             createArmor(EnumThermalMaterial.DIAMONDFUR, diamondFurWearRenderID, 2, "diamondFurPants", true, true, true, false);
             createArmor(EnumThermalMaterial.DIAMONDFUR, diamondFurWearRenderID, 3, "diamondFurBoots", false, true, true, false);
+
+            createArmor(EnumThermalMaterial.BONES, bonesWearRenderID, 0, "bonesHat", false, true, true, false);
+            createArmor(EnumThermalMaterial.BONES, bonesWearRenderID, 1, "bonesCoat", false, true, true, false);
+            createArmor(EnumThermalMaterial.BONES, bonesWearRenderID, 2, "bonesPants", true, true, true, false);
+            createArmor(EnumThermalMaterial.BONES, bonesWearRenderID, 3, "bonesBoots", false, true, true, false);
 		}
 		maskId = Item.getIdFromItem(items.get("mask"));
 	}
@@ -242,10 +250,16 @@ public class ItemManager {
 		commonRegistrationActions(item, itemName);
 	}
 
+
     protected static void createPlants() {
         BarleySeeds item = new BarleySeeds("barleySeeds", BlockManager.blockBarley);
         BlockManager.blockBarley.setItem(item);
         commonRegistrationActions(item, "barleySeeds");
+    }
+
+    protected static void createBadFood() {
+        BadFood item = new BadFood();
+        commonRegistrationActions(item, "badFood");
     }
 
     protected static void createKey(int security, int maxDamage, String itemName) {
