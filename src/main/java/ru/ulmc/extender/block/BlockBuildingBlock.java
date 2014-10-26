@@ -27,29 +27,25 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import ru.ulmc.extender.Reference;
-import ru.ulmc.extender.UltimateExtender;
 import ru.ulmc.extender.tileentity.BuildingBlockTileEntity;
-import ru.ulmc.extender.tileentity.TileEntityFiller;
-import ru.ulmc.extender.tileentity.TileEntityFlag;
-
-import java.util.List;
 
 public class BlockBuildingBlock extends BasicStandingBlock {
 
-	private static int maxAllowedBridge = 3;
-	private static int IS_ON_THE_GROUND = 2;
 	public static final int renderId = RenderingRegistry.getNextAvailableRenderId();
+	private static int IS_ON_THE_GROUND = 1;
+	private static int IS_CONNECTED_TO_SOLID = 2;
+	private static int IS_NOT_SOLID = 0;
 	protected IIcon icon;
 
 	public BlockBuildingBlock(String aBlockName) {
@@ -58,6 +54,7 @@ public class BlockBuildingBlock extends BasicStandingBlock {
 		setCreativeTab(CreativeTabs.tabDecorations);
 		setBlockTextureName(Reference.RES_NAME + getUnlocalizedName());
 		setBlockBounds(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
+		this.blockHardness = 0.5F;
 
 	}
 
@@ -68,7 +65,7 @@ public class BlockBuildingBlock extends BasicStandingBlock {
 		} catch (Exception exception) {
 			throw new RuntimeException(exception);
 		}
-	}	
+	}
 
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
@@ -90,9 +87,22 @@ public class BlockBuildingBlock extends BasicStandingBlock {
 		return renderId;
 	}
 
+	@Override
+	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
+		if(player.getHeldItem() != null && Item.getItemFromBlock(this).equals(player.getHeldItem().getItem())) {
+			int newZ = lookUp(world, x, y, z);
+			if (newZ > 0 && newZ < 256) {
+				if (player.getHeldItem().stackSize > 1)
+					player.getHeldItem().stackSize--;
+				else
+					player.destroyCurrentEquippedItem();
+				world.setBlock(x,newZ,z,this);
+			}
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World p_149633_1_, int p_149633_2_, int p_149633_3_, int p_149633_4_)
-	{
+	public AxisAlignedBB getSelectedBoundingBoxFromPool(World p_149633_1_, int p_149633_2_, int p_149633_3_, int p_149633_4_) {
 		return AxisAlignedBB.getBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 	}
 
@@ -108,8 +118,8 @@ public class BlockBuildingBlock extends BasicStandingBlock {
 		if (!canPlaceOnTheGround) {
 			return canAttachToBlock(world, x, y, z, ForgeDirection.EAST) ||
 					canAttachToBlock(world, x, y, z, ForgeDirection.NORTH) ||
-					 canAttachToBlock(world, x, y, z, ForgeDirection.WEST) ||
-					 canAttachToBlock(world, x, y, z, ForgeDirection.SOUTH);
+					canAttachToBlock(world, x, y, z, ForgeDirection.WEST) ||
+					canAttachToBlock(world, x, y, z, ForgeDirection.SOUTH);
 		}
 		return canPlaceOnTheGround;
 	}
@@ -117,40 +127,89 @@ public class BlockBuildingBlock extends BasicStandingBlock {
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block par5) {
 		int meta = world.getBlockMetadata(x, y, z);
-		if (meta == IS_ON_THE_GROUND) {
-			if (!canPlaceStandingBlockOn(world, x, y - 1, z)) {
-				world.setBlockMetadataWithNotify(x, y, z, 0, 2);
-			}
+		if (meta == IS_ON_THE_GROUND && !isSolidBlockNear(world, x, y, z)) {
+			this.dropBlockAsItem(world, x, y, z, 0, 0);
+			world.setBlock(x, y, z, Blocks.air);
+			return;
 		}
 		if (!this.canPlaceBlockAt(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, 0, 0);
 			world.setBlock(x, y, z, Blocks.air);
+		} else {
+			defineIfSolid(world, x, y, z);
 		}
 	}
 
-	private boolean canAttachToBlock(World world, int x, int y, int z, ForgeDirection direction){
-		for (int i = 0; i < maxAllowedBridge; i++) {
-			x +=direction.offsetX;
-			y +=direction.offsetY;
-			z +=direction.offsetZ;
-			if (!Block.isEqualTo(this, world.getBlock(x, y, z)))
-				break;
+	private boolean canAttachToBlock(World world, int x, int y, int z, ForgeDirection direction) {
+		x += direction.offsetX;
+		y += direction.offsetY;
+		z += direction.offsetZ;
+		if (!Block.isEqualTo(this, world.getBlock(x, y, z)))
+			return false;
 
-			if (world.getBlockMetadata(x, y, z) == IS_ON_THE_GROUND)
-				return true;
+		if (world.getBlockMetadata(x, y, z) == IS_NOT_SOLID) {
+			return false;
 		}
-		return false;
+		return true;
+	}
+
+	private int lookUp(World world, int x, int y, int z) {
+		int meta = 0;
+		while (meta != -2) {
+			meta = getNeighbourMeta(world,x,y++,z,ForgeDirection.UP);
+			if (meta == -1) {
+				return -1;
+			}
+		}
+		return y;
+	}
+
+	private int getNeighbourMeta(World world, int x, int y, int z, ForgeDirection direction) {
+		Block nextBlock = world.getBlock(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);
+		if (Block.isEqualTo(this, nextBlock)) {
+			int meta = world.getBlockMetadata(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);
+			return meta;
+		} else if(Block.isEqualTo(Blocks.air, nextBlock)) {
+			return -2;
+		}
+		return -1;
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z,
 	                            EntityLivingBase entityLiving, ItemStack par6ItemStack) {
-		world.setBlockMetadataWithNotify(x, y, z, world.getBlock(x, y-1, z).isNormalCube() ? IS_ON_THE_GROUND : 0, 2);
+
+		defineIfSolid(world, x, y, z);
+	}
+
+	private void defineIfSolid(World world, int x, int y, int z) {
+		Block underBlock = world.getBlock(x, y - 1, z);
+		boolean isSolid = underBlock.isBlockNormalCube();
+		if (underBlock instanceof BlockBuildingBlock) {
+			isSolid = isSolid || world.getBlockMetadata(x, y - 1, z) == IS_ON_THE_GROUND;
+		}
+		if (isSolid) {
+			world.setBlockMetadataWithNotify(x, y, z, IS_ON_THE_GROUND, 2);
+			return;
+		}
+		if (isSolidBlockNear(world, x, y, z)) {
+			world.setBlockMetadataWithNotify(x, y, z, IS_CONNECTED_TO_SOLID, 2);
+		} else {
+			world.setBlockMetadataWithNotify(x, y, z, IS_NOT_SOLID, 2);
+		}
+	}
+
+	private boolean isSolidBlockNear(World world, int x, int y, int z) {
+		return getNeighbourMeta(world, x, y, z, ForgeDirection.EAST) == IS_ON_THE_GROUND ||
+				getNeighbourMeta(world, x, y, z, ForgeDirection.WEST) == IS_ON_THE_GROUND ||
+				getNeighbourMeta(world, x, y, z, ForgeDirection.NORTH) == IS_ON_THE_GROUND ||
+				getNeighbourMeta(world, x, y, z, ForgeDirection.SOUTH) == IS_ON_THE_GROUND ||
+				getNeighbourMeta(world, x, y, z, ForgeDirection.DOWN) == IS_ON_THE_GROUND ||
+				canPlaceStandingBlockOn(world, x, y - 1, z);
 	}
 
 	@Override
-	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity)
-	{
+	public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
 		return true;
 	}
 }

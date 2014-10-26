@@ -67,6 +67,13 @@ public class RenderBuildingBlock extends TileEntitySpecialRenderer implements IS
 				(float) d2 + 0.5F);
 		GL11.glScalef(1.0F, 1.0F, 1.0F);
 		GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
+		/*
+		int meta = tileEntity.getBlockMetadata();
+		if(meta == 1) {
+			GL11.glColor3d(00,66,00);
+		} else if (meta == 2) {
+			GL11.glColor3d(00,00,33);
+		}*/
 		model.render(0.0625F, renderDeck);
 		GL11.glPopMatrix();
 	}

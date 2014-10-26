@@ -152,7 +152,7 @@ public class UltimateExtender {
 		RecipeManager.init(proxy);
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
 		initNetwork();
-		ForgeModContainer.fullBoundingBoxLadders = true;
+		ForgeModContainer.fullBoundingBoxLadders = true; //sorry for that
 	}
 
 	@EventHandler

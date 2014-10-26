@@ -77,8 +77,8 @@ public class WarmHandler {
 	private float normalization;
 	private float coldMultiplier;
 	private float hotMultiplier;
-	private float neutralValue;
-	private float allowableDeviation;
+	private float neutralValueStart;
+	private float neutralValueEnd;
 
 	private float multiplierPacket;
 	private float damageSize;
@@ -116,8 +116,8 @@ public class WarmHandler {
 		inSnowPenalty = Config.getSurvivalFloat("thermal.inSnowPenalty");
 		coldMultiplier = Config.getSurvivalFloat("thermal.multiplier.coldBiome");
 		hotMultiplier = Config.getSurvivalFloat("thermal.multiplier.hotBiome");
-		neutralValue = Config.getSurvivalFloat("thermal.neutral.value");
-		allowableDeviation = Config.getSurvivalFloat("thermal.allowable.deviation");
+		neutralValueStart = Config.getSurvivalFloat("thermal.neutral.start");
+		neutralValueEnd = Config.getSurvivalFloat("thermal.neutral.end");
 
 		sendMessageToPlayer = Config.getSurvivalInt("thermal.debug.sendMessageToPlayer") == 1;
 
@@ -186,7 +186,7 @@ public class WarmHandler {
 		BiomeGenBase biome = world.getBiomeGenForCoords(currentX, currentZ);
 		float temp = biome.getFloatTemperature(currentX, currentZ, currentY);
 		Float warmnessDelta = null;
-		if (Math.abs(temp - neutralValue) < allowableDeviation) {
+		if (temp >= neutralValueStart && temp <= neutralValueEnd) {
 			if (isLavaNear(world, currentX - 2, currentY - 2, currentZ - 2,
 					currentX + 2, currentY + 2, currentZ + 2)) {
 				warmnessDelta = lavaPenalty;
@@ -200,7 +200,7 @@ public class WarmHandler {
 				returnPlayerToNormal(player);
 			}
 		} else {
-			float tempStr = temp > neutralValue ? temp * hotMultiplier : temp * coldMultiplier * ( temp > 0 ? -1 : 1);
+			float tempStr = temp > neutralValueEnd ? temp * hotMultiplier : temp * coldMultiplier * ( temp > 0 ? -1 : 1);
 			if (tempStr < 0) {
 				float coldStrength = Math.abs(tempStr);
 				boolean noWarmNear = !isBoxWarm(world,

@@ -92,6 +92,10 @@ public class SurvivalGui extends Gui {
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public void renderFrostBlur(RenderGameOverlayEvent event) {
+		if (event.type == RenderGameOverlayEvent.ElementType.DEBUG) {
+			doRenderThermo();
+		}
+
 		if ((!doRenderFrost && !doRenderHeat)
 				|| event.isCancelable()
 				|| event.type != RenderGameOverlayEvent.ElementType.AIR) {
@@ -130,7 +134,17 @@ public class SurvivalGui extends Gui {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		//GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		/*FontRenderer fontRender = mc.fontRenderer;
+		fontRender.drawStringWithShadow("Delta: " + Math.round(currentMaxPower * 100),xPos-relativeX,absoluteY,color);*/
+	}
+
+	private void doRenderThermo() {
+		ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+		int xPos = scaledresolution.getScaledWidth();
+		int color = 0xfefefe;
+
 		FontRenderer fontRender = mc.fontRenderer;
-		fontRender.drawStringWithShadow("Temp: " + Math.round(currentMaxPower * 100),xPos-relativeX,absoluteY,color);
+		fontRender.drawStringWithShadow("Temp: " +
+				mc.thePlayer.getEntityWorld().getBiomeGenForCoords((int)mc.thePlayer.posX, (int)mc.thePlayer.posZ).temperature,xPos-55,scaledresolution.getScaledHeight()-10,color);
 	}
 }
